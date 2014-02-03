@@ -13,5 +13,6 @@
 *.a
 
 bin/
+obj/
 
 *.swp
