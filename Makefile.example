@@ -1,0 +1,69 @@
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = bin
+# DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
+SRCS = $(wildcard $(SRC_DIR)/*.cpp) #main.cpp src1.cpp src2.cpp src3.cpp
+OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+BIN = $(BIN_DIR)/AoS
+
+$(info $(SRCS))
+$(info $(OBJS))
+$(info $(BIN))
+
+# target: link the objects. 
+#	prerequisite: make sure that the objects are compiled first.
+#	prerequisite: check for any $(BIN) prerequisites.
+build: $(OBJS) $(BIN)
+	@echo "Building the project"
+	@echo "g++ -o $(BIN) $^ A_BUNCH_OF_FLAGS"
+
+# target: do work for creating the binary file. 
+#	prerequisite: Make sure that there is a bin directory. 
+$(BIN):	$(BIN_DIR)
+
+# target: If a dependency asks for files in the OBJ_DIR that have teh .o extension then
+#   build those objects.
+#	prerequisite: Find the matching source file in the SRC_DIR.
+#   prerequisite: Find the matching header file in the SRC_DIR.
+# 	prerequisite: Make sure that the object directory exists.
+$(OBJ_DIR)/%.o:	$(SRC_DIR)/%.cpp $(SRC_DIR)/%.h $(OBJ_DIR)
+	@echo "Building object $@"
+	@echo "g++ $@ -c $<"
+	touch $@
+
+# target: Make make an executables directory if necessary. 
+$(BIN_DIR): 
+	@echo "Did not find an binary directory... creating one"
+	mkdir -p ./$(BIN_DIR)
+
+# target: Make an object directory if necessary. 
+$(OBJ_DIR):
+	@echo "Did not find an object directory... creating one"
+	mkdir -p ./$(OBJ_DIR)
+
+# Create bogus files to experiment with dependencies.
+tsfls:
+	touch $(SRC_DIR)/src1.cpp
+	touch $(SRC_DIR)/src2.cpp
+	touch $(SRC_DIR)/src3.cpp
+	touch $(SRC_DIR)/src1.h
+	touch $(SRC_DIR)/src2.h
+	touch $(SRC_DIR)/src3.h
+
+print:
+	make build --just-print
+
+clean:
+	/bin/rm -rf $(OBJ_DIR)
+	/bin/rm -rf $(BIN_DIR)
+
+db:
+	make build --print-data-base
+
+
+#$(OBJ)%.o: %.c
+#	$(CXX) $@ -c $<
+
+#$(OBJ)%.o: %.c %h
+#	$(CXX) -c $< 
+
