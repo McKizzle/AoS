@@ -1,77 +1,82 @@
 # Detect the operating system 
 # for now we will only worry about OS X and Linux. 
-UNAME_S := $(shell uname -s)
+UNAME_S = $(shell uname -s)
 
-CXXFLAGS := -g -std=c++11 -Wall -pedantic
-CXXLIBS := -pthread
+CXXFLAGS = -g -std=c++11 -Wall -pedantic
+CXXLIBS = -pthread
 
-CXX := g++
+CXX = g++
 ifeq ($(UNAME_S),Darwin)
-    CXX := g++-4.8 #/usr/local/bin/g++-4.8
+    CXX = g++-4.8 #/usr/local/bin/g++-4.8
 endif
 ifeq ($(UNAME_S),Linux)
-    CXX := g++
-    CXXFLAGS := $(CXXFLAGS) -Wl,--no-as-needed
+    CXX = g++
+    CXXFLAGS := $(CXXFLAGS) -Wl,--no-as-needed #:= prevents recursive expansion
 endif
 
 
-SDL_CFLAGS := $(shell sdl2-config --cflags) 
-SDL_LDFLAGS := $(shell sdl2-config --libs)
-SDL_SLIBS := $(shell sdl2-config --static-libs) 
-SDL_ADD_SLIBS := -lSDL2_image
+SDL_CFLAGS = $(shell sdl2-config --cflags) 
+SDL_LDFLAGS = $(shell sdl2-config --libs)
+SDL_SLIBS = $(shell sdl2-config --static-libs) 
+SDL_ADD_SLIBS = -lSDL2_image
+GL_FLAGS = -lGL -lGLU
 
-ALL_FLAGS := $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS)
+ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS)
 
-#CURR_DIR = $(notdir $(shell pwd))
-SRC_DIR := src/
-OBJ_DIR := obj/
-BIN_DIR := bin/
-SRC := $(wildcard $(SRC_DIR)*.cpp)
-OBJ := $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
-BIN := bin/AoS
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = bin
+# DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
+# SRCS = $(wildcard $(SRC_DIR)/*.cpp) 
+SRCS = main.cpp
+OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
+BIN = $(BIN_DIR)/AoS
 
-$(info $(SRC))
-$(info $(OBJ))
+$(info $(SRCS))
+$(info $(OBJS))
 $(info $(BIN))
+#$(info $(CXXFLAGS))
 
-build:	$(OBJ) 
-	@echo "Building the project"
-	@echo "g++ -o $(BIN) $^"
+# target: link the objects. 
+#	prerequisite: make sure that the objects are compiled first.
+#	prerequisite: check for any $(BIN) prerequisites.
+build: $(OBJS) $(BIN)
+	g++ -o $(BIN) $(OBJS) $(ALL_FLAGS)
 
-$(OBJ)%.o:	
-	@echo "Building object $@"
-	touch $@
+# target: do work for creating the binary file. 
+#	prerequisite: Make sure that there is a bin directory. 
+$(BIN):	$(BIN_DIR)
 
-dirs:
-	mkdir -p ./$(OBJ_DIR)
-	mkdir -p ./$(SRC_DIR)
+# target: If a dependency asks for files in the OBJ_DIR that have teh .o extension then
+#   build those objects.
+#	prerequisite: Find the matching source file in the SRC_DIR.
+# 	prerequisite: Make sure that the object directory exists.
+$(OBJ_DIR)/%.o:	$(SRC_DIR)/%.cpp $(SRC_DIR)/%.h $(OBJ_DIR)
+	g++ -o $@ -c $< $(ALL_FLAGS)
+
+# target: Make make an executables directory if necessary. 
+$(BIN_DIR): 
 	mkdir -p ./$(BIN_DIR)
 
-tsfls:
-	touch $(SRC_DIR)src1.cpp
-	touch $(SRC_DIR)src2.cpp
-	touch $(SRC_DIR)src3.cpp
-	touch $(SRC_DIR)src1.h
-	touch $(SRC_DIR)src2.h
-	touch $(SRC_DIR)src3.h
-	touch $(OBJ_DIR)main.o
+# target: Make an object directory if necessary. 
+$(OBJ_DIR):
+	mkdir -p ./$(OBJ_DIR)
 
 print:
 	make build --just-print
 
 clean:
-	/bin/rm -f $(OBJ)
-	/bin/rm -f $(BIN)
+	/bin/rm -rf $(OBJ_DIR)
+	/bin/rm -rf $(BIN_DIR)
 
+db:
+	make build --print-data-base
+
+undef:
+	make build --warn-undefined-variables
 
 #$(OBJ)%.o: %.c
 #	$(CXX) $@ -c $<
 
 #$(OBJ)%.o: %.c %h
 #	$(CXX) -c $< 
-
-#db:
-#	make build --print-data-base
-
-#undef:
-#	make build --warn-undefined-variables
