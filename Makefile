@@ -51,7 +51,8 @@ $(BIN):	$(BIN_DIR)
 #   build those objects.
 #	prerequisite: Find the matching source file in the SRC_DIR.
 # 	prerequisite: Make sure that the object directory exists.
-$(OBJ_DIR)/%.o:	$(SRC_DIR)/%.cpp $(SRC_DIR)/%.h $(OBJ_DIR)
+# $(SRC_DIR)/%.h
+$(OBJ_DIR)/%.o:	$(SRC_DIR)/%.cpp $(OBJ_DIR)
 	g++ -o $@ -c $< $(ALL_FLAGS)
 
 # target: Make make an executables directory if necessary. 
