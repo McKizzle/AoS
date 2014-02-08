@@ -44,8 +44,8 @@ Delivering a pleasant game requires smooth a smooth game play and system propert
       - To render the game scene an SDL openGL context will be used. 
       - If possible use lib LAPACK for linear algebra operations. 
   - AI Engine
-      - Enemy Ship AI 
-      - Difficulty AI
+      - Enemy Ship AI the controls enemy targeting behaviors. 
+      - Difficulty AI that controls object frequency and speed. 
   - Menu Engine
       - Handles user input when in menu mode. 
       - Configures game settings based on input. 
@@ -53,6 +53,5 @@ Delivering a pleasant game requires smooth a smooth game play and system propert
       - Render system to openGL context. 
   - Menu Render Engine
       - Render player menu to the screen. 
-
 
 
