@@ -15,4 +15,9 @@
 bin/
 obj/
 
+# Vim swap files
 *.swp
+
+# OS X Finder Files
+.DS_Store
+
