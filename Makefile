@@ -12,14 +12,13 @@ endif
 ifeq ($(UNAME_S),Linux)
     CXX = g++
     CXXFLAGS := $(CXXFLAGS) -Wl,--no-as-needed #:= prevents recursive expansion
+    GL_FLAGS = -lGL -lGLU
 endif
-
 
 SDL_CFLAGS = $(shell sdl2-config --cflags) 
 SDL_LDFLAGS = $(shell sdl2-config --libs)
 SDL_SLIBS = $(shell sdl2-config --static-libs) 
 SDL_ADD_SLIBS = -lSDL2_image
-GL_FLAGS = -lGL -lGLU
 
 ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS)
 
@@ -41,7 +40,7 @@ $(info $(BIN))
 #	prerequisite: make sure that the objects are compiled first.
 #	prerequisite: check for any $(BIN) prerequisites.
 build: $(OBJS) $(BIN)
-	g++ -o $(BIN) $(OBJS) $(ALL_FLAGS)
+	$(CXX) -o $(BIN) $(OBJS) $(ALL_FLAGS)
 
 # target: do work for creating the binary file. 
 #	prerequisite: Make sure that there is a bin directory. 
@@ -53,7 +52,7 @@ $(BIN):	$(BIN_DIR)
 # 	prerequisite: Make sure that the object directory exists.
 # $(SRC_DIR)/%.h
 $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.cpp $(OBJ_DIR)
-	g++ -o $@ -c $< $(ALL_FLAGS)
+	$(CXX) -o $@ -c $< $(ALL_FLAGS)
 
 # target: Make make an executables directory if necessary. 
 $(BIN_DIR): 
