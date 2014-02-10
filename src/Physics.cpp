@@ -7,7 +7,7 @@ namespace aos {
         std::cout << "Overriden Physics" << std::endl;
     }
      
-    void PhysicsGine::integrate()
+    void PhysicsGine::integrate(int dt_ms, Object * objects)
     {
         std::cout << "Ran the integrater" << std::endl;     
     }

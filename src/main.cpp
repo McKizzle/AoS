@@ -3,6 +3,7 @@
 ///     run test cases and make sure the code runs optimally. 
 #include "includes.hpp"
 #include "Physics.hpp"
+#include "Object.hpp"
 
 using namespace aos;
 
@@ -16,9 +17,13 @@ using namespace aos;
 int main(int argc, char *argv[]) {
     std::cout << "Hello World!" << std::endl;
     Integrator *phgn = new PhysicsGine();
-    phgn->integrate();
-    phgn->overrided();
+    phgn->integrate(NULL, NULL);
     delete phgn;
+
+    Object *gmobj = new Object();
+    gmobj->render();
+    gmobj->update(12);
+    delete gmobj;
 }
 
 
