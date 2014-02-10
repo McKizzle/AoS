@@ -27,7 +27,7 @@ OBJ_DIR = obj
 BIN_DIR = bin
 # DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
 # SRCS = $(wildcard $(SRC_DIR)/*.cpp) 
-SRCS = main.cpp Physics.cpp Object.cpp
+SRCS = main.cpp Physics.cpp Object.cpp Game.cpp
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 BIN = $(BIN_DIR)/AoS
 
@@ -74,6 +74,9 @@ db:
 
 undef:
 	make build --warn-undefined-variables
+
+doxygen:
+	cd ./doc/doxygen/; make doc
 
 #$(OBJ)%.o: %.c
 #	$(CXX) $@ -c $<
