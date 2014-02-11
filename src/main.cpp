@@ -6,9 +6,22 @@
 #include "Object.hpp"
 #include "Game.hpp"
 
-#include <getopt.h>
+#include <getopt.h> 
 
 using namespace aos;
+
+///
+/// Takes in an optarg (char pointer) and converts it into an 
+/// integer.
+/// 
+/// \param[in] optarg The optarg char * from getopt.h
+/// \returns an integer representation of the optarg value.
+int optarg_to_int(char * optarg) {
+    std::string *tmp = new std::string(optarg);
+    int width = std::stoi(*tmp);
+    delete tmp;
+    return width;
+}
 
 ///
 /// \brief Gulps in parameters and initilizes AoS
@@ -18,44 +31,59 @@ using namespace aos;
 /// \param[in] argc The number of arguments. 
 /// \param[in,out] argv The arguments passed in. 
 int main(int argc, char *argv[]) {
-    // First parse the arguments.
-    const struct option longopts[] {
+    const struct option longopts[] { ///< Define the program's long arguments for getopt.h
         // name,         has_arg,            flag, val
-        {"help",         no_argument,        0,    'h'}, //help will print the version. 
+        {"help",         no_argument,        0,    'h'}, 
         {"width",        optional_argument,  0,    'x'},
         {"height",       optional_argument,  0,    'y'}, 
-        {"frame-rate",   optional_argument,  0,    'r'}, //update every miliseconds. 
-        {"aspect-ratio", optional_argument,  0,    'a'}, // the aspect ratio of the screen. 4:3, 16:9, 16:10
+        {"frame-rate",   optional_argument,  0,    'r'}, 
+        {"aspect-ratio", optional_argument,  0,    'a'}, 
         {0,              0,                  0,     0 }
     };
+    const char * shortopts = "hx:y:r:a:"; ///< Define the program's short arguments for getopt.h
+
+    std::string * aspect_ratio = new std::string("4:3"); 
+    int width = 0, height = 0, refresh_rate = 0;
     
+    // Extract program arguments.
     int longopts_index = 0;
     int iarg = 0;
-    while((iarg = getopt_long(argc, argv, "", longopts, &longopts_index)) != -1) 
+    while((iarg = getopt_long(argc, argv, shortopts, longopts, &longopts_index)) != -1) 
     {
-        std::cout << "Printing the option" << std::endl;
-        std::cout << std::string((char *)&iarg) << std::endl;
-        std::cout << "Printing the value" << std::endl;
-        std::cout << optarg << std::endl;
-
         switch(iarg) 
         {
             case 'h':
                 std::cout << "Printing help text to the screen\n";
                 break;
             case 'x':
-                std::cout << "The width has been set\n";
+                if(optarg != 0) {
+                    width = optarg_to_int(optarg);
+                } 
                 break;
             case 'y':
-                std::cout << "The height has been set\n";
+                if(optarg != 0) 
+                    height = optarg_to_int(optarg); 
                 break;
             case 'r':
-                std::cout << "The refresh rate has been set\n";
+                if(optarg != 0)
+                    refresh_rate = optarg_to_int(optarg); 
                 break;
             case 'a':
-                std::cout << "The aspect ratio has been set\n";
+                if(optarg != 0) {
+                    delete aspect_ratio; 
+                    aspect_ratio = new std::string(optarg); 
+                }
                 break;
         }
+    }
+    
+      
+    if(1) 
+    {
+        std::cout << "Width: " << width << std::endl; 
+        std::cout << "Height: " << height << std::endl;     
+        std::cout << "Refresh Rate: " << refresh_rate << std::endl;
+        std::cout << "Aspect Ratio: " << *aspect_ratio << std::endl;
     }
 
     // Now Initialize the game. 
@@ -65,7 +93,12 @@ int main(int argc, char *argv[]) {
     // Create a InputGrabber.
     
     // Start the Game Object. 
+    //
+
+    delete aspect_ratio;
 }
+
+
 
 
 
