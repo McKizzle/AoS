@@ -28,6 +28,19 @@ To make the game entertaining. The application must meet the following player re
       - Collideable object speed increases.
       - Gravity effects on the player ship increases. 
       - Enemy ship targeting systems improve in accuracy. 
+  - Difficulty
+    - Easy
+      1. Display asteroid trajectories. 
+      2. Display enemy targeting.
+      3. Display bullet trajectory and targeting systems. 
+      4. Life every 10,000 pts
+    - Medium
+      1. Display asteroid trajectories. 
+      2. Life every 20,000 pts. 
+    - Hard
+      1. Life every 40,000 pts. 
+    - Einstein
+      1. Bullets affected by gravity of planets and planetoids. 
 
 ## Non-Functional Requirments
 Delivering a pleasant game requires smooth a smooth game play and system properties that are related to the game. 
