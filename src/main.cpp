@@ -2,7 +2,6 @@
 ///     bootstraps the game into a running state. Besides runing the game main.cpp will be used to 
 ///     run test cases and make sure the code runs optimally. 
 #include "includes.hpp"
-#include "Physics.hpp"
 #include "Object.hpp"
 #include "Game.hpp"
 
@@ -92,15 +91,17 @@ int main(int argc, char *argv[]) {
 
     // Now Initialize the game.
     // Create a Game object. 
+    Game *aos_game_ptr = new Game();
+    aos_game_ptr->init();
     // Create an Integrator.
     // Create a Renderer.
     // Create a InputGrabber.
     //
     
     // Start the Game Object. 
-    //
 
     delete aspect_ratio;
+    delete aos_game_ptr;
 }
 
 
