@@ -2,7 +2,7 @@
 # for now we will only worry about OS X and Linux. 
 UNAME_S = $(shell uname -s)
 
-CXXFLAGS = -g -std=c++11 -Wall -pedantic
+CXXFLAGS = -g -std=c++11 -Wall -pedantic -pipe
 CXXLIBS = -pthread
 
 CXX = g++
@@ -27,7 +27,7 @@ OBJ_DIR = obj
 BIN_DIR = bin
 # DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
 # SRCS = $(wildcard $(SRC_DIR)/*.cpp) 
-SRCS = main.cpp Physics.cpp Object.cpp Game.cpp
+SRCS = main.cpp Object.cpp Game.cpp System.cpp Renderable.cpp Updateable.cpp
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 BIN = $(BIN_DIR)/AoS
 
@@ -35,6 +35,11 @@ $(info $(SRCS))
 $(info $(OBJS))
 $(info $(BIN))
 #$(info $(CXXFLAGS))
+
+# Builds and then runs the game.
+run: build
+	clear
+	./$(BIN)	
 
 # target: link the objects. 
 #	prerequisite: make sure that the objects are compiled first.
