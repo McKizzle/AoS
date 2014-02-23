@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/McKizzle/AoS.png?branch=master)](https://travis-ci.org/McKizzle/AoS)
+
 AoS
 ===
 
@@ -17,7 +19,8 @@ This project uses the new threading tools provided in the C++11 standard library
 So make sure that your compiler supports the C++11. 
 The compiler I will be using to build the project is `gcc 4.8`. 
 In simple terms, here is a list of dependencies.
-
+  
+  - SDL2
   - gcc 4.8
   - lapack (not confirmed)
 
