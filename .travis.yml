@@ -1,3 +1,5 @@
+language: cpp
+compiler: g++-4.8 
 before_install: 
     - pwd
     - lsb_release -a
@@ -6,5 +8,10 @@ before_install:
     - sudo apt-get update -y -qq
     - sudo apt-get install -qq -y gcc-4.8
     - sudo apt-get install -qq -y libsdl2-dev 
+    - sudo update-alternatives --remove-all gcc
+    - sudo update-alternatives --config gcc
+    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50
+    - sudo update-alternatives --set gcc /usr/bin/gcc-4.8
+     
 script: make build
 
