@@ -1,4 +1,7 @@
-before_install: sudo apt-get install gcc libsdl2-2.0-0 libsdl2-dbg libsdl2-dev
+before_install: 
+    - sudo apt-get install -qq gcc-4.8
+    - sudo apt-get install -qq libsdl2-dev
+    
 script: make build
 
 
