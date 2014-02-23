@@ -12,6 +12,7 @@ before_install:
     - sudo apt-get install -qq -y libasound2-dev
     - sudo apt-get install -qq -y libxss-dev
     - sudo apt-get install -qq -y libxxf86vm-dev
+    - sudo apt-get install -qq -y libpulse-dev
 
 script: make build
 
