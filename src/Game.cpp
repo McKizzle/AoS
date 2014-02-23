@@ -65,6 +65,8 @@ int Game::init_gl()
     sdl_gl_context = SDL_GL_CreateContext(sdl_window);
 
     SDL_GL_SetSwapInterval(1); // Enable V-Sync
+
+    return 0;
 }
 
 void Game::render_loop()
