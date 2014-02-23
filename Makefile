@@ -10,7 +10,7 @@ ifeq ($(UNAME_S),Darwin)
     CXX = g++-4.8 #/usr/local/bin/g++-4.8
 endif
 ifeq ($(UNAME_S),Linux)
-    CXX = g++
+    CXX = g++-4.8
     CXXFLAGS := $(CXXFLAGS) -Wl,--no-as-needed #:= prevents recursive expansion
     GL_FLAGS = -lGL -lGLU
 endif
