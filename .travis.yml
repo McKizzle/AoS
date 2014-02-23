@@ -1,7 +1,7 @@
 before_install: 
+    - pwd
     - sudo apt-get install -qq gcc-4.8
-    - sudo apt-get install -qq libsdl2-dev
-    
+    - sudo apt-get install -qq libsdl2-dev 
 script: make build
 
 
