@@ -30,20 +30,6 @@ Uint32 Game::main_loop()
             SDL_Delay((int)(dt - ftime));
         }
     }
-    //SDL_Event event;
-    //while (SDL_PollEvent(&event))
-    //{
-    //    switch (event.type)
-    //    {
-    //        case SDL_USEREVENT:
-    //        {   
-    //            std::cout << "Caught SDL_USEREVENT" << std::endl;
-    //            break;
-    //        }
-    //            
-    //    }
-
-    //}
 
     return 0;
 }
@@ -65,19 +51,19 @@ int Game::init()
        this->logSDLError(std::cout, "init_gl(): "); 
     }
 
-    //std::cout << "Starting SDL_Timer" << std::endl; 
-    //std::cout << "Ticks: " << this->ticks << std::endl; 
-    //std::cout << "Ticks: " << this->ticks << std::endl; 
-    //std::cout << "Done starting SDL_Timer" << std::endl; 
+    // Create and load the game objects. 
+    float shp_verts[] = {0.0, 1.0, -0.3, -0.3, 0.3, -0.3};
+    float shp_edgs[]  = {0, 1, 1, 2, 2};
 
-    // Start the main loop
-    //Uint32 s_main_loop = main_loop(0, this);
+    delete shp_verts;
+    delete shp_edgs;
 
-    // 3) TODO: Start the update loop.
+
+    // Start the update loop.
     this->game_timer = SDL_AddTimer(16, Game::update_loop, this); 
-    // 4) TODO: Start the input loop.
+    // Start the input loop.
     this->input_timer = SDL_AddTimer(16, Game::input_loop, this);
-
+    // Start the main loop 
     this->main_loop();
 
     return 1;
@@ -121,8 +107,6 @@ int Game::init_gl()
 
 Uint32 Game::render(Uint32 interval, void *param)
 { 
-    //SDL_GL_MakeCurrent(game_ptr->sdl_window, game_ptr->sdl_gl_context); // Needed since this is running in its own thread.
-    //Clear to red background. 
     Uint32 ticks = (this->ticks % 30) / 10;
     switch(ticks) 
     {
@@ -146,7 +130,6 @@ Uint32 Game::render(Uint32 interval, void *param)
 
 Uint32 Game::update_loop(Uint32 interval, void * param)
 {
-    std::cout << "Game Loop\n";
     SDL_Event event;
     SDL_UserEvent uevent;
     
@@ -157,21 +140,8 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
     event.user = uevent;
 
     Game *aos_game_ptr = (Game * )param;
-    std::cout << "Tick: " << aos_game_ptr->ticks << "\nInterval: " << interval << std::endl;
     
     aos_game_ptr->ticks++;
-    if(aos_game_ptr->ticks >= 1000)
-    {
-        std::cout << "Reached maximum ticks. Disableing timer" << std::endl;
-        interval = 0;
-        aos_game_ptr->exit = true; 
-    }
-    
-    if(aos_game_ptr->exit)
-    {
-        interval = 0;
-    }
-    SDL_PushEvent(&event);
     return interval;
 }
 
