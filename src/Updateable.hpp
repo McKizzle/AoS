@@ -1,5 +1,8 @@
 #ifndef UPDATEABLE_HPP 
 #define UPDATEABLE_HPP
+
+#include <SDL2/SDL.h>
+
 namespace aos {
     /// \interface Updateable Updateable.hpp
     /// 
@@ -11,7 +14,7 @@ namespace aos {
             /// Updates the object.
             /// \param the time step size.
             /// \param the game time.
-            void update(int dt, int time) = 0;
+            virtual void update(Uint32 dt, Uint32 time) = 0;
     };
 }
 #endif

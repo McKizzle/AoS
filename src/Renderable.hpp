@@ -1,5 +1,8 @@
 #ifndef RENDERABLE_HPP
 #define RENDERABLE_HPP
+
+#include <SDL2/SDL.h>
+
 namespace aos {
     /// \interface Renderable Renderable.hpp
     /// 
@@ -8,7 +11,7 @@ namespace aos {
     class Renderable
     {
         public:
-            void render() = 0;
+            virtual void render(Uint32 dt_ms, Uint32 time) = 0;
     };
 }
 #endif
