@@ -36,16 +36,16 @@ $(info $(OBJS))
 $(info $(BIN))
 #$(info $(CXXFLAGS))
 
-# Builds and then runs the game.
-run: build
-	clear
-	./$(BIN)	
-
 # target: link the objects. 
 #	prerequisite: make sure that the objects are compiled first.
 #	prerequisite: check for any $(BIN) prerequisites.
 build: $(OBJS) $(BIN)
 	$(CXX) -o $(BIN) $(OBJS) $(ALL_FLAGS)
+
+# Builds and then runs the game.
+run: build
+	clear
+	./$(BIN)	
 
 # target: do work for creating the binary file. 
 #	prerequisite: Make sure that there is a bin directory. 
