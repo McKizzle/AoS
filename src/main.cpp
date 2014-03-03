@@ -56,6 +56,7 @@ int main(int argc, char *argv[]) {
         {
             case 'h':
                 std::cout << "Printing help text to the screen\n";
+                return 1;
                 break;
             case 'd':
                 DEBUG = true;
