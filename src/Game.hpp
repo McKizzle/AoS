@@ -1,5 +1,6 @@
 //SDL Includes
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_timer.h>
 #ifdef __APPLE__
 #include <OpenGL/GL.h>
 #elif __linux__
@@ -20,6 +21,8 @@ namespace aos {
     /// All three loops will access the objects in the game and update them approprietly. 
     class Game {
         public:
+            bool exit = false;
+            void logSDLError(std::ostream &os, const std::string &msg);
             Game();
             ~Game();
             /// The init method calls all of the necessary code in order to setup 
@@ -28,15 +31,23 @@ namespace aos {
             /// \return 0 on success otherwise return another number.
             int init(); 
         private:
-            int screen_width = 512, screen_height = 512;
             SDL_Window * sdl_window;
             SDL_GLContext sdl_gl_context;
-            /// The render_loop runs in a thread. Its sole job is to call
+            Uint32 ticks = 0;
+            Uint32 screen_width = 512, screen_height = 512;
+            SDL_TimerID game_timer;
+            SDL_TimerID input_timer;
+            /// The main game loop. Compliant to the SDL_AddTimer function.
+            Uint32 main_loop();
+            /// The render is planned to run in a thread. For now it 
+            /// will be ran in the main_loop. Its sole job is to call
             ///  a renderable object.
-            void render_loop();
-            /// The update_loop runs in a thread. Its sole job is to call
+            Uint32 render(Uint32 interval, void *param);
+            /// The update_loop is planned to run in a thread. Its sole job is to call
             ///  an updatable object.
-            void update_loop();
+            static Uint32 update_loop(Uint32 interval, void * param);
+            /// The input_loop runs in its own thread and handles events from the user.
+            static Uint32 input_loop(Uint32 interval, void * param);
             int init_gl();      ///< Initializes OpenGL for the game.
             int init_sdl();     ///< Initializes SDL for the game.
     };
