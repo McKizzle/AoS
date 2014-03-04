@@ -3,17 +3,13 @@
 
 using namespace aos;
 
-Game::Game() 
-{
-    std::cout << "Created a game object\n"; 
-}
+Game::Game() {}
 
 Game::~Game()
-{
+{ 
     SDL_GL_DeleteContext(sdl_gl_context);
     SDL_DestroyWindow(sdl_window);
     SDL_Quit();    
-    std::cout << "Destroyed a game object\n";  
 } 
 
 Uint32 Game::main_loop() 
@@ -24,6 +20,8 @@ Uint32 Game::main_loop()
     {
         fstart = SDL_GetTicks();
         this->render(0, this);
+        this->input_handler(0, this);
+
         ftime = SDL_GetTicks() - fstart;
         if(ftime < dt) 
         {
@@ -36,12 +34,7 @@ Uint32 Game::main_loop()
 
 int Game::init() 
 {
-    std::cout << "Initializing the environment for the game. \n";
-
-    // 1) Load the required data
-    //          In this case create a simple object that spins.
-     
-    // 2) Initialize the game data.
+    // Initialize SDL and openGL
     if(init_sdl() != 0) 
     {
         this->logSDLError(std::cout, "init_sdl(): ");
@@ -52,17 +45,16 @@ int Game::init()
     }
 
     // Create and load the game objects. 
-    float shp_verts[] = {0.0, 1.0, -0.3, -0.3, 0.3, -0.3};
-    float shp_edgs[]  = {0, 1, 1, 2, 2};
+    //float shp_verts[] = {0.0, 1.0, -0.3, -0.3, 0.3, -0.3};
+    //float shp_edgs[]  = {0, 1, 1, 2, 2};
 
-    delete shp_verts;
-    delete shp_edgs;
+    //delete shp_verts;
+    //delete shp_edgs;
 
 
-    // Start the update loop.
-    this->game_timer = SDL_AddTimer(16, Game::update_loop, this); 
-    // Start the input loop.
-    this->input_timer = SDL_AddTimer(16, Game::input_loop, this);
+    // Start the update thread
+    //this->game_timer = SDL_AddTimer(16, Game::update_loop, this); 
+    this->update_thread = new std::thread(Game::update_loop, 16, this);
     // Start the main loop 
     this->main_loop();
 
@@ -130,27 +122,37 @@ Uint32 Game::render(Uint32 interval, void *param)
 
 Uint32 Game::update_loop(Uint32 interval, void * param)
 {
-    SDL_Event event;
-    SDL_UserEvent uevent;
-    
-    uevent.type = SDL_USEREVENT;
-    uevent.code = 0;
+    //SDL_Event event;
+    //SDL_UserEvent uevent;
+    //
+    //uevent.type = SDL_USEREVENT;
+    //uevent.code = 0;
 
-    event.type = SDL_USEREVENT;
-    event.user = uevent;
+    //event.type = SDL_USEREVENT;
+    //event.user = uevent;
 
-    Game *aos_game_ptr = (Game * )param;
-    
-    aos_game_ptr->ticks++;
+    Uint32 dt = 16;
+    Uint32 fstart, ftime;
+    Game *aos_game_ptr = (Game * )param; 
+    while(!aos_game_ptr->exit)
+    {
+        fstart = SDL_GetTicks();
+
+        ftime = SDL_GetTicks() - fstart;
+        aos_game_ptr->ticks++;
+        std::chrono::milliseconds stime(dt - ftime);
+        std::this_thread::sleep_for(stime);
+    }
+
     return interval;
 }
 
-Uint32 Game::input_loop(Uint32 interval, void * param)
+Uint32 Game::input_handler(Uint32 interval, void * param)
 {
     Game * game_ptr = (Game *) param;
-    
+ 
     SDL_Event event;
-    while(SDL_PollEvent(&event))
+    while(SDL_PollEvent(&event)) 
     {
         switch(event.type) 
         {

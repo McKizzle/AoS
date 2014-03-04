@@ -1,5 +1,6 @@
 //SDL Includes
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_timer.h>
 #ifdef __APPLE__
 #include <OpenGL/GL.h>
@@ -23,6 +24,7 @@ namespace aos {
         public:
             bool exit = false;
             void logSDLError(std::ostream &os, const std::string &msg);
+            Uint32 screen_width = 512, screen_height = 512;
             Game();
             ~Game();
             /// The init method calls all of the necessary code in order to setup 
@@ -34,9 +36,8 @@ namespace aos {
             SDL_Window * sdl_window;
             SDL_GLContext sdl_gl_context;
             Uint32 ticks = 0;
-            Uint32 screen_width = 512, screen_height = 512;
             SDL_TimerID game_timer;
-            SDL_TimerID input_timer;
+            std::thread * update_thread;
             /// The main game loop. Compliant to the SDL_AddTimer function.
             Uint32 main_loop();
             /// The render is planned to run in a thread. For now it 
@@ -47,7 +48,7 @@ namespace aos {
             ///  an updatable object.
             static Uint32 update_loop(Uint32 interval, void * param);
             /// The input_loop runs in its own thread and handles events from the user.
-            static Uint32 input_loop(Uint32 interval, void * param);
+            Uint32 input_handler(Uint32 interval, void * param);
             int init_gl();      ///< Initializes OpenGL for the game.
             int init_sdl();     ///< Initializes SDL for the game.
     };
