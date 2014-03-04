@@ -93,6 +93,8 @@ int main(int argc, char *argv[]) {
     // Now Initialize the game.
     // Create a Game object. 
     Game *aos_game_ptr = new Game();
+    aos_game_ptr->screen_width = width;
+    aos_game_ptr->screen_height = height;
     aos_game_ptr->init();
     // Create an Integrator.
     // Create a Renderer.
