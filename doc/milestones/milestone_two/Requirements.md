@@ -33,14 +33,15 @@ To make the game entertaining. The application must meet the following player re
       1. Display asteroid trajectories. 
       2. Display enemy targeting.
       3. Display bullet trajectory and targeting systems. 
-      4. Life every 10,000 pts
+      4. Life every 10,000 pts.
     - Medium
-      1. Display asteroid trajectories. 
-      2. Life every 20,000 pts. 
+      1. Display asteroid trajectories.
+      2. Life every 20,000 pts.
     - Hard
-      1. Life every 40,000 pts. 
+      1. Life every 40,000 pts.
     - Einstein
       1. Bullets affected by gravity of planets and planetoids. 
+      2. If a feasible solution to the game play then asteroid gravity will have a minor affect on the bullets. 
 
 ## Non-Functional Requirments
 Delivering a pleasant game requires smooth a smooth game play and system properties that are related to the game. 
