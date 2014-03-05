@@ -14,9 +14,8 @@ Game::~Game()
 
 Uint32 Game::main_loop() 
 {
-    Uint32 dt = 16;
     Uint32 fstart, ftime;
-    while(!this->exit)
+    while(!this->exit) // FIXME: Now the main game loop follows the dt values set by the update function. 
     {
         fstart = SDL_GetTicks();
         this->render(0, this);
@@ -44,14 +43,6 @@ int Game::init()
        this->logSDLError(std::cout, "init_gl(): "); 
     }
 
-    // Create and load the game objects. 
-    //float shp_verts[] = {0.0, 1.0, -0.3, -0.3, 0.3, -0.3};
-    //float shp_edgs[]  = {0, 1, 1, 2, 2};
-
-    //delete shp_verts;
-    //delete shp_edgs;
-
-
     // Start the update thread
     //this->game_timer = SDL_AddTimer(16, Game::update_loop, this); 
     this->update_thread = new std::thread(Game::update_loop, 16, this);
@@ -67,7 +58,6 @@ int Game::init_sdl()
     {
         return 1;
     } 
-
 
     sdl_window = SDL_CreateWindow(
             "Asteroids on Steroids",
@@ -131,17 +121,38 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
     //event.type = SDL_USEREVENT;
     //event.user = uevent;
 
-    Uint32 dt = 16;
     Uint32 fstart, ftime;
     Game *aos_game_ptr = (Game * )param; 
+    Uint32 min_dt = aos_game_ptr->min_dt;
+    Uint32 max_dt = aos_game_ptr->max_dt;
+    Uint32 dt; 
     while(!aos_game_ptr->exit)
     {
+        dt = aos_game_ptr->dt;
         fstart = SDL_GetTicks();
 
         ftime = SDL_GetTicks() - fstart;
-        aos_game_ptr->ticks++;
-        std::chrono::milliseconds stime(dt - ftime);
-        std::this_thread::sleep_for(stime);
+        aos_game_ptr->ticks++; 
+        
+
+        // Allow a variable dt between the minimum and maximum dt specified in the game
+        // class.
+        if(ftime < min_dt) // Only sleep if execution time takes less than dt.
+        {  
+            aos_game_ptr->dt = min_dt;
+
+            std::chrono::milliseconds stime(dt - ftime);
+            std::this_thread::sleep_for(stime);
+        } 
+        else { if(ftime > max_dt) {
+            aos_game_ptr->dt = max_dt;
+                    
+        }
+        else 
+        { 
+            aos_game_ptr->dt = ftime;
+        }}
+
     }
 
     return interval;

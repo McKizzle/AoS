@@ -23,8 +23,12 @@ namespace aos {
     class Game {
         public:
             bool exit = false;
-            void logSDLError(std::ostream &os, const std::string &msg);
-            Uint32 screen_width = 512, screen_height = 512;
+            Uint32 screen_width = 512;
+            Uint32 screen_height = 512;
+            Uint32 ticks = 0;
+            Uint32 min_dt = 16; 
+            Uint32 max_dt = 32; 
+            Uint32 dt = min_dt; ///< Timestep in miliseconds. Default to minimum dt.
             Game();
             ~Game();
             /// The init method calls all of the necessary code in order to setup 
@@ -32,13 +36,14 @@ namespace aos {
             ///  an error code.
             /// \return 0 on success otherwise return another number.
             int init(); 
+            /// Log sdl errors to the desired output stream.
+            void logSDLError(std::ostream &os, const std::string &msg);
         private:
-            SDL_Window * sdl_window;
-            SDL_GLContext sdl_gl_context;
-            Uint32 ticks = 0;
+            SDL_Window * sdl_window; ///< The SDL window to display the OpenGL Context
+            SDL_GLContext sdl_gl_context; ///< The OpenGL context to render the game. Using the SDL version allows usage of SDL 2d libraries.
             SDL_TimerID game_timer;
-            std::thread * update_thread;
-            /// The main game loop. Compliant to the SDL_AddTimer function.
+            std::thread * update_thread; ///< Updates the game.
+            /// The main game loop. Runs in the main thread.
             Uint32 main_loop();
             /// The render is planned to run in a thread. For now it 
             /// will be ran in the main_loop. Its sole job is to call
@@ -47,7 +52,12 @@ namespace aos {
             /// The update_loop is planned to run in a thread. Its sole job is to call
             ///  an updatable object.
             static Uint32 update_loop(Uint32 interval, void * param);
-            /// The input_loop runs in its own thread and handles events from the user.
+            /// The input_handler is called by the main_loop function. The 
+            ///     design of SDL doesn't allow events to be handled in a seperate thread.
+            /// @param [in] interval TODO
+            /// @param [in, out] param aditional parameters that the update procedure may need. 
+            /// 
+            /// \return The return value is to be determined for now return a Uint32. 
             Uint32 input_handler(Uint32 interval, void * param);
             int init_gl();      ///< Initializes OpenGL for the game.
             int init_sdl();     ///< Initializes SDL for the game.
