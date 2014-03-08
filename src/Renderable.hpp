@@ -1,8 +1,7 @@
-#ifndef RENDERABLE_HPP
-#define RENDERABLE_HPP
-
 #include <SDL2/SDL.h>
 
+#ifndef RENDERABLE_HPP
+#define RENDERABLE_HPP
 namespace aos {
     /// \interface Renderable Renderable.hpp
     /// 

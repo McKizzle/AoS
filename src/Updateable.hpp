@@ -1,8 +1,7 @@
-#ifndef UPDATEABLE_HPP 
-#define UPDATEABLE_HPP
-
 #include <SDL2/SDL.h>
 
+#ifndef UPDATEABLE_HPP 
+#define UPDATEABLE_HPP
 namespace aos {
     /// \interface Updateable Updateable.hpp
     /// 

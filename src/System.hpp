@@ -1,6 +1,3 @@
-#ifndef SYSTEM_HPP
-#define SYSTEM_HPP
-
 #include <SDL2/SDL.h>
 
 #include <vector>
@@ -9,6 +6,8 @@
 #include "Renderable.hpp"
 #include "Object.hpp"
 
+#ifndef SYSTEM_HPP
+#define SYSTEM_HPP
 namespace aos
 {    
     class System: public Updateable, public Renderable
