@@ -15,7 +15,7 @@ namespace aos {
     ///  
     /// All objects in the game that need to be rendered and integrated
     /// must inherit from the Object class. 
-    class Object: public Renderable, public Updateable
+    class Object: public Renderable, public Updateable, public Eventful
     {
         public:
             std::vector< double > angular_momentum;

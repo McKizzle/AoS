@@ -4,6 +4,7 @@
 #include "includes.hpp"
 #include "Object.hpp"
 #include "Game.hpp"
+#include "Player.hpp"
 
 #include <getopt.h> 
 
@@ -92,19 +93,16 @@ int main(int argc, char *argv[]) {
 
     // Now Initialize the game.
     // Create a Game object. 
-    Game *aos_game_ptr = new Game();
-    aos_game_ptr->screen_width = width;
-    aos_game_ptr->screen_height = height;
-    aos_game_ptr->init();
-    // Create an Integrator.
-    // Create a Renderer.
-    // Create a InputGrabber.
-    //
+    Game *aos_game = new Game();
+    aos_game->screen_width = width;
+    aos_game->screen_height = height;
+    aos_game->init();
+    int res = aos_game->start_game();
     
-    // Start the Game Object. 
-
     delete aspect_ratio;
-    delete aos_game_ptr;
+    delete aos_game;
+
+    return res;
 }
 
 

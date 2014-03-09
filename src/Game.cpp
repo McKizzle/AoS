@@ -38,6 +38,15 @@ Uint32 Game::main_loop()
     return 0;
 }
 
+int Game::start_game()
+{
+    // Start the update thread
+    this->update_thread = new std::thread(Game::update_loop, 16, this);
+    this->main_loop();
+
+    return 0;
+}
+
 int Game::init() 
 {
     // Initialize SDL and openGL
@@ -50,11 +59,9 @@ int Game::init()
        this->logSDLError(std::cout, "init_gl(): "); 
     }
 
-    // Start the update thread
-    //this->game_timer = SDL_AddTimer(16, Game::update_loop, this); 
-    this->update_thread = new std::thread(Game::update_loop, 16, this);
-    // Start the main loop 
-    this->main_loop();
+    // Create the game objects. 
+    Object * plyr = Player::default_player();
+    objects.push_back(plyr);
 
     return 1;
 }
@@ -96,21 +103,21 @@ int Game::init_gl()
 
 Uint32 Game::render(Uint32 interval, void *param)
 { 
-    Uint32 ticks = (this->ticks % 30) / 10;
-    switch(ticks) 
-    {
-        case 0: 
-            glClearColor(1.0, 0.0, 0.0, 1.0);
-            break;
-        case 1: 
-            glClearColor(0.0, 1.0, 0.0, 1.0);
-            break;
-        case 2: 
-            glClearColor(0.0, 0.0, 1.0, 1.0);
-            break;
-        default:
-            break;
-    }
+    //Uint32 ticks = (this->ticks % 30) / 10;
+    //switch(ticks) 
+    //{
+    //    case 0: 
+    //        glClearColor(1.0, 0.0, 0.0, 1.0);
+    //        break;
+    //    case 1: 
+    //        glClearColor(0.0, 1.0, 0.0, 1.0);
+    //        break;
+    //    case 2: 
+    //        glClearColor(0.0, 0.0, 1.0, 1.0);
+    //        break;
+    //    default:
+    //        break;
+    //}
     glClear(GL_COLOR_BUFFER_BIT);
     SDL_GL_SwapWindow(this->sdl_window);
 
@@ -186,7 +193,13 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
                 }
                 else 
                 {
-                    // Send the event to an object. 
+                    std::cout << "Game keydown" << std::endl;
+                    for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
+                    {
+                        Object *evntf = *it;
+                        evntf->send_event(event, interval, game_ptr->ticks);
+                        //(Eventful *it)->send_event(event, interval, game_ptr->ticks);
+                    }
                 }
                 break;
             default:

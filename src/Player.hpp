@@ -12,7 +12,8 @@
 #include "Eventful.hpp"
 
 namespace aos {
-    class Player: public Object, public Eventful {
+    class Player: public Object 
+    {
         public:
             Player();
             ~Player();
@@ -21,6 +22,8 @@ namespace aos {
             virtual void send_event(SDL_Event, Uint32 dt, Uint32 time);
             
             static Player * default_player();
+
+            void test_vectors();
     };
 }
 

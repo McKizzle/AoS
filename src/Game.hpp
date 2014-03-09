@@ -6,7 +6,10 @@
 #elif __linux__
 #include <GL/gl.h>
 #endif
+
 #include "includes.hpp"
+#include "Object.hpp"
+#include "Player.hpp"
 
 #ifndef GAME_HPP
 #define GAME_HPP
@@ -30,6 +33,8 @@ namespace aos {
             SDL_Window * sdl_window; ///< The SDL window to display the OpenGL Context
             SDL_GLContext sdl_gl_context; ///< The OpenGL context to render the game. Using the SDL version allows usage of SDL 2d libraries.
             std::thread * update_thread; ///< Updates the game.
+            
+            std::vector< Object* > objects; ///< Game objects go here. 
 
             Game();
             ~Game();
@@ -40,6 +45,8 @@ namespace aos {
             int init(); 
             int init_gl();      ///< Initializes OpenGL for the game.
             int init_sdl();     ///< Initializes SDL for the game.
+            int start_game();   ///< Starts up all of the necessary threads. 
+            
             
             /// Log sdl errors to the desired output stream.
             void logSDLError(std::ostream &os, const std::string &msg);
