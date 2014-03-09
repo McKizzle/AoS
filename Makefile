@@ -27,7 +27,7 @@ OBJ_DIR = obj
 BIN_DIR = bin
 # DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
 # SRCS = $(wildcard $(SRC_DIR)/*.cpp) 
-SRCS = main.cpp Object.cpp Game.cpp System.cpp
+SRCS = main.cpp Object.cpp Game.cpp System.cpp Player.cpp
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 BIN = $(BIN_DIR)/AoS
 

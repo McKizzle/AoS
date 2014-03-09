@@ -1,4 +1,3 @@
-#include "includes.hpp"
 #include "Game.hpp"
 
 using namespace aos;
@@ -15,7 +14,7 @@ Game::~Game()
 Uint32 Game::main_loop() 
 {
     Uint32 fstart, ftime;
-    while(!this->exit) // FIXME: Now the main game loop follows the dt values set by the update function. 
+    while(!this->exit)
     {
         fstart = SDL_GetTicks();
         this->render(0, this);
@@ -26,6 +25,14 @@ Uint32 Game::main_loop()
         {
             SDL_Delay((int)(dt - ftime));
         }
+        else { if(ftime > dt) 
+        {
+            dt = max_dt;
+        }
+        else 
+        {
+            dt = ftime;
+        }}
     }
 
     return 0;
@@ -135,8 +142,8 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
         aos_game_ptr->ticks++; 
         
 
-        // Allow a variable dt between the minimum and maximum dt specified in the game
-        // class.
+        // Allow a variable dt between the minimum and maximum dt specified in 
+        // the game class.
         if(ftime < min_dt) // Only sleep if execution time takes less than dt.
         {  
             aos_game_ptr->dt = min_dt;
