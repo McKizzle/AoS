@@ -6,6 +6,12 @@
 #include <iostream>
 #include <vector>
 
+#ifdef __APPLE__
+#include <OpenGL/GL.h>
+#elif __linux__
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
 
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
@@ -18,7 +24,8 @@ namespace aos {
     class Object: public Renderable, public Updateable, public Eventful
     {
         public:
-            std::vector< double > angular_momentum;
+            double angular_velocity; ///< The rotational speed of the object. Positive is clockwise, negative counterclockwise. 
+            double heading;
             std::vector< double > velocity;
             std::vector< double > acceleration;
             std::vector< double > jerk;

@@ -98,11 +98,24 @@ int Game::init_gl()
 
     SDL_GL_SetSwapInterval(1); // Enable V-Sync
 
+    glViewport(0, 0, screen_width, screen_height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
+    gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
     return 0;
 }
 
 Uint32 Game::render(Uint32 interval, void *param)
-{ 
+{
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
+    {
+        Object *rndrf = *it;
+        rndrf->render(interval, this->ticks);
+    }
+
     //Uint32 ticks = (this->ticks % 30) / 10;
     //switch(ticks) 
     //{
@@ -118,7 +131,8 @@ Uint32 Game::render(Uint32 interval, void *param)
     //    default:
     //        break;
     //}
-    glClear(GL_COLOR_BUFFER_BIT);
+
+    glFlush();
     SDL_GL_SwapWindow(this->sdl_window);
 
     return interval;
@@ -175,10 +189,12 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
 Uint32 Game::input_handler(Uint32 interval, void * param)
 {
     Game * game_ptr = (Game *) param;
- 
+
     SDL_Event event;
+ 
     while(SDL_PollEvent(&event)) 
-    {
+    {   
+
         switch(event.type) 
         {
             case SDL_QUIT:
@@ -192,13 +208,13 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
                     interval = 0;
                 }
                 else 
-                {
-                    std::cout << "Game keydown" << std::endl;
+                {   
+                    // Get all of the keyboard events.
+                    const Uint8* currKeyStates = SDL_GetKeyboardState(NULL);
                     for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
                     {
                         Object *evntf = *it;
-                        evntf->send_event(event, interval, game_ptr->ticks);
-                        //(Eventful *it)->send_event(event, interval, game_ptr->ticks);
+                        evntf->send_event(currKeyStates, interval, game_ptr->ticks);
                     }
                 }
                 break;

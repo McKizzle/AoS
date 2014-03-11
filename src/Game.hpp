@@ -5,6 +5,7 @@
 #include <OpenGL/GL.h>
 #elif __linux__
 #include <GL/gl.h>
+#include <GL/glu.h>
 #endif
 
 #include "includes.hpp"
@@ -32,8 +33,7 @@ namespace aos {
             Uint32 dt = min_dt; ///< Timestep in miliseconds. Default to minimum dt.
             SDL_Window * sdl_window; ///< The SDL window to display the OpenGL Context
             SDL_GLContext sdl_gl_context; ///< The OpenGL context to render the game. Using the SDL version allows usage of SDL 2d libraries.
-            std::thread * update_thread; ///< Updates the game.
-            
+            std::thread * update_thread; ///< Updates the game. 
             std::vector< Object* > objects; ///< Game objects go here. 
 
             Game();

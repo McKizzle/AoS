@@ -12,29 +12,41 @@ Player::~Player()
     
 }
 
-void Player::update(Uint32 dt, Uint32 time)
+//void Player::update(Uint32 dt, Uint32 time)
+//{
+//    
+//}
+//
+//void Player::render(Uint32 dt, Uint32 time)
+//{
+//    // Render the spaceship. 
+//}
+
+
+void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time) 
 {
-
-}
-
-void Player::render(Uint32 dt, Uint32 time)
-{
-
-}
-
-
-void Player::send_event(SDL_Event event, Uint32 dt, Uint32 time)
-{ 
-    std::cout << "Received an event! " << std::endl;
-    switch(event.type) 
+    if(keyboardStates[SDL_SCANCODE_A])
     {
-        case SDL_KEYDOWN:
-            std::cout << "Key Pressed" << std::endl;
-            break;
-        default:
-            break;
+        std::cout << "Forward" << std::endl;
+    }
+    if(keyboardStates[SDL_SCANCODE_W])
+    {
+        std::cout << "Left" << std::endl;
+    }
+    if(keyboardStates[SDL_SCANCODE_D])
+    { 
+         std::cout << "Right" << std::endl;
+    }
+    if(keyboardStates[SDL_SCANCODE_S])
+    {
+        std::cout << "Backwards" << std::endl;
+    }
+    if(keyboardStates[SDL_SCANCODE_SPACE]) 
+    { 
+        std::cout << "Fire" << std::endl;
     }
 }
+
 
 void Player::test_vectors() 
 {
@@ -88,10 +100,13 @@ Player * Player::default_player()
     edges.push_back(3);
     edges.push_back(3);
     edges.push_back(4);
+    edges.push_back(4);
+    edges.push_back(0);
 
     Player *plyr = new Player();
     plyr->edges = std::move(edges);
     plyr->vertices = std::move(vertices);
+    plyr->angular_velocity = M_PI / 5.0;
 
     return plyr;
 }
