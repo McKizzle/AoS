@@ -90,6 +90,7 @@ int Game::init_sdl()
 int Game::init_gl()
 { 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3); // Request openGL 3
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Set up double buffering
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); // Set the color depth. 
 
@@ -103,6 +104,8 @@ int Game::init_gl()
     glLoadIdentity();
     GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
     gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+
+    printf("%s\n", glGetString(GL_VERSION));
     return 0;
 }
 
@@ -112,6 +115,7 @@ Uint32 Game::render(Uint32 interval, void *param)
     glClear(GL_COLOR_BUFFER_BIT);
     for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
     {
+        std::cout << "Calling objects to render" << std::endl;
         Object *rndrf = *it;
         rndrf->render(interval, this->ticks);
     }
