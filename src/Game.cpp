@@ -99,12 +99,13 @@ int Game::init_gl()
 
     SDL_GL_SetSwapInterval(1); // Enable V-Sync
 
-    glViewport(0, 0, screen_width, screen_height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
-    //gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
-    glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);
+    //glViewport(0, 0, screen_width, screen_height);
+    //glMatrixMode(GL_PROJECTION);
+    //glLoadIdentity();
+    ////GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
+    ////gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+    //glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);
+    //glMatrixMode(GL_MODELVIEW);
 
     printf("%s\n", glGetString(GL_VERSION));
     return 0;
@@ -112,33 +113,44 @@ int Game::init_gl()
 
 Uint32 Game::render(Uint32 interval, void *param)
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
-    for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
-    {
-        std::cout << "Calling objects to render" << std::endl;
-        Object *rndrf = *it;
-        rndrf->render(interval, this->ticks);
-    }
-
-    //Uint32 ticks = (this->ticks % 30) / 10;
-    //switch(ticks) 
-    //{
-    //    case 0: 
-    //        glClearColor(1.0, 0.0, 0.0, 1.0);
-    //        break;
-    //    case 1: 
-    //        glClearColor(0.0, 1.0, 0.0, 1.0);
-    //        break;
-    //    case 2: 
-    //        glClearColor(0.0, 0.0, 1.0, 1.0);
-    //        break;
-    //    default:
-    //        break;
-    //}
-
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    //glTranslatef(0, 0, -2);
+    glBegin(GL_POLYGON);
+    glColor3f(1.0, 0.2, 0.2);
+    glVertex3f(0.25, 0.25, 0.0);
+    glVertex3f(0.75, 0.25, 0.0);
+    glVertex3f(0.75, 0.75, 0.0);
+    glVertex3f(0.25, 0.75, 0.0);
+    glEnd();
     glFlush();
-    SDL_GL_SwapWindow(this->sdl_window);
+    //glClear(GL_COLOR_BUFFER_BIT);
+    //glLoadIdentity();
+    ////glTranslatef(0.0f, 0.0f, -5.0f);
+
+    //glColor3f(1.0f, 1.0f, 1.0f);
+    //glBegin(GL_QUADS); // Start drawing a quad primitive  
+
+    //    glVertex3f(-1.0f, -1.0f, 0.0f); // The bottom left corner  
+    //    glVertex3f(-1.0f, 1.0f, 0.0f); // The top left corner  
+    //    glVertex3f(1.0f, 1.0f, 0.0f); // The top right corner  
+    //    glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner  
+
+    //glEnd();  
+    ////for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
+    ////{
+    ////    //std::cout << "Calling objects to render" << std::endl;
+    ////    Object *rndrf = *it;
+    ////    rndrf->render(interval, this->ticks);
+    ////}
+
+    //glFlush();
+    //SDL_GL_SwapWindow(this->sdl_window);
 
     return interval;
 }

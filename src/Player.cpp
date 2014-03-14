@@ -17,21 +17,29 @@ Player::~Player()
 //    
 //}
 //
-//void Player::render(Uint32 dt, Uint32 time)
-//{
-//    // Render the spaceship. 
-//}
+void Player::render(Uint32 dt, Uint32 time)
+{ 
+glColor3f(1.0f, 1.0f, 1.0f);
+glBegin(GL_QUADS); // Start drawing a quad primitive  
+
+glVertex3f(-1.0f, -1.0f, 0.0f); // The bottom left corner  
+glVertex3f(-1.0f, 1.0f, 0.0f); // The top left corner  
+glVertex3f(1.0f, 1.0f, 0.0f); // The top right corner  
+glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner  
+
+glEnd();  
+}
 
 
 void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time) 
 {
     if(keyboardStates[SDL_SCANCODE_A])
     {
-        std::cout << "Forward" << std::endl;
+        std::cout << "Left" << std::endl;
     }
     if(keyboardStates[SDL_SCANCODE_W])
     {
-        std::cout << "Left" << std::endl;
+        std::cout << "Forward" << std::endl;
     }
     if(keyboardStates[SDL_SCANCODE_D])
     { 
@@ -65,31 +73,32 @@ void Player::test_vectors()
         std::vector< unsigned int >::iterator itn = it + 1;
         std::cout << "(" << *it << ", " << *itn << ")" << std::endl;
     }
+    exit(0);
 }
 
 Player * Player::default_player()
 { 
-    std::vector< double > p1;// = new std::vector< double >();
-    p1.push_back(1.0);
-    p1.push_back(0.0);
-    std::vector< double > p2;// = new std::vector< double >(); 
+    std::vector< double > p0;// = new std::vector< double >();
+    p0.push_back(1.0);
+    p0.push_back(0.0);
+    std::vector< double > p1;// = new std::vector< double >(); 
     double theta = 2.0 * M_PI / 3.0; //one-third of 2pi
-    p2.push_back(std::cos(theta));
-    p2.push_back(std::sin(theta));
+    p1.push_back(std::cos(theta));
+    p1.push_back(std::sin(theta));
+    std::vector< double > p2;// = new std::vector< double >();
+    p2.push_back(-1.0/3.0);
+    p2.push_back(0.0); 
     std::vector< double > p3;// = new std::vector< double >();
-    p3.push_back(-1.0/3.0);
-    p3.push_back(0.0); 
-    std::vector< double > p4;// = new std::vector< double >();
     theta = 4.0 * M_PI / 3.0; // two-thirds of 2pi`
-    p4.push_back(std::cos(theta));
-    p4.push_back(std::sin(theta));
+    p3.push_back(std::cos(theta));
+    p3.push_back(std::sin(theta));
     
     std::vector< std::vector< double > > vertices;
     
+    vertices.push_back(p0);
     vertices.push_back(p1);
     vertices.push_back(p2);
-    vertices.push_back(p3);
-    vertices.push_back(p4); 
+    vertices.push_back(p3); 
 
     std::vector< unsigned int > edges;
     edges.push_back(0);
@@ -99,8 +108,6 @@ Player * Player::default_player()
     edges.push_back(2);
     edges.push_back(3);
     edges.push_back(3);
-    edges.push_back(4);
-    edges.push_back(4);
     edges.push_back(0);
 
     Player *plyr = new Player();

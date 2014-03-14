@@ -17,7 +17,7 @@ namespace aos {
         public:
             Player();
             ~Player();
-            //virtual void render(Uint32 dt, Uint32 time);
+            virtual void render(Uint32 dt, Uint32 time);
             //virtual void update(Uint32 dt, Uint32 time);
             virtual void send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time);
 

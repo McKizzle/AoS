@@ -10,18 +10,18 @@ Object::Object()
     jerk.push_back(0.0);
     jerk.push_back(0.0);
 
-    std::cout << "Object Constructor" << std::endl;
+    std::cout << "Object Constructed" << std::endl;
 }
 
 Object::~Object()
 {
-    std::cout << "Object Destructor" << std::endl; 
+    std::cout << "Object Destructed" << std::endl; 
 }
 
 void Object::render(Uint32 dt_ms, Uint32 time) 
 {
     glBegin(GL_LINES);  
-        glColor3f(1.0f, 0.0f, 0.0f);
+        glColor3f(1.0f, 1.0f, 1.0f);
         for(std::vector< unsigned int>::iterator it = this->edges.begin(); it != edges.end(); ++it)
         {
             //std::cout << *it << std::endl; 
