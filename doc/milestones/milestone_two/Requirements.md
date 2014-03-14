@@ -4,7 +4,7 @@
 ### Application Requirements
 Before the user can play the game the application must provide them with the following options.
 
-  - Game runs on Linux and Darwin operating systems.
+  - Game runs on Linux ~~and Darwin operating systems.~~
   - Upon game startup menu is displayed. From the menu users can:
       - Play the game.
       - View high scores.
