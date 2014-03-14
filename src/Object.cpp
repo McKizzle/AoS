@@ -9,6 +9,8 @@ Object::Object()
     acceleration.push_back(0.0);
     jerk.push_back(0.0);
     jerk.push_back(0.0);
+    position.push_back(0.0);
+    position.push_back(0.0);
 
     std::cout << "Object Constructed" << std::endl;
 }
@@ -20,6 +22,9 @@ Object::~Object()
 
 void Object::render(Uint32 dt_ms, Uint32 time) 
 {
+    glPushMatrix();
+    glTranslatef(position[0], position[1], 0.0);
+    glRotatef(heading, 0, 0, 1);
     glBegin(GL_LINES);  
         glColor3f(1.0f, 1.0f, 1.0f);
         for(std::vector< unsigned int>::iterator it = this->edges.begin(); it != edges.end(); ++it)
@@ -30,11 +35,14 @@ void Object::render(Uint32 dt_ms, Uint32 time)
 
         }
     glEnd();
+    glPopMatrix();
 }
 
 void Object::update(Uint32 dt_ms, Uint32 time) 
 {
-    std::cout << "Updated Object" << std::endl;
+    //std::cout << "Updated Object" << std::endl;
+    position[0] += velocity[0];
+    position[1] += velocity[1];
 }
 
 

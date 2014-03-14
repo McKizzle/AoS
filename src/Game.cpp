@@ -90,7 +90,7 @@ int Game::init_sdl()
 int Game::init_gl()
 { 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3); // Request openGL 3
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Set up double buffering
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); // Set the color depth. 
 
@@ -101,16 +101,16 @@ int Game::init_gl()
     
     glViewport(0, 0, screen_width, screen_height);
     print_glError("GL Viewport");
-    //glMatrixMode(GL_PROJECTION);
+    glMatrixMode(GL_PROJECTION);
     print_glError("Matrix Mode");
     glLoadIdentity();
     print_glError("Load Identity");
-    GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
-    gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
-    print_glError("Ortho 2D");
-
-    //glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);
-    //glMatrixMode(GL_MODELVIEW);
+    //GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
+    //gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+    //print_glError("Ortho 2D");
+    glOrtho(-10.0, 10.0, -10.0, 10.0, -1.0, 1.0);
+    print_glError("Ortho");
+    glMatrixMode(GL_MODELVIEW);
 
     printf("%s\n", glGetString(GL_VERSION));
     return 0;
@@ -118,22 +118,8 @@ int Game::init_gl()
 
 Uint32 Game::render(Uint32 interval, void *param)
 {
-    //print_glError("render start");
-    glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
-    //glTranslatef(0, 0, -2);
-    glBegin(GL_POLYGON);
-    glColor3f(1.0, 0.2, 0.2);
-    glVertex3f(0.25, 0.25, 0.0);
-    glVertex3f(0.75, 0.25, 0.0);
-    glVertex3f(0.75, 0.75, 0.0);
-    glVertex3f(0.25, 0.75, 0.0);
-    glEnd();
-    glFlush();
-    //glClear(GL_COLOR_BUFFER_BIT);
-    //glLoadIdentity();
-    ////glTranslatef(0.0f, 0.0f, -5.0f);
 
     //glColor3f(1.0f, 1.0f, 1.0f);
     //glBegin(GL_QUADS); // Start drawing a quad primitive  
@@ -144,14 +130,14 @@ Uint32 Game::render(Uint32 interval, void *param)
     //    glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner  
 
     //glEnd();  
-    ////for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
-    ////{
-    ////    //std::cout << "Calling objects to render" << std::endl;
-    ////    Object *rndrf = *it;
-    ////    rndrf->render(interval, this->ticks);
-    ////}
+    for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
+    {
+        //std::cout << "Calling objects to render" << std::endl;
+        Object *rndrf = *it;
+        rndrf->render(interval, this->ticks);
+    }
 
-    //glFlush();
+    glFlush();
     SDL_GL_SwapWindow(this->sdl_window);
 
     return interval;
@@ -177,11 +163,18 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
     {
         dt = aos_game_ptr->dt;
         fstart = SDL_GetTicks();
-
-        ftime = SDL_GetTicks() - fstart;
-        aos_game_ptr->ticks++; 
         
-
+        std::vector<Object *> objects = aos_game_ptr->objects;
+        for(std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it)
+        {
+            Object *rndrf = *it;
+            rndrf->update(dt, aos_game_ptr->ticks);
+        }
+        
+        ftime = SDL_GetTicks() - fstart;
+        aos_game_ptr->ticks++;
+        
+        
         // Allow a variable dt between the minimum and maximum dt specified in 
         // the game class.
         if(ftime < min_dt) // Only sleep if execution time takes less than dt.
@@ -210,10 +203,18 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
     Game * game_ptr = (Game *) param;
 
     SDL_Event event;
- 
+
+
+    // Get all of the keyboard events.
+    const Uint8* currKeyStates = SDL_GetKeyboardState(NULL);
+    for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
+    {
+        Object *evntf = *it;
+        evntf->send_event(currKeyStates, interval, game_ptr->ticks);
+    }
+
     while(SDL_PollEvent(&event)) 
     {   
-
         switch(event.type) 
         {
             case SDL_QUIT:
@@ -228,13 +229,7 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
                 }
                 else 
                 {   
-                    // Get all of the keyboard events.
-                    const Uint8* currKeyStates = SDL_GetKeyboardState(NULL);
-                    for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
-                    {
-                        Object *evntf = *it;
-                        evntf->send_event(currKeyStates, interval, game_ptr->ticks);
-                    }
+
                 }
                 break;
             default:

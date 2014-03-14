@@ -12,42 +12,64 @@ Player::~Player()
     
 }
 
-//void Player::update(Uint32 dt, Uint32 time)
-//{
-//    
-//}
-//
-void Player::render(Uint32 dt, Uint32 time)
-{ 
-glColor3f(1.0f, 1.0f, 1.0f);
-glBegin(GL_QUADS); // Start drawing a quad primitive  
-
-glVertex3f(-1.0f, -1.0f, 0.0f); // The bottom left corner  
-glVertex3f(-1.0f, 1.0f, 0.0f); // The top left corner  
-glVertex3f(1.0f, 1.0f, 0.0f); // The top right corner  
-glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner  
-
-glEnd();  
+void Player::update(Uint32 dt_ms, Uint32 time) 
+{
+    heading += heading_velocity;
+    if(heading_velocity >= 0)
+    {
+        heading_velocity = ((heading_velocity - heading_jerk) <= 0.0) ? 0.0 : heading_velocity - heading_jerk;
+    } 
+    else
+    {
+        heading_velocity = ((heading_velocity - heading_jerk) >= 0.0) ? 0.0 : heading_velocity + heading_jerk;
+    }
+    
+    //std::cout << "Updated Object" << std::endl;
+    position[0] += velocity[0];
+    position[1] += velocity[1];
 }
+
+//void Player::render(Uint32 dt, Uint32 time)
+//{ 
+//    glColor3f(1.0f, 1.0f, 1.0f);
+//    glBegin(GL_QUADS); // Start drawing a quad primitive  
+//
+//    glVertex3f(-1.0f, -1.0f, 0.0f); // The bottom left corner  
+//    glVertex3f(-1.0f, 1.0f, 0.0f); // The top left corner  
+//    glVertex3f(1.0f, 1.0f, 0.0f); // The top right corner  
+//    glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner  
+//
+//    glEnd();  
+//}
 
 
 void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time) 
 {
+    double d = 360.0;
+    double h = 4.0;
     if(keyboardStates[SDL_SCANCODE_A])
     {
         std::cout << "Left" << std::endl;
+        heading_velocity = -d/h;
+        std::cout << "V_x: " << velocity[0] << std::endl;
     }
     if(keyboardStates[SDL_SCANCODE_W])
     {
         std::cout << "Forward" << std::endl;
+        velocity[1] += 0.01;
+        std::cout << "V_y: " << velocity[1] << std::endl;
     }
     if(keyboardStates[SDL_SCANCODE_D])
     { 
-         std::cout << "Right" << std::endl;
+        std::cout << "Right" << std::endl;
+        heading_velocity = d/h;
+        std::cout << "V_x: " << velocity[0] << std::endl;
     }
     if(keyboardStates[SDL_SCANCODE_S])
     {
         std::cout << "Backwards" << std::endl;
+        velocity[1] -= 0.01;
+        std::cout << "V_y: " << velocity[1] << std::endl;
     }
     if(keyboardStates[SDL_SCANCODE_SPACE]) 
     { 

@@ -26,7 +26,8 @@ namespace aos {
     {
         public:
             double angular_velocity; ///< The rotational speed of the object. Positive is clockwise, negative counterclockwise. 
-            double heading;
+            double heading = 0.0; ///< Heading in degrees
+            double heading_velocity = 0.0; ///< Heading change in degrees
             std::vector< double > velocity;
             std::vector< double > acceleration;
             std::vector< double > jerk;
