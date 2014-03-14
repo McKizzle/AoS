@@ -94,16 +94,21 @@ int Game::init_gl()
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Set up double buffering
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); // Set the color depth. 
 
-    // 3) Create an opengl Context.
+    // 3) Create an SDL opengl Context.
     sdl_gl_context = SDL_GL_CreateContext(sdl_window);
-
+    int setcurrent_result = SDL_GL_MakeCurrent(sdl_window, sdl_gl_context);
     SDL_GL_SetSwapInterval(1); // Enable V-Sync
-
-    //glViewport(0, 0, screen_width, screen_height);
+    
+    glViewport(0, 0, screen_width, screen_height);
+    print_glError("GL Viewport");
     //glMatrixMode(GL_PROJECTION);
-    //glLoadIdentity();
-    ////GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
-    ////gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+    print_glError("Matrix Mode");
+    glLoadIdentity();
+    print_glError("Load Identity");
+    GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
+    gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+    print_glError("Ortho 2D");
+
     //glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);
     //glMatrixMode(GL_MODELVIEW);
 
@@ -113,12 +118,9 @@ int Game::init_gl()
 
 Uint32 Game::render(Uint32 interval, void *param)
 {
+    //print_glError("render start");
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-1, 1, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     //glTranslatef(0, 0, -2);
     glBegin(GL_POLYGON);
@@ -150,7 +152,7 @@ Uint32 Game::render(Uint32 interval, void *param)
     ////}
 
     //glFlush();
-    //SDL_GL_SwapWindow(this->sdl_window);
+    SDL_GL_SwapWindow(this->sdl_window);
 
     return interval;
 }
@@ -246,4 +248,13 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
 void Game::logSDLError(std::ostream &os, const std::string &msg)
 {
     os << msg << " error: " << SDL_GetError() << std::endl;
+}
+
+void Game::print_glError(const std::string &extra)
+{
+    GLenum error = glGetError();
+    if(error != GL_NO_ERROR)
+    {
+        std::cout << extra << " -- GL Error: " << gluErrorString(error) << std::endl;
+    }
 }

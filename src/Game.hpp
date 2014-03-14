@@ -50,6 +50,7 @@ namespace aos {
             
             /// Log sdl errors to the desired output stream.
             void logSDLError(std::ostream &os, const std::string &msg);
+            void print_glError(const std::string &extra);
         //private:
 
             /// The main game loop. Runs in the main thread.
