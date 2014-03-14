@@ -103,7 +103,8 @@ int Game::init_gl()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
-    gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+    //gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+    glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);
 
     printf("%s\n", glGetString(GL_VERSION));
     return 0;
