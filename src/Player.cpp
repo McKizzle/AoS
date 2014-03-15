@@ -46,7 +46,7 @@ void Player::update(Uint32 dt_ms, Uint32 time)
 void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time) 
 {
     double d = 360.0;
-    double h = 4.0;
+    double h = 100.0;
     if(keyboardStates[SDL_SCANCODE_A])
     {
         std::cout << "Left" << std::endl;

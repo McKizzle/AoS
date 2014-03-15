@@ -19,8 +19,8 @@ Uint32 Game::main_loop()
         fstart = SDL_GetTicks();
         this->render(0, this);
         this->input_handler(0, this);
-
         ftime = SDL_GetTicks() - fstart;
+        
         if(ftime < dt) 
         {
             SDL_Delay((int)(dt - ftime));
@@ -121,18 +121,8 @@ Uint32 Game::render(Uint32 interval, void *param)
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
-    //glColor3f(1.0f, 1.0f, 1.0f);
-    //glBegin(GL_QUADS); // Start drawing a quad primitive  
-
-    //    glVertex3f(-1.0f, -1.0f, 0.0f); // The bottom left corner  
-    //    glVertex3f(-1.0f, 1.0f, 0.0f); // The top left corner  
-    //    glVertex3f(1.0f, 1.0f, 0.0f); // The top right corner  
-    //    glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner  
-
-    //glEnd();  
     for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
     {
-        //std::cout << "Calling objects to render" << std::endl;
         Object *rndrf = *it;
         rndrf->render(interval, this->ticks);
     }
