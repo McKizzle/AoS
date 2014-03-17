@@ -12,6 +12,17 @@ Object::Object()
     position.push_back(0.0);
     position.push_back(0.0);
 
+    // Initialize the initial state.
+    state.push_back(0.0); // x
+    state.push_back(0.0); // y
+    state.push_back(0.0); // v_x
+    state.push_back(0.0); // v_y
+    state.push_back(0.0); // j_x
+    state.push_back(0.0); // j_y
+    state.push_back(0.0); // heading
+    state.push_back(0.0); // ang. vel.
+    state.push_back(0.0); // ang. jerk
+
     std::cout << "Object Constructed" << std::endl;
 }
 
@@ -29,10 +40,7 @@ void Object::render(Uint32 dt_ms, Uint32 time)
         glColor3f(1.0f, 1.0f, 1.0f);
         for(std::vector< unsigned int>::iterator it = this->edges.begin(); it != edges.end(); ++it)
         {
-            //std::cout << *it << std::endl; 
-            //std::cout << "(" << vertices[*it][0] << ", " << vertices[*it][1] << ")" << std::endl;
             glVertex2f((GLfloat)vertices[*it][0], (GLfloat)vertices[*it][1]);
-
         }
     glEnd();
     glPopMatrix();

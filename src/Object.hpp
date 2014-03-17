@@ -25,9 +25,21 @@ namespace aos {
     class Object: public Renderable, public Updateable, public Eventful
     {
         public:
-            double angular_velocity; ///< The rotational speed of the object. Positive is clockwise, negative counterclockwise. 
+            /// Contains the state of the object.
+            /// 0: x position
+            /// 1: y position
+            /// 2: x velocity
+            /// 2: y velocity
+            /// 3: x jerk
+            /// 4: y jerk
+            /// 5: heading
+            /// 6: angular velocity
+            /// 7: angualr jerk
+            std::vector< double > state; 
             double heading = 0.0; ///< Heading in degrees
-            double heading_velocity = 0.0; ///< Heading change in degrees
+            double angular_vel = 0.0; ///< The rotational speed of the object. Positive is clockwise, negative counterclockwise. 
+            double heading_accel = 0.0; ///< Accereration of the heading.
+            double heading_jerk = 0.0;  ///< Jerk of the heading.
             std::vector< double > velocity;
             std::vector< double > acceleration;
             std::vector< double > jerk;
@@ -39,6 +51,8 @@ namespace aos {
             ~Object();
             virtual void render(Uint32 dt_ms, Uint32 time);
             virtual void update(Uint32 dt_ms, Uint32 time);
+
+            std::vector< double > * ode(std::vector< double > & x, Uint32 t);
     };
 }
 #endif

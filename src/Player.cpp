@@ -14,19 +14,29 @@ Player::~Player()
 
 void Player::update(Uint32 dt_ms, Uint32 time) 
 {
-    heading += heading_velocity;
-    if(heading_velocity >= 0)
+    double dt = (double) dt_ms / 1000.0;
+
+    //std::cout << "Updated Object" << std::endl; 
+    //position[0] = velocity[0] * cos(M_PI / 180.0 * heading) * dt + position[0];
+    //position[1] = velocity[1] * sin(M_PI / 180.0 * heading) * dt + position[1];
+    position[0] += dt * velocity[0];
+    position[1] += dt *velocity[1];
+    
+    heading += angular_vel;
+    if(angular_vel >= 0)
     {
-        heading_velocity = ((heading_velocity - heading_jerk) <= 0.0) ? 0.0 : heading_velocity - heading_jerk;
+        angular_vel = (angular_vel <= 0.0) ? 0.0 : angular_vel - heading_jerk;
     } 
     else
     {
-        heading_velocity = ((heading_velocity - heading_jerk) >= 0.0) ? 0.0 : heading_velocity + heading_jerk;
+        angular_vel = (angular_vel >= 0.0) ? 0.0 : angular_vel + heading_jerk;
     }
-    
-    //std::cout << "Updated Object" << std::endl;
-    position[0] += velocity[0];
-    position[1] += velocity[1];
+}
+
+
+std::vector< double > * Player::ode(std::vector< double > & x, Uint32 t)
+{
+    return new std::vector<double>();
 }
 
 //void Player::render(Uint32 dt, Uint32 time)
@@ -49,27 +59,27 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
     double h = 100.0;
     if(keyboardStates[SDL_SCANCODE_A])
     {
-        std::cout << "Left" << std::endl;
-        heading_velocity = -d/h;
-        std::cout << "V_x: " << velocity[0] << std::endl;
+        //std::cout << "Left" << std::endl;
+        angular_vel = -d/h;
+        //std::cout << "V_x: " << velocity[0] << std::endl;
     }
     if(keyboardStates[SDL_SCANCODE_W])
     {
-        std::cout << "Forward" << std::endl;
-        velocity[1] += 0.01;
-        std::cout << "V_y: " << velocity[1] << std::endl;
+        //std::cout << "Forward" << std::endl;
+        velocity[1] += 0.1;
+        //std::cout << "V_y: " << velocity[1] << std::endl;
     }
     if(keyboardStates[SDL_SCANCODE_D])
     { 
-        std::cout << "Right" << std::endl;
-        heading_velocity = d/h;
-        std::cout << "V_x: " << velocity[0] << std::endl;
+        //std::cout << "Right" << std::endl;
+        angular_vel = d/h;
+        //std::cout << "V_x: " << velocity[0] << std::endl;
     }
     if(keyboardStates[SDL_SCANCODE_S])
     {
-        std::cout << "Backwards" << std::endl;
-        velocity[1] -= 0.01;
-        std::cout << "V_y: " << velocity[1] << std::endl;
+        //std::cout << "Backwards" << std::endl;
+        velocity[1] -= 0.1;
+        //std::cout << "V_y: " << velocity[1] << std::endl;
     }
     if(keyboardStates[SDL_SCANCODE_SPACE]) 
     { 
@@ -135,7 +145,8 @@ Player * Player::default_player()
     Player *plyr = new Player();
     plyr->edges = std::move(edges);
     plyr->vertices = std::move(vertices);
-    plyr->angular_velocity = M_PI / 5.0;
+    plyr->angular_vel = M_PI / 5.0;
+    plyr->heading_jerk = 1.0;
 
     return plyr;
 }
