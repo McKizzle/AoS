@@ -1,6 +1,7 @@
 #include "Renderable.hpp"
 #include "Updateable.hpp"
 #include "Eventful.hpp"
+#include "Ode.hpp"
 
 #include <SDL2/SDL.h>
 #include <iostream>
@@ -46,13 +47,12 @@ namespace aos {
             std::vector< double > position;
             std::vector< std::vector<double> > vertices;
             std::vector< unsigned int > edges;
+            Integrator intgr; 
 
             Object();
             ~Object();
             virtual void render(Uint32 dt_ms, Uint32 time);
             virtual void update(Uint32 dt_ms, Uint32 time);
-
-            std::vector< double > * ode(std::vector< double > & x, Uint32 t);
     };
 }
 #endif

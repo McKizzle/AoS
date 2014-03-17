@@ -33,12 +33,6 @@ void Player::update(Uint32 dt_ms, Uint32 time)
     }
 }
 
-
-std::vector< double > * Player::ode(std::vector< double > & x, Uint32 t)
-{
-    return new std::vector<double>();
-}
-
 //void Player::render(Uint32 dt, Uint32 time)
 //{ 
 //    glColor3f(1.0f, 1.0f, 1.0f);

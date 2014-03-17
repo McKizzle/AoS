@@ -1,4 +1,4 @@
-#include "ode.hpp"
+#include "Ode.hpp"
 
 using namespace aos;
 
@@ -20,6 +20,12 @@ std::vector< double > * euler(std::vector< double > * (*f)(std::vector< double >
     }
 
     return x_new;
+}
+
+std::vector< double > * Integrator::integrate(std::vector< double > * (*f)(std::vector< double >, Uint32),
+                                    std::vector< double > & x, Uint32 dt, Uint32 t)
+{
+    return new std::vector< double >();//this->integrator(f, x, dt, t);
 }
 
 
