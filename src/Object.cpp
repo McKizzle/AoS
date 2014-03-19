@@ -1,6 +1,8 @@
 #include "Object.hpp"
 
-using namespace aos;
+namespace aos
+{
+
 Object::Object()
 {
     velocity.push_back(0.0);
@@ -22,6 +24,8 @@ Object::Object()
     state.push_back(0.0); // heading
     state.push_back(0.0); // ang. vel.
     state.push_back(0.0); // ang. jerk
+    
+    intgr = new Integrator();
 
     std::cout << "Object Constructed" << std::endl;
 }
@@ -53,5 +57,5 @@ void Object::update(Uint32 dt_ms, Uint32 time)
     position[1] += velocity[1];
 }
 
-
+} // END namespace aos
 

@@ -1,6 +1,3 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
-
 #include <SDL2/SDL.h>
 #include <cmath>
 #include <utility>
@@ -11,6 +8,8 @@
 #include "Object.hpp"
 #include "Eventful.hpp"
 
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 namespace aos {
     class Player: public Object 
     {
@@ -20,6 +19,9 @@ namespace aos {
             //virtual void render(Uint32 dt, Uint32 time);
             virtual void update(Uint32 dt, Uint32 time);
             virtual void send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time);
+            
+            // The ode system that simulates the player movements.
+            std::vector< double > * system(std::vector< double > * x, Uint32 dt, Uint32 time);
 
             static Player * default_player();
 

@@ -47,7 +47,7 @@ namespace aos {
             std::vector< double > position;
             std::vector< std::vector<double> > vertices;
             std::vector< unsigned int > edges;
-            Integrator intgr; 
+            Integrator *intgr;
 
             Object();
             ~Object();

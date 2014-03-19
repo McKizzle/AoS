@@ -31,7 +31,16 @@ void Player::update(Uint32 dt_ms, Uint32 time)
     {
         angular_vel = (angular_vel >= 0.0) ? 0.0 : angular_vel + heading_jerk;
     }
+
+    intgr->integrate(&(this->system), state, dt_ms, time);
 }
+
+std::vector< double > * Player::system(std::vector< double > * x, Uint32 dt, Uint32 time)
+{
+    std::cout << "Player::system" << std::endl; 
+    return &(this->state); 
+}
+
 
 //void Player::render(Uint32 dt, Uint32 time)
 //{ 

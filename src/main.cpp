@@ -5,6 +5,7 @@
 #include "Object.hpp"
 #include "Game.hpp"
 #include "Player.hpp"
+#include "Ode.hpp"
 
 #include <getopt.h> 
 
@@ -92,7 +93,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Now Initialize the game.
-    // Create a Game object. 
+    // Create a Game object.
     Game *aos_game = new Game();
     aos_game->screen_width = width;
     aos_game->screen_height = height;
