@@ -17,13 +17,15 @@
 
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
-namespace aos {
+namespace aos 
+{
     /// \class Object Object.hpp
     /// \brief Represents a game object.
     ///  
     /// All objects in the game that need to be rendered and integrated
     /// must inherit from the Object class. 
-    class Object: public Renderable, public Updateable, public Eventful
+    class Object: public Renderable, public Updateable, public Eventful, public Integratable
+
     {
         public:
             /// Contains the state of the object.

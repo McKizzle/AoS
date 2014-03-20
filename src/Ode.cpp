@@ -3,11 +3,12 @@
 namespace aos
 {
 
-std::vector< double > * euler(std::vector< double > * (*f)(std::vector< double > *, Uint32, Uint32),
-                                    std::vector< double > * x, Uint32 dt, Uint32 t) 
+std::vector< double > * euler(
+    Integratable * I,
+    std::vector< double > * x, Uint32 dt, Uint32 t) 
 { 
     std::cout << "aos::euler" << std::endl;
-    return f(x, dt, t);
+    return I->system(t, x);
     
     //double dt_sec = ((double) dt) / 1000.0;
 
@@ -28,11 +29,12 @@ std::vector< double > * euler(std::vector< double > * (*f)(std::vector< double >
 
 Integrator::Integrator(){}
 
-std::vector< double > * Integrator::integrate(std::vector< double > * (Updateable::*)(std::vector< double > *, Uint32, Uint32),
-                                    std::vector< double > * x, Uint32 dt, Uint32 t)
+std::vector< double > * Integrator::integrate(
+    Integratable * I, 
+    std::vector< double > * x, Uint32 dt, Uint32 t)
 {
     std::cout << "Integrator::integrate" << std::endl;
-    return this->integrator(f, x, dt, t);
+    return this->integrator(I, x, dt, t);
 }
 
 } // END namespace aos

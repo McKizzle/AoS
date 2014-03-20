@@ -1,7 +1,9 @@
 #include "System.hpp"
 #include "includes.hpp"
 
-using namespace aos;
+namespace aos
+{
+
 
 System::System()
 {
@@ -23,3 +25,5 @@ void System::update(Uint32 dt_ms, Uint32 time)
 {
 
 }
+
+} // END namespace aos

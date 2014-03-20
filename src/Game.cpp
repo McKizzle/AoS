@@ -1,6 +1,7 @@
 #include "Game.hpp"
 
-using namespace aos;
+namespace aos
+{
 
 Game::Game() {}
 
@@ -243,3 +244,5 @@ void Game::print_glError(const std::string &extra)
         std::cout << extra << " -- GL Error: " << gluErrorString(error) << std::endl;
     }
 }
+
+} // END namespace aos

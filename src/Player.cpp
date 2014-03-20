@@ -32,12 +32,15 @@ void Player::update(Uint32 dt_ms, Uint32 time)
         angular_vel = (angular_vel >= 0.0) ? 0.0 : angular_vel + heading_jerk;
     }
 
-    intgr->integrate(&(this->system), state, dt_ms, time);
+    intgr->integrate(this, &this->state, dt_ms, time);
 }
 
-std::vector< double > * Player::system(std::vector< double > * x, Uint32 dt, Uint32 time)
+std::vector< double > * Player::system(Uint32 t, std::vector< double > * x)
 {
     std::cout << "Player::system" << std::endl; 
+    std::vector< double > * dxdt = new std::vector< double >(x->size(), 0.0); 
+    //std::cout << "Size X: " << dxdt->size() << std::endl;
+    //exit(0);
     return &(this->state); 
 }
 
