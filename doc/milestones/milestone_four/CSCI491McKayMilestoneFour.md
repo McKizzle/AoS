@@ -1,8 +1,4 @@
-Week Eight Writeup
-
-Clinton McKay
-
-# Progress Report
+# Milestone Four
 
 ## Schedule
 

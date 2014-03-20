@@ -5,7 +5,6 @@ OUTFILE=$(ASS)
 
 pdf:
 	pandoc $(MDFILE) -o $(OUTFILE).pdf
-	#tar -zcvf $(OUTFILE).tar.gz $(OUTFILE).pdf
 	zip $(OUTFILE).zip $(OUTFILE).pdf $(UI_DES).pdf
 
 
