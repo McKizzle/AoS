@@ -3,43 +3,23 @@
 namespace aos
 {
 
-Object::Object()
+Object::Object(): state(9, 0.0) 
 {
-    velocity.push_back(0.0);
-    velocity.push_back(0.0);
-    acceleration.push_back(0.0);
-    acceleration.push_back(0.0);
-    jerk.push_back(0.0);
-    jerk.push_back(0.0);
-    position.push_back(0.0);
-    position.push_back(0.0);
-
-    // Initialize the initial state.
-    state.push_back(0.0); // x
-    state.push_back(0.0); // y
-    state.push_back(0.0); // v_x
-    state.push_back(0.0); // v_y
-    state.push_back(0.0); // j_x
-    state.push_back(0.0); // j_y
-    state.push_back(0.0); // heading
-    state.push_back(0.0); // ang. vel.
-    state.push_back(0.0); // ang. jerk
-    
     intgr = new Integrator();
-
-    std::cout << "Object Constructed" << std::endl;
+    std::cout << "Object::Object" << std::endl;
 }
 
 Object::~Object()
 {
-    std::cout << "Object Destructed" << std::endl; 
+    delete intgr;
+    std::cout << "Object::~Object" << std::endl; 
 }
 
 void Object::render(Uint32 dt_ms, Uint32 time) 
 {
     glPushMatrix();
-    glTranslatef(position[0], position[1], 0.0);
-    glRotatef(heading, 0, 0, 1);
+    glTranslatef(state[XIND], state[YIND], 0.0);
+    glRotatef(state[HIND], 0, 0, 1);
     glBegin(GL_LINES);  
         glColor3f(1.0f, 1.0f, 1.0f);
         for(std::vector< unsigned int>::iterator it = this->edges.begin(); it != edges.end(); ++it)
@@ -50,11 +30,11 @@ void Object::render(Uint32 dt_ms, Uint32 time)
     glPopMatrix();
 }
 
-void Object::update(Uint32 dt_ms, Uint32 time) 
+void Object::update(Uint32 dt_ms, Uint32 time) {}
+void Object::send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time){}
+std::vector< double > * Object::system(Uint32 t, std::vector< double > * x)
 {
-    //std::cout << "Updated Object" << std::endl;
-    position[0] += velocity[0];
-    position[1] += velocity[1];
+    return new std::vector< double >();
 }
 
 } // END namespace aos

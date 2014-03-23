@@ -27,6 +27,8 @@ namespace aos {
             bool exit = false;
             Uint32 screen_width = 512;
             Uint32 screen_height = 512;
+            GLfloat glortho_width = 20.0;
+            GLfloat glortho_height = 20.0;
             Uint32 ticks = 0;
             Uint32 min_dt = 16; 
             Uint32 max_dt = 32; 

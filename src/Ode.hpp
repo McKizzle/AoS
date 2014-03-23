@@ -20,12 +20,11 @@ namespace aos
     class Integrator {
         public:
             Integrator();
-            std::vector< double > * (*integrator)( Integratable* I,
-                std::vector< double > * x, Uint32 dt, Uint32 t) = euler;  ///< Stores a pointer to the default ODE integrator function (defaults to euler)   
-             
             std::vector< double > * integrate( Integratable* I,
                 std::vector< double > * x, Uint32 dt, Uint32 t
             );
+            std::vector< double > * (*integrator)( Integratable* I,
+                std::vector< double > * x, Uint32 dt, Uint32 t) = euler;             
     };
 
 }

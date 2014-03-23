@@ -28,33 +28,27 @@ namespace aos
 
     {
         public:
-            /// Contains the state of the object.
-            /// 0: x position
-            /// 1: y position
-            /// 2: x velocity
-            /// 2: y velocity
-            /// 3: x jerk
-            /// 4: y jerk
-            /// 5: heading
-            /// 6: angular velocity
-            /// 7: angualr jerk
-            std::vector< double > state; 
-            double heading = 0.0; ///< Heading in degrees
-            double angular_vel = 0.0; ///< The rotational speed of the object. Positive is clockwise, negative counterclockwise. 
-            double heading_accel = 0.0; ///< Accereration of the heading.
-            double heading_jerk = 0.0;  ///< Jerk of the heading.
-            std::vector< double > velocity;
-            std::vector< double > acceleration;
-            std::vector< double > jerk;
-            std::vector< double > position;
+            static const unsigned int XIND = 0; ///< x position index
+            static const unsigned int YIND = 1; ///< y position index
+            static const unsigned int VXIND= 2; ///< x velocity index
+            static const unsigned int VYIND= 3; ///< y velocity index
+            static const unsigned int AXIND= 4; ///< x acceleration index
+            static const unsigned int AYIND= 5; ///< y acceleration index
+            static const unsigned int HIND = 6; ///< heading index
+            static const unsigned int VHIND= 7; ///< heading velocity index
+            static const unsigned int AHIND= 8; ///< heading acceleration index 
+            std::vector< double > state; ///< The current state of the object. 
+
             std::vector< std::vector<double> > vertices;
             std::vector< unsigned int > edges;
             Integrator *intgr;
 
-            Object();
-            ~Object();
+            Object(); 
+            virtual ~Object();
             virtual void render(Uint32 dt_ms, Uint32 time);
             virtual void update(Uint32 dt_ms, Uint32 time);
+            virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time);
+            virtual std::vector< double > * system(Uint32 t, std::vector< double > * x);
     };
 }
 #endif

@@ -4,44 +4,60 @@ using namespace aos;
 
 Player::Player() 
 { 
-    
+    std::cout << "Player::Player" << std::endl; 
 }
 
 Player::~Player() 
-{
-    
+{ 
+    std::cout << "Player::~Player" << std::endl; 
 }
 
 void Player::update(Uint32 dt_ms, Uint32 time) 
 {
-    double dt = (double) dt_ms / 1000.0;
+    std::vector< double > * new_state = intgr->integrate(this, &state, dt_ms, time);
+    state.swap((*new_state));
 
-    //std::cout << "Updated Object" << std::endl; 
-    //position[0] = velocity[0] * cos(M_PI / 180.0 * heading) * dt + position[0];
-    //position[1] = velocity[1] * sin(M_PI / 180.0 * heading) * dt + position[1];
-    position[0] += dt * velocity[0];
-    position[1] += dt *velocity[1];
+    // Nudge the ship heading velocity if it is close to zero and the heading thrusters are slowing it down. 
+    short sign_vheading = (state[VHIND] < 0.0) ? 1 : -1; 
+    state[VHIND] = (!heading_key_pressed && (sign_vheading != prev_sign_vheading)) ? 0.0 : state[VHIND];
+    heading_key_pressed = false;
+    thruster_key_pressed= false;
     
-    heading += angular_vel;
-    if(angular_vel >= 0)
-    {
-        angular_vel = (angular_vel <= 0.0) ? 0.0 : angular_vel - heading_jerk;
-    } 
-    else
-    {
-        angular_vel = (angular_vel >= 0.0) ? 0.0 : angular_vel + heading_jerk;
-    }
+    // Change current state values
+    state[AXIND] = 0.0;
+    state[AYIND] = 0.0;
+    state[AHIND] = 0.0;
 
-    intgr->integrate(this, &this->state, dt_ms, time);
+    delete new_state;
 }
 
 std::vector< double > * Player::system(Uint32 t, std::vector< double > * x)
 {
-    std::cout << "Player::system" << std::endl; 
-    std::vector< double > * dxdt = new std::vector< double >(x->size(), 0.0); 
-    //std::cout << "Size X: " << dxdt->size() << std::endl;
-    //exit(0);
-    return &(this->state); 
+    //std::cout << "Player::system" << std::endl; 
+    std::vector< double > * dxdt = new std::vector< double >(x->size(), 0.0);
+    
+    // Calculate the heading acceleration. 
+    short sign_vheading = ((*x)[VHIND] < 0.0) ? 1 : -1; 
+    double abs_vheading = std::abs((*x)[VHIND]);
+    double d2xdt2_heading = (abs_vheading > max_heading_velocity) ? sign_vheading * heading_thrusters_impulse : (*x)[AHIND];
+    if(!heading_key_pressed && (abs_vheading > 0)) 
+    { 
+        d2xdt2_heading += sign_vheading * heading_thrusters_impulse;
+    } 
+    prev_sign_vheading = sign_vheading;
+
+
+    (*dxdt)[XIND]  = (*x)[VXIND];
+    (*dxdt)[YIND]  = (*x)[VYIND];
+    (*dxdt)[VXIND] = (*x)[AXIND];
+    (*dxdt)[VYIND] = (*x)[AYIND];
+    (*dxdt)[AXIND] = 0.0;  
+    (*dxdt)[AYIND] = 0.0;  
+    (*dxdt)[HIND]  = (*x)[VHIND];
+    (*dxdt)[VHIND] = d2xdt2_heading; 
+    (*dxdt)[AHIND] = 0.0; 
+ 
+    return dxdt;
 }
 
 
@@ -61,36 +77,63 @@ std::vector< double > * Player::system(Uint32 t, std::vector< double > * x)
 
 void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time) 
 {
-    double d = 360.0;
-    double h = 100.0;
+    //std::cout << "------------" << std::endl;
+    //double dt_ms = dt / 1000.0;
+
+    // Velocity
+    //double curr_vel = std::sqrt(std::pow(state[VXIND], 2.0) + std::pow(state[VYIND], 2.0));
+    //std::cout << "Current Velocity: " << curr_vel << std::endl;
+ 
+    //delete new_state;
+
+    // Acceleration
+    double theta = 2.0 * M_PI * state[HIND] / 360.0;
+    double a_x = std::cos(theta) * thrusters_impulse;
+    double a_y = std::sin(theta) * thrusters_impulse; 
+     
+    std::vector< double > tmp_state(state);
     if(keyboardStates[SDL_SCANCODE_A])
     {
-        //std::cout << "Left" << std::endl;
-        angular_vel = -d/h;
-        //std::cout << "V_x: " << velocity[0] << std::endl;
+        heading_key_pressed = true;
+        tmp_state[AHIND] = heading_thrusters_impulse;
     }
     if(keyboardStates[SDL_SCANCODE_W])
     {
-        //std::cout << "Forward" << std::endl;
-        velocity[1] += 0.1;
-        //std::cout << "V_y: " << velocity[1] << std::endl;
+        tmp_state[AXIND] = a_x;
+        tmp_state[AYIND] = a_y;
+        thruster_key_pressed = true;
     }
     if(keyboardStates[SDL_SCANCODE_D])
     { 
-        //std::cout << "Right" << std::endl;
-        angular_vel = d/h;
-        //std::cout << "V_x: " << velocity[0] << std::endl;
+        heading_key_pressed = true;
+        tmp_state[AHIND] = -heading_thrusters_impulse;
     }
     if(keyboardStates[SDL_SCANCODE_S])
-    {
-        //std::cout << "Backwards" << std::endl;
-        velocity[1] -= 0.1;
-        //std::cout << "V_y: " << velocity[1] << std::endl;
+    { 
+        tmp_state[AXIND] = -a_x;
+        tmp_state[AYIND] = -a_y;
+        thruster_key_pressed = true;
     }
     if(keyboardStates[SDL_SCANCODE_SPACE]) 
     { 
         std::cout << "Fire" << std::endl;
     }
+    std::vector< double > * next_state = intgr->integrate(this, &tmp_state, dt, time);
+   
+    //std::cout << "Current State\n";
+    //dvect_dump(std::cout, state); 
+    //std::cout << "Tmp State\n";
+    //dvect_dump(std::cout, tmp_state); 
+
+    // Next velocity
+    //double new_vel = std::sqrt(std::pow((*next_state)[VXIND], 2.0) + std::pow((*next_state)[VYIND], 2.0));
+    //std::cout << "New Velocity: " << new_vel << std::endl;
+
+    state[AHIND] = tmp_state[AHIND];
+    state[AXIND] = tmp_state[AXIND];//(new_vel < max_velocity) ? tmp_state[AXIND] : 0.0;
+    state[AYIND] = tmp_state[AYIND];//(new_vel < max_velocity) ? tmp_state[AYIND] : 0.0;
+
+    delete next_state;
 }
 
 
@@ -111,7 +154,6 @@ void Player::test_vectors()
         std::vector< unsigned int >::iterator itn = it + 1;
         std::cout << "(" << *it << ", " << *itn << ")" << std::endl;
     }
-    exit(0);
 }
 
 Player * Player::default_player()
@@ -151,8 +193,8 @@ Player * Player::default_player()
     Player *plyr = new Player();
     plyr->edges = std::move(edges);
     plyr->vertices = std::move(vertices);
-    plyr->angular_vel = M_PI / 5.0;
-    plyr->heading_jerk = 1.0;
+    //plyr->angular_vel = M_PI / 5.0;
+    //plyr->heading_jerk = 1.0;
 
     return plyr;
 }

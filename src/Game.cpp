@@ -3,10 +3,23 @@
 namespace aos
 {
 
-Game::Game() {}
+Game::Game()
+{ 
+    std::cout << "Game::~Game" << std::endl;  
+}
 
 Game::~Game()
-{ 
+{   
+    std::cout << "Game::~Game" << std::endl;  
+
+    while(!objects.empty())
+    {
+        Object *obj = objects.back();
+        objects.pop_back();
+        delete obj;
+    }
+
+
     SDL_GL_DeleteContext(sdl_gl_context);
     SDL_DestroyWindow(sdl_window);
     SDL_Quit();    
@@ -18,8 +31,8 @@ Uint32 Game::main_loop()
     while(!this->exit)
     {
         fstart = SDL_GetTicks();
-        this->render(0, this);
-        this->input_handler(0, this);
+        this->render(dt, this);
+        this->input_handler(dt, this);
         ftime = SDL_GetTicks() - fstart;
         
         if(ftime < dt) 
@@ -36,7 +49,7 @@ Uint32 Game::main_loop()
         }}
     }
 
-    return 0;
+    return 1;
 }
 
 int Game::start_game()
@@ -76,7 +89,7 @@ int Game::init_sdl()
 
     sdl_window = SDL_CreateWindow(
             "Asteroids on Steroids",
-            100, 100, 
+            10, 10, 
             screen_width, screen_height,
             SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN
     );
@@ -90,13 +103,25 @@ int Game::init_sdl()
 
 int Game::init_gl()
 { 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3); // Request openGL 3
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2); // Request openGL 3
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Set up double buffering
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); // Set the color depth. 
 
     // 3) Create an SDL opengl Context.
     sdl_gl_context = SDL_GL_CreateContext(sdl_window);
+    if(sdl_gl_context == nullptr) 
+    { 
+        std::cout << SDL_GetError() << std::endl;
+        std::cout << "Quitting AoS" << std::endl;
+        std::exit(0);
+    } 
+    else
+    {
+        std::cout << glGetString(GL_VERSION) << std::endl;
+    }
+    
+    
     int setcurrent_result = SDL_GL_MakeCurrent(sdl_window, sdl_gl_context);
     SDL_GL_SetSwapInterval(1); // Enable V-Sync
     
@@ -106,14 +131,13 @@ int Game::init_gl()
     print_glError("Matrix Mode");
     glLoadIdentity();
     print_glError("Load Identity");
-    //GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
+    GLfloat aspect = (GLfloat)screen_width / (GLfloat)screen_height;
     //gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
     //print_glError("Ortho 2D");
-    glOrtho(-10.0, 10.0, -10.0, 10.0, -1.0, 1.0);
+    glOrtho(-glortho_width * aspect, glortho_width * aspect, -glortho_height, glortho_height, -1.0, 1.0);
     print_glError("Ortho");
     glMatrixMode(GL_MODELVIEW);
 
-    printf("%s\n", glGetString(GL_VERSION));
     return 0;
 }
 
@@ -220,7 +244,6 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
                 }
                 else 
                 {   
-
                 }
                 break;
             default:
