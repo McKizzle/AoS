@@ -8,6 +8,7 @@ CXXLIBS = -pthread
 CXX = g++
 ifeq ($(UNAME_S),Darwin)
     CXX = g++-4.8 #/usr/local/bin/g++-4.8
+    #OPEN_GL = -framework OpenGL
 endif
 ifeq ($(UNAME_S),Linux)
     CXX = g++-4.8
@@ -20,7 +21,7 @@ SDL_LDFLAGS = $(shell sdl2-config --libs)
 SDL_SLIBS = $(shell sdl2-config --static-libs) 
 SDL_ADD_SLIBS = -lSDL2_image
 
-ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS)
+ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) #$(OPEN_GL)
 
 SRC_DIR = src
 OBJ_DIR = obj
