@@ -11,6 +11,8 @@
 #include "includes.hpp"
 #include "Object.hpp"
 #include "Player.hpp"
+#include "utils.hpp"
+#include "Camera.hpp"
 
 #ifndef GAME_HPP
 #define GAME_HPP
@@ -37,6 +39,7 @@ namespace aos {
             SDL_GLContext sdl_gl_context; ///< The OpenGL context to render the game. Using the SDL version allows usage of SDL 2d libraries.
             std::thread * update_thread; ///< Updates the game. 
             std::vector< Object* > objects; ///< Game objects go here. 
+            Camera *camera = nullptr;
 
             Game();
             ~Game();

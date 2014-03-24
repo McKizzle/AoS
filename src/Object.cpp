@@ -18,10 +18,10 @@ Object::~Object()
 void Object::render(Uint32 dt_ms, Uint32 time) 
 {
     glPushMatrix();
-    glTranslatef(state[XIND], state[YIND], 0.0);
+    glTranslatef(state[XIND] - camera->x(), state[YIND] - camera->y(), 0.0);
     glRotatef(state[HIND], 0, 0, 1);
     glBegin(GL_LINES);  
-        glColor3f(1.0f, 1.0f, 1.0f);
+        glColor3f(color[0], color[1], color[2]);
         for(std::vector< unsigned int>::iterator it = this->edges.begin(); it != edges.end(); ++it)
         {
             glVertex2f((GLfloat)vertices[*it][0], (GLfloat)vertices[*it][1]);

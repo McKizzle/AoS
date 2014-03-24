@@ -75,7 +75,15 @@ int Game::init()
 
     // Create the game objects. 
     Object * plyr = Player::default_player();
+    Object * grd = grid(50000, 50000, 10);
+    objects.push_back(grd);
     objects.push_back(plyr);
+    //std::exit(0);
+
+    Camera *cmra = new Camera(plyr);
+
+    plyr->camera = cmra;
+    grd->camera = cmra;
 
     return 1;
 }

@@ -2,6 +2,7 @@
 #include "Updateable.hpp"
 #include "Eventful.hpp"
 #include "Ode.hpp"
+#include "Camera.hpp"
 
 #include <SDL2/SDL.h>
 #include <iostream>
@@ -19,6 +20,8 @@
 #define OBJECT_HPP
 namespace aos 
 {
+    class Camera;
+    
     /// \class Object Object.hpp
     /// \brief Represents a game object.
     ///  
@@ -38,10 +41,14 @@ namespace aos
             static const unsigned int VHIND= 7; ///< heading velocity index
             static const unsigned int AHIND= 8; ///< heading acceleration index 
             std::vector< double > state; ///< The current state of the object. 
+            Integrator *intgr; ///< Handles the integration of the object. 
+
+            std::vector< float > color = {1.0, 1.0, 1.0, 1.0}; ///< The color of the object. 
 
             std::vector< std::vector<double> > vertices;
             std::vector< unsigned int > edges;
-            Integrator *intgr;
+
+            Camera *camera;
 
             Object(); 
             virtual ~Object();
