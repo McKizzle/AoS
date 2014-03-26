@@ -7,6 +7,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 #ifdef __APPLE__
 #include <OpenGL/GL.h>
@@ -47,6 +48,8 @@ namespace aos
 
             std::vector< std::vector<double> > vertices;
             std::vector< unsigned int > edges;
+            
+            double bs_r = 0.0; // The radius of the bounding sphere. 
 
             Camera *camera;
 
@@ -56,6 +59,8 @@ namespace aos
             virtual void update(Uint32 dt_ms, Uint32 time);
             virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time);
             virtual std::vector< double > * system(Uint32 t, std::vector< double > * x);
+            virtual void add_vertex(double x, double y);
+            virtual void add_edge(unsigned int v1,unsigned int v2);
     };
 }
 #endif

@@ -157,46 +157,22 @@ void Player::test_vectors()
 }
 
 Player * Player::default_player()
-{ 
-    std::vector< double > p0;// = new std::vector< double >();
-    p0.push_back(1.0);
-    p0.push_back(0.0);
-    std::vector< double > p1;// = new std::vector< double >(); 
+{   
+    Player *plyr2 = new Player();
+
+    plyr2->add_vertex(1.0, 0.0);
     double theta = 2.0 * M_PI / 3.0; //one-third of 2pi
-    p1.push_back(std::cos(theta));
-    p1.push_back(std::sin(theta));
-    std::vector< double > p2;// = new std::vector< double >();
-    p2.push_back(-1.0/3.0);
-    p2.push_back(0.0); 
-    std::vector< double > p3;// = new std::vector< double >();
+    plyr2->add_vertex(std::cos(theta), std::sin(theta));
+    plyr2->add_vertex(-1.0/3.0, 0.0);
     theta = 4.0 * M_PI / 3.0; // two-thirds of 2pi`
-    p3.push_back(std::cos(theta));
-    p3.push_back(std::sin(theta));
+    plyr2->add_vertex(std::cos(theta), std::sin(theta));
     
-    std::vector< std::vector< double > > vertices;
+    plyr2->add_edge(0, 1);
+    plyr2->add_edge(1, 2);
+    plyr2->add_edge(2, 3);
+    plyr2->add_edge(3, 0);
     
-    vertices.push_back(p0);
-    vertices.push_back(p1);
-    vertices.push_back(p2);
-    vertices.push_back(p3); 
-
-    std::vector< unsigned int > edges;
-    edges.push_back(0);
-    edges.push_back(1);
-    edges.push_back(1);
-    edges.push_back(2);
-    edges.push_back(2);
-    edges.push_back(3);
-    edges.push_back(3);
-    edges.push_back(0);
-
-    Player *plyr = new Player();
-    plyr->edges = std::move(edges);
-    plyr->vertices = std::move(vertices);
-    //plyr->angular_vel = M_PI / 5.0;
-    //plyr->heading_jerk = 1.0;
-
-    return plyr;
+    return plyr2;
 }
 
 

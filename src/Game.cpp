@@ -19,7 +19,6 @@ Game::~Game()
         delete obj;
     }
 
-
     SDL_GL_DeleteContext(sdl_gl_context);
     SDL_DestroyWindow(sdl_window);
     SDL_Quit();    
@@ -75,15 +74,26 @@ int Game::init()
 
     // Create the game objects. 
     Object * plyr = Player::default_player();
+    Object * plnt1 = circle(100, 360, 0.0, -120.0);
     Object * grd = grid(50000, 50000, 10);
     objects.push_back(grd);
+    objects.push_back(plnt1);
     objects.push_back(plyr);
-    //std::exit(0);
 
     Camera *cmra = new Camera(plyr);
 
+    std::vector< Object *> * asteroids = seed_for_asteroids(12345, 100, 5, 10, 10.0, 20.0);
+
+    for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
+    {
+        (*it)->camera = cmra;
+        objects.push_back(*it);
+    }
+    delete asteroids;
+
     plyr->camera = cmra;
     grd->camera = cmra;
+    plnt1->camera = cmra;
 
     return 1;
 }
@@ -111,8 +121,8 @@ int Game::init_sdl()
 
 int Game::init_gl()
 { 
-    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2); // Request openGL 3
-    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2); // Request openGL 3
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Set up double buffering
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); // Set the color depth. 
 
