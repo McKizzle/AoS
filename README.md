@@ -38,7 +38,15 @@ Debian users will have to run these two commands before they can run the command
 To build the application `cd` to the root directory of the project and run ``make build``. 
 Once make has finished compiling the files the binary file __AoS__ should be in the __bin__ directory.
 
+## Documentation
+You can either navigate through the header files for the necessary documentation. Or you have the
+option to run ``make doxygen`` to run the doxygen command and build the documentation. 
+
+In order to build the documentation make sure to run:
+
+    sudo apt-get install -qq -y doxygen
+
 ## Execution
-To execute the application simply run ``bin/AoS`` from the terminal. 
+To execute the application simply run ``bin/AoS`` from the terminal in the root directory of the project. 
 
 

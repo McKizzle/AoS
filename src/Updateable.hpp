@@ -11,8 +11,8 @@ namespace aos {
     {
         public:
             /// Updates the object.
-            /// \param the time step size.
-            /// \param the game time.
+            /// \param [in] the time step size.
+            /// \param [in] the game time.
             virtual void update(Uint32 dt, Uint32 time) = 0;
     };
 }

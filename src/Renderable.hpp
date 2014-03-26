@@ -9,7 +9,10 @@ namespace aos {
     /// will implement the renderable interface.
     class Renderable
     {
-        public:
+        public: 
+            /// Renders the object.
+            /// \param [in] the time step size.
+            /// \param [in] the game time.
             virtual void render(Uint32 dt_ms, Uint32 time) = 0;
     };
 }
