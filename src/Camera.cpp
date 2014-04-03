@@ -12,12 +12,12 @@ Camera::~Camera(){ }
 
 double Camera::x()
 {
-    return ref_object->state[ref_object->XIND];
+    return ref_object->state[Object::XIND];
 }
 
 double Camera::y()
 {
-    return ref_object->state[ref_object->YIND];
+    return ref_object->state[Object::YIND];
 }
 
 }

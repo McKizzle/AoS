@@ -213,10 +213,10 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
 
             //check for collisions
             bool collided = false;
-            std::vector< double > intsctn = aos_game_ptr->player_collision->test_collision(collided);
+            //std::vector< double > intsctn = aos_game_ptr->player_collision->test_collision(collided);
 
-            if(collided){}
-            else{}
+            //if(collided){}
+            //else{}
         }
 
         

@@ -50,12 +50,12 @@ std::vector< double > Collision::test_object_collision(Object * obj1, Object * o
     // Iterate through the edges in object 1 and determine if there is an intersection in object 2.
     std::vector< unsigned int > & edgs1 = obj1->edges;
     std::vector< std::vector< double > > & vrts1 = obj1->vertices;
-    double x1_off = obj1->state[obj1->XIND];
-    double y1_off = obj1->state[obj1->YIND];
+    double x1_off = obj1->state[Object::XIND];
+    double y1_off = obj1->state[Object::YIND];
     std::vector< unsigned int > & edgs2 = obj2->edges;
     std::vector< std::vector< double > > & vrts2 = obj2->vertices;
-    double x2_off = obj2->state[obj2->XIND];
-    double y2_off = obj2->state[obj2->YIND];
+    double x2_off = obj2->state[Object::XIND];
+    double y2_off = obj2->state[Object::YIND];
     for(std::vector< unsigned int >::iterator it11 = edgs1.begin(); it11 != edgs1.end(); it11 += 2)
     {
         std::vector< unsigned int>::iterator it12 = it11 + 1;
