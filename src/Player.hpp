@@ -6,8 +6,6 @@
 
 #include "includes.hpp"
 #include "Object.hpp"
-#include "Eventful.hpp"
-#include "Ode.hpp"
 
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
