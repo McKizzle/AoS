@@ -8,14 +8,17 @@
 #include <GL/glu.h>
 #endif
 
+#ifndef GAME_HPP
+#define GAME_HPP
+
 #include "includes.hpp"
 #include "Object.hpp"
 #include "Player.hpp"
 #include "utils.hpp"
 #include "Camera.hpp"
+#include "Grid.hpp"
+#include "Collision.hpp"
 
-#ifndef GAME_HPP
-#define GAME_HPP
 namespace aos {
     /// \class Game Game.hpp
     /// \brief Game management area.
@@ -32,13 +35,14 @@ namespace aos {
             GLfloat glortho_width = 20.0;
             GLfloat glortho_height = 20.0;
             Uint32 ticks = 0;
-            Uint32 min_dt = 16; 
-            Uint32 max_dt = 32; 
+            Uint32 min_dt = 8; 
+            Uint32 max_dt = 16; 
             Uint32 dt = min_dt; ///< Timestep in miliseconds. Default to minimum dt.
             SDL_Window * sdl_window; ///< The SDL window to display the OpenGL Context
             SDL_GLContext sdl_gl_context; ///< The OpenGL context to render the game. Using the SDL version allows usage of SDL 2d libraries.
             std::thread * update_thread; ///< Updates the game. 
             std::vector< Object* > objects; ///< Game objects go here. 
+            Collision *player_collision = nullptr;
             Camera *camera = nullptr;
 
             Game();

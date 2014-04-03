@@ -75,7 +75,9 @@ int Game::init()
     // Create the game objects. 
     Object * plyr = Player::default_player();
     Object * plnt1 = circle(100, 360, 0.0, -120.0);
-    Object * grd = grid(50000, 50000, 10);
+    Grid * grd = new Grid(120.0, 120.0);
+    grd->horizontal_minor_spacing = 2;
+    grd->vertical_minor_spacing = 2;
     objects.push_back(grd);
     objects.push_back(plnt1);
     objects.push_back(plyr);
@@ -89,12 +91,18 @@ int Game::init()
         (*it)->camera = cmra;
         objects.push_back(*it);
     }
-    delete asteroids;
 
     plyr->camera = cmra;
     grd->camera = cmra;
+    grd->obj_camera = cmra;
     plnt1->camera = cmra;
 
+    camera = cmra;
+    player_collision = new Collision(plyr);
+    player_collision->add_collidable(plnt1);
+    player_collision->add_collidables(*asteroids);
+
+    delete asteroids;
     return 1;
 }
 
@@ -200,9 +208,17 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
         std::vector<Object *> objects = aos_game_ptr->objects;
         for(std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it)
         {
-            Object *rndrf = *it;
-            rndrf->update(dt, aos_game_ptr->ticks);
+            Object *updtf = *it;
+            updtf->update(dt, aos_game_ptr->ticks);
+
+            //check for collisions
+            bool collided = false;
+            std::vector< double > intsctn = aos_game_ptr->player_collision->test_collision(collided);
+
+            if(collided){}
+            else{}
         }
+
         
         ftime = SDL_GetTicks() - fstart;
         aos_game_ptr->ticks++;
