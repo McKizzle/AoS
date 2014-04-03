@@ -19,6 +19,7 @@ before_install:
     - unzip master.zip
     - cd gmtl-master/
     - sudo scons install
+    - cd ..
 
 script: make build
 
