@@ -12,6 +12,11 @@ before_install:
     - sudo apt-get install -qq -y libxss-dev
     - sudo apt-get install -qq -y libxxf86vm-dev
     - sudo apt-get install -qq -y libpulse-dev
+    - sudo apt-get install -qq -y git
+    - sudo apt-get install -qq -y scons
+    - git clone git@github.com:imvu/gmtl.git
+    - cd gmtl/
+    - sudo scons install
 
 script: make build
 

@@ -9,11 +9,13 @@ CXX = g++
 ifeq ($(UNAME_S),Darwin)
     CXX = g++-4.8 #/usr/local/bin/g++-4.8
     #OPEN_GL = -framework OpenGL
+    #GGT_FLAGS = -lgmtl
 endif
 ifeq ($(UNAME_S),Linux)
     CXX = g++-4.8
     CXXFLAGS := $(CXXFLAGS) -Wl,--no-as-needed #:= prevents recursive expansion
     GL_FLAGS = -lGL -lGLU
+    GGT_FLAGS = -I /usr/local/include/
 endif
 
 SDL_CFLAGS = $(shell sdl2-config --cflags) 
@@ -21,14 +23,14 @@ SDL_LDFLAGS = $(shell sdl2-config --libs)
 SDL_SLIBS = $(shell sdl2-config --static-libs) 
 SDL_ADD_SLIBS = -lSDL2_image
 
-ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) #$(OPEN_GL)
+ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GGT_FLAGS)
 
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
 # DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
 # SRCS = $(wildcard $(SRC_DIR)/*.cpp) 
-SRCS = main.cpp Object.cpp Game.cpp System.cpp Player.cpp Ode.cpp utils.cpp Camera.cpp Collision.cpp
+SRCS = main.cpp Object.cpp Game.cpp System.cpp Player.cpp Ode.cpp utils.cpp Camera.cpp Collision.cpp Grid.cpp
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 BIN = $(BIN_DIR)/AoS
 
