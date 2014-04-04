@@ -212,7 +212,7 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
             updtf->update(dt, aos_game_ptr->ticks);
 
             //check for collisions
-            bool collided = false;
+            //bool collided = false;
             //std::vector< double > intsctn = aos_game_ptr->player_collision->test_collision(collided);
 
             //if(collided){}

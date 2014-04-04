@@ -28,6 +28,18 @@ commands to install the required libraries.
     sudo apt-get install -qq -y libxxf86vm-dev
     sudo apt-get install -qq -y libpulse-dev
 
+### Generic Graphics Toolkit
+AoS makes use of the Graphics Math Template Library to perform its math calculations. You will need to install it. Linux users need to run the following set of commands. 
+
+    sudo apt-get install -qq -y scons 
+    sudo apt-get install -qq -y wget
+    wget https://github.com/imvu/gmtl/archive/master.zip
+    unzip master.zip
+    cd gmtl-master/
+    sudo scons install
+
+OS X users will need to install gmtl to there home directory if they are using Homebrew. 
+
 ### Debian Users
 Debian users will have to run these two commands before they can run the commands listed above. 
 
