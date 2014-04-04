@@ -8,6 +8,7 @@ CXXLIBS = -pthread
 CXX = g++
 ifeq ($(UNAME_S),Darwin)
     CXX = g++-4.8 #/usr/local/bin/g++-4.8
+    GGT_FLAGS = -I ~/.aos/include/
     #OPEN_GL = -framework OpenGL
     #GGT_FLAGS = -lgmtl
 endif
