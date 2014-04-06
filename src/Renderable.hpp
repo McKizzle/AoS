@@ -1,4 +1,10 @@
 #include <SDL2/SDL.h>
+#ifdef __APPLE__
+#include <OpenGL/GL.h>
+#elif __linux__
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
 
 #ifndef RENDERABLE_HPP
 #define RENDERABLE_HPP

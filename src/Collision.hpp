@@ -1,13 +1,12 @@
-#include "includes.hpp"
-#include "Object.hpp"
-
 #include <vector>
 
 #ifndef COLLISION_HPP
 #define COLLISION_HPP
 
+#include "Object.hpp"
+
 namespace aos
-{
+{    
     class Collision
     {
         public:

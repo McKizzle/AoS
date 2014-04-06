@@ -1,7 +1,6 @@
 /// \file main.cpp Parses arguments and initializes all of the game components. It essentially
 ///     bootstraps the game into a running state. Besides runing the game main.cpp will be used to 
 ///     run test cases and make sure the code runs optimally. 
-#include "includes.hpp"
 #include "Object.hpp"
 #include "Game.hpp"
 #include "Player.hpp"

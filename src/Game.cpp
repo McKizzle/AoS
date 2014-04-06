@@ -186,15 +186,6 @@ Uint32 Game::render(Uint32 interval, void *param)
 
 Uint32 Game::update_loop(Uint32 interval, void * param)
 {
-    //SDL_Event event;
-    //SDL_UserEvent uevent;
-    //
-    //uevent.type = SDL_USEREVENT;
-    //uevent.code = 0;
-
-    //event.type = SDL_USEREVENT;
-    //event.user = uevent;
-
     Uint32 fstart, ftime;
     Game *aos_game_ptr = (Game * )param; 
     Uint32 min_dt = aos_game_ptr->min_dt;
@@ -210,13 +201,6 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
         {
             Object *updtf = *it;
             updtf->update(dt, aos_game_ptr->ticks);
-
-            //check for collisions
-            //bool collided = false;
-            //std::vector< double > intsctn = aos_game_ptr->player_collision->test_collision(collided);
-
-            //if(collided){}
-            //else{}
         }
 
         

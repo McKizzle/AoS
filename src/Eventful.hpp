@@ -1,4 +1,3 @@
-#include "includes.hpp"
 #include <SDL2/SDL.h>
 
 #ifndef EVENTFUL_HPP

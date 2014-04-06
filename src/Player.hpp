@@ -1,14 +1,15 @@
 #include <SDL2/SDL.h>
 #include <cmath>
 #include <utility>
+#include <vector>
 
 #define _USE_MATH_DEFINES
 
-#include "includes.hpp"
-#include "Object.hpp"
-
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
+
+#include "Object.hpp"
+
 namespace aos {
     class Player: public Object
     {

@@ -1,13 +1,5 @@
-#include "Renderable.hpp"
-#include "Updateable.hpp"
-#include "Eventful.hpp"
-#include "Ode.hpp"
-#include "Camera.hpp"
-
 #include <SDL2/SDL.h>
-#include <iostream>
 #include <vector>
-#include <cmath>
 
 #ifdef __APPLE__
 #include <OpenGL/GL.h>
@@ -19,17 +11,23 @@
 
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
+
+#include "Camera.hpp"
+#include "Ode.hpp"
+#include "System.hpp"
+
 namespace aos 
 {
     class Camera;
+    class System;
+    //class Integratable;
     
     /// \class Object Object.hpp
     /// \brief Represents a game object.
     ///  
     /// All objects in the game that need to be rendered and integrated
     /// must inherit from the Object class. 
-    class Object: public Renderable, public Updateable, public Eventful, public Integratable
-
+    class Object: public System, public Integratable
     {
         public:
             static const unsigned int XIND = 0; ///< x position index
@@ -48,7 +46,7 @@ namespace aos
 
             std::vector< std::vector<double> > vertices; ///< All of the vertices in the object. 
             std::vector< unsigned int > edges; ///< An even-length vector of the vertices to edges. 
-            double bs_r = 0.0; ///< The radius of the bounding sphere. 
+            double bs_r = 0.0; ///< The minimum bounding radius. 
 
             Camera *camera; ///< Used to render the object position relative to the camera. 
 
@@ -69,6 +67,9 @@ namespace aos
             /// \param [in] index to the first vertex.
             /// \param [in] index to the second vertex. 
             virtual void add_edge(unsigned int v1,unsigned int v2);
+
+            virtual unsigned int push_back(System * subsystem);
+            virtual void pop_back();
     };
 }
 #endif

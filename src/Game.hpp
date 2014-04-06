@@ -1,6 +1,3 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#include <SDL2/SDL_timer.h>
 #ifdef __APPLE__
 #include <OpenGL/GL.h>
 #elif __linux__
@@ -8,10 +5,16 @@
 #include <GL/glu.h>
 #endif
 
+#include <thread>
+#include <mutex>
+#include <vector>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_timer.h>
+
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "includes.hpp"
 #include "Object.hpp"
 #include "Player.hpp"
 #include "utils.hpp"
@@ -20,6 +23,7 @@
 #include "Collision.hpp"
 
 namespace aos {
+
     /// \class Game Game.hpp
     /// \brief Game management area.
     /// 

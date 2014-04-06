@@ -6,9 +6,7 @@ namespace aos
 std::vector< double > * euler(
     Integratable * I,
     std::vector< double > * x, Uint32 dt, Uint32 t) 
-{ 
-    //std::cout << "aos::euler" << std::endl;
-    
+{  
     double dt_sec = ((double) dt) / 1000.0;
 
     std::vector< double >* dxdt = I->system(t, x);
@@ -21,11 +19,8 @@ std::vector< double > * euler(
     for(std::vector< int >::size_type i = 0; i != x->size(); i++) 
     { 
         (*x_new)[i] = (*x)[i] + (*dxdt)[i];
-    }
-    
-    // delete unused vectors. 
+    } 
     delete dxdt;
-
     return x_new;
 }
 
@@ -35,7 +30,6 @@ std::vector< double > * Integrator::integrate(
     Integratable * I, 
     std::vector< double > * x, Uint32 dt, Uint32 t)
 {
-    //std::cout << "Integrator::integrate" << std::endl;
     return this->integrator(I, x, dt, t);
 }
 

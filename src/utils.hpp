@@ -1,16 +1,17 @@
-#include "includes.hpp"
-#include "Object.hpp"
+#ifndef UTILS_HPP
+#define UTILS_HPP
 
 #include <cmath>
 #include <cstdlib>
 
 #define _USE_MATH_DEFINES
 
-#ifndef UTILS_HPP
-#define UTILS_HPP
+#include "Object.hpp"
 
 namespace aos
 {
+    class Object;
+    
     /// Dumps the contents of a vector of doubles to a out stream.
     void dvect_dump(const std::ostream &os, const std::vector< double > &todump);
 

@@ -1,11 +1,12 @@
-#include "includes.hpp"
-
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
 #include "Object.hpp"
+
 namespace aos
 {
+    class Object;
+    
     /// \Class Camera Camera.hpp
     /// \brief Represents a camera object in the game. 
     ///

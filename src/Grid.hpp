@@ -1,8 +1,6 @@
-#include "includes.hpp"
-
-
 #ifndef GRID_HPP
 #define GRID_HPP
+
 #include "Object.hpp"
 
 namespace aos

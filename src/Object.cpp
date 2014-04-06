@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+
 #include "Object.hpp"
 
 namespace aos
@@ -70,6 +73,12 @@ void Object::add_edge(unsigned int v1, unsigned int v2)
     edges.push_back(v1);
     edges.push_back(v2);
 }
+
+unsigned int Object::push_back(System * subsystem)
+{
+    return 0;
+}
+void Object::pop_back(){ }
 
 } // END namespace aos
 
