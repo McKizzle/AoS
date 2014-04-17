@@ -77,15 +77,6 @@ std::vector< double > * Player::system(Uint32 t, std::vector< double > * x)
 
 void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time) 
 {
-    //std::cout << "------------" << std::endl;
-    //double dt_ms = dt / 1000.0;
-
-    // Velocity
-    //double curr_vel = std::sqrt(std::pow(state[VXIND], 2.0) + std::pow(state[VYIND], 2.0));
-    //std::cout << "Current Velocity: " << curr_vel << std::endl;
- 
-    //delete new_state;
-
     // Acceleration
     double theta = 2.0 * M_PI * state[HIND] / 360.0;
     double a_x = std::cos(theta) * thrusters_impulse;
@@ -95,45 +86,33 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
     if(keyboardStates[SDL_SCANCODE_A])
     {
         heading_key_pressed = true;
-        tmp_state[AHIND] = heading_thrusters_impulse;
+        tmp_state[AHIND] = heading_thrusters_impulse + tmp_state[AHIND];
     }
     if(keyboardStates[SDL_SCANCODE_W])
     {
-        tmp_state[AXIND] = a_x;
-        tmp_state[AYIND] = a_y;
+        tmp_state[AXIND] = a_x + tmp_state[AXIND];
+        tmp_state[AYIND] = a_y + tmp_state[AYIND];
         thruster_key_pressed = true;
     }
     if(keyboardStates[SDL_SCANCODE_D])
     { 
         heading_key_pressed = true;
-        tmp_state[AHIND] = -heading_thrusters_impulse;
+        tmp_state[AHIND] = -heading_thrusters_impulse + tmp_state[AHIND];
     }
     if(keyboardStates[SDL_SCANCODE_S])
-    { 
-        tmp_state[AXIND] = -a_x;
-        tmp_state[AYIND] = -a_y;
+    {   
+        // TODO: Right now lets disable the back thrusters. They appear to be confusing the player. 
+        tmp_state[AXIND] = -a_x / 2.0 + tmp_state[AXIND];
+        tmp_state[AYIND] = -a_y / 2.0 + tmp_state[AYIND];
         thruster_key_pressed = true;
     }
     if(keyboardStates[SDL_SCANCODE_SPACE]) 
     { 
         std::cout << "Fire" << std::endl;
     }
-    std::vector< double > * next_state = intgr->integrate(this, &tmp_state, dt, time);
-   
-    //std::cout << "Current State\n";
-    //dvect_dump(std::cout, state); 
-    //std::cout << "Tmp State\n";
-    //dvect_dump(std::cout, tmp_state); 
-
-    // Next velocity
-    //double new_vel = std::sqrt(std::pow((*next_state)[VXIND], 2.0) + std::pow((*next_state)[VYIND], 2.0));
-    //std::cout << "New Velocity: " << new_vel << std::endl;
-
     state[AHIND] = tmp_state[AHIND];
-    state[AXIND] = tmp_state[AXIND];//(new_vel < max_velocity) ? tmp_state[AXIND] : 0.0;
-    state[AYIND] = tmp_state[AYIND];//(new_vel < max_velocity) ? tmp_state[AYIND] : 0.0;
-
-    delete next_state;
+    state[AXIND] = tmp_state[AXIND];
+    state[AYIND] = tmp_state[AYIND];
 }
 
 
