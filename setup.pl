@@ -50,7 +50,7 @@ sub debian
     @result = `sudo apt-get install -qq -y wget`;
     
     @result = `wget https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip`;
-    @result = `unzip $HOME/gmtl.zip`;
+    @result = `unzip $HOME/gmtl.zip -d $HOME/`;
     chdir "$HOME/gmtl-master/";
     @result = `sudo scons install`;
     chdir $WORKING_DIR;
@@ -60,6 +60,21 @@ sub debian
 
 sub ubuntu
 {
+    my $WORKING_DIR = abs_path($0);
+    my $HOME = $ENV{"HOME"};  
+
+    my @result = `sudo apt-get update -y -qq`;
+    @result = `sudo apt-get install -qq -y g++-4.8`;
+    @result = `sudo apt-get install -qq -y libsdl2-dev`;
+    @result = `sudo apt-get install -qq -y scons`;
+    
+    @result = `wget https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip`;
+    @result = `unzip $HOME/gmtl.zip -d $HOME/`;
+    chdir "$HOME/gmtl-master/";
+    @result = `sudo scons install`;
+    chdir $WORKING_DIR;
+
+    return @result;
     return 0;
 }
 
