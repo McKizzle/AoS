@@ -15,8 +15,8 @@ before_install:
     - sudo apt-get install -qq -y git
     - sudo apt-get install -qq -y scons 
     - sudo apt-get install -qq -y wget
-    - wget https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip
-    - unzip gmtl.zip -d $HOME/
+    - wget -N https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip
+    - unzip $HOME/gmtl.zip -d $HOME/
     - cd $HOME/gmtl-master/
     - sudo scons install
     - cd -

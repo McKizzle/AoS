@@ -41,16 +41,11 @@ sub debian
     @result = `sudo apt-get update -y -qq`;
     @result = `sudo apt-get install -qq -y g++-4.8`;
     @result = `sudo apt-get install -qq -y libsdl2-dev`;
-    @result = `sudo apt-get install -qq -y libasound2-dev`;
-    @result = `sudo apt-get install -qq -y libxss-dev`;
-    @result = `sudo apt-get install -qq -y libxxf86vm-dev`;
-    @result = `sudo apt-get install -qq -y libpulse-dev`;
-    @result = `sudo apt-get install -qq -y git`;
     @result = `sudo apt-get install -qq -y scons`;
     @result = `sudo apt-get install -qq -y wget`;
     
-    @result = `wget https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip`;
-    @result = `unzip $HOME/gmtl.zip -d $HOME/`;
+    @result = `wget -N https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip`;
+    @result = `unzip -o $HOME/gmtl.zip -d $HOME/`;
     chdir "$HOME/gmtl-master/";
     @result = `sudo scons install`;
     chdir $WORKING_DIR;
@@ -67,9 +62,10 @@ sub ubuntu
     @result = `sudo apt-get install -qq -y g++-4.8`;
     @result = `sudo apt-get install -qq -y libsdl2-dev`;
     @result = `sudo apt-get install -qq -y scons`;
+    @result = `sudo apt-get install -qq -y wget`;
     
-    @result = `wget https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip`;
-    @result = `unzip $HOME/gmtl.zip -d $HOME/`;
+    @result = `wget -N https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip`;
+    @result = `unzip -o $HOME/gmtl.zip -d $HOME/`;
     chdir "$HOME/gmtl-master/";
     @result = `sudo scons install`;
     chdir $WORKING_DIR;
