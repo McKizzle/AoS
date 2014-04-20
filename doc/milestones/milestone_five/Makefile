@@ -1,24 +1,19 @@
 ASS=CSCI491McKayMilestoneFive
 MDIN=Setup Timeline StatusReport
 MARKDOWN=$(MDIN:%=%.md)
+PDF=$(MDIN:%=%.pdf)
 MDFILE=$(ASS).md
 OUTFILE=$(ASS)
 
-$(info $(MDIN))
-$(info $(MARKDOWN))
+all: $(PDF)
+	wget --no-clobber https://github.com/McKizzle/AoS/archive/v0.5.0.zip
+	zip $(OUTFILE).zip $(PDF) v0.5.0.zip
 
-all: $(MARKDOWN)
-	echo $^
-	#echo 'all'
+%.pdf: %.md
+	pandoc $< -o $@
 
-$(MARKDOWN):
-	echo $@
-
-# make pdf from markdowns
-md_pdf: 
-	echo $(MARKDOWN)
-	#pandoc $(MDFILE) -o $(OUTFILE).pdf
-	#zip $(OUTFILE).zip $(OUTFILE).pdf $(UI_DES).pdf
+clean:
+	rm -rf *.pdf
 
 
 
