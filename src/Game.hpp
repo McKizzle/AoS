@@ -20,7 +20,10 @@
 #include "utils.hpp"
 #include "Camera.hpp"
 #include "Grid.hpp"
-#include "Collision.hpp"
+//#include "Collision.hpp"
+#include "GravityWell.hpp"
+#include "Systems.hpp"
+
 
 namespace aos {
 
@@ -45,8 +48,7 @@ namespace aos {
             SDL_Window * sdl_window; ///< The SDL window to display the OpenGL Context
             SDL_GLContext sdl_gl_context; ///< The OpenGL context to render the game. Using the SDL version allows usage of SDL 2d libraries.
             std::thread * update_thread; ///< Updates the game. 
-            std::vector< Object* > objects; ///< Game objects go here. 
-            Collision *player_collision = nullptr;
+            Systems *gameverse; ///< The game system goes here. 
             Camera *camera = nullptr;
 
             Game();
@@ -72,18 +74,25 @@ namespace aos {
             /// The render is planned to run in a thread. For now it 
             /// will be ran in the main_loop. Its sole job is to call
             ///  a renderable object.
+            /// @param [in] interval TODO: Remove this argument. It's useless. 
+            /// @param [in, out] param aditional parameters that the update procedure may need. 
+            ///     TODO: Change the the type of param to Game*
             Uint32 render(Uint32 interval, void *param);
 
             /// The input_handler is called by the main_loop function. The 
             ///     design of SDL doesn't allow events to be handled in a seperate thread.
-            /// @param [in] interval TODO
+            /// @param [in] interval TODO: Remove this argument. It's useless. 
             /// @param [in, out] param aditional parameters that the update procedure may need. 
+            ///     TODO: Change the the type of param to Game*
             /// 
             /// \return The return value is to be determined for now return a Uint32. 
             Uint32 input_handler(Uint32 interval, void * param);
 
             /// The update_loop is planned to run in a thread. Its sole job is to call
             ///  an updatable object.
+            /// @param [in] interval TODO: Remove this argument. It's useless.  
+            /// @param [in, out] param aditional parameters that the update procedure may need. 
+            ///     TODO: Change the the type of param to Game*
             static Uint32 update_loop(Uint32 interval, void * param);
 
 

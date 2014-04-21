@@ -12,12 +12,7 @@ Game::~Game()
 {   
     std::cout << "Game::~Game" << std::endl;  
 
-    while(!objects.empty())
-    {
-        Object *obj = objects.back();
-        objects.pop_back();
-        delete obj;
-    }
+    delete gameverse;
 
     SDL_GL_DeleteContext(sdl_gl_context);
     SDL_DestroyWindow(sdl_window);
@@ -73,35 +68,54 @@ int Game::init()
     }
 
     // Create the game objects. 
-    Object * plyr = Player::default_player();
-    Object * plnt1 = circle(100, 360, 0.0, -120.0);
-    Grid * grd = new Grid(120.0, 120.0);
+    Object * plyr = Player::default_player(); // player ship
+
+    // TODO: Needing to create a player and then adding that player to the
+    //      camera is confusing. Fix this later. 
+    Camera *cmra = new Camera(plyr); // focus the camera on the player
+    this->camera = cmra;
+
+    plyr->camera = cmra; // Set the camera for the player
+
+    Grid * grd = new Grid(120.0, 120.0); // Grid to follow the player's ship
     grd->horizontal_minor_spacing = 2;
     grd->vertical_minor_spacing = 2;
-    objects.push_back(grd);
-    objects.push_back(plnt1);
-    objects.push_back(plyr);
-
-    Camera *cmra = new Camera(plyr);
-
-    std::vector< Object *> * asteroids = seed_for_asteroids(12345, 100, 5, 10, 10.0, 20.0);
-
+    grd->camera = cmra;
+    grd->obj_camera = cmra;
+    
+    // Create a planet. 
+    Object * plnt1 = circle(100, 360, 0.0, -120.0);
+    plnt1->camera = cmra;
+    
+    // Create a bunch of random asteroids
+    std::vector< Object *> *asteroids = seed_for_asteroids(12345, 100, 5, 10, 10.0, 20.0); //FIXME: Get rid of vector pointer. 
     for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
     {
         (*it)->camera = cmra;
-        objects.push_back(*it);
     }
+    
+    this->gameverse = new Systems(); // Contains all of the systems. 
 
-    plyr->camera = cmra;
-    grd->camera = cmra;
-    grd->obj_camera = cmra;
-    plnt1->camera = cmra;
+    Systems *update = new Systems(); // Updates all of the objects. 
 
-    camera = cmra;
-    player_collision = new Collision(plyr);
-    player_collision->add_collidable(plnt1);
-    player_collision->add_collidables(*asteroids);
+    Systems *render = new Systems(); // Renders all of the objects.
+    render->push_back(grd);
+    for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
+    {
+        render->push_back(*it);
+    }
+    render->push_back(plyr);
+    render->push_back(plnt1);
 
+    // Initialize a gravitywell to the single planet. 
+    System *planet_gravity = new GravityWell(plnt1);
+    planet_gravity->push_back(plyr);
+    
+    this->gameverse->push_back(planet_gravity); 
+    this->gameverse->push_back(update);
+    this->gameverse->push_back(render);
+
+    // End System test. 
     delete asteroids;
     return 1;
 }
@@ -172,11 +186,13 @@ Uint32 Game::render(Uint32 interval, void *param)
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
-    for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
-    {
-        Object *rndrf = *it;
-        rndrf->render(interval, this->ticks);
-    }
+    gameverse->render(interval, this->ticks);
+
+    //for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
+    //{
+    //    Object *rndrf = *it;
+    //    rndrf->render(interval, this->ticks);
+    //}
 
     glFlush();
     SDL_GL_SwapWindow(this->sdl_window);
@@ -196,12 +212,13 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
         dt = aos_game_ptr->dt;
         fstart = SDL_GetTicks();
         
-        std::vector<Object *> objects = aos_game_ptr->objects;
-        for(std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it)
-        {
-            Object *updtf = *it;
-            updtf->update(dt, aos_game_ptr->ticks);
-        }
+        //std::vector<Object *> objects = aos_game_ptr->objects;
+        //for(std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it)
+        //{
+        //    Object *updtf = *it;
+        //    updtf->update(dt, aos_game_ptr->ticks);
+        //}
+        aos_game_ptr->gameverse->update(dt, aos_game_ptr->ticks);
 
         
         ftime = SDL_GetTicks() - fstart;
@@ -240,11 +257,12 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
 
     // Get all of the keyboard events.
     const Uint8* currKeyStates = SDL_GetKeyboardState(NULL);
-    for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
-    {
-        Object *evntf = *it;
-        evntf->send_event(currKeyStates, interval, game_ptr->ticks);
-    }
+    //for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
+    //{
+    //    Object *evntf = *it;
+    //    evntf->send_event(currKeyStates, interval, game_ptr->ticks);
+    //}
+    this->gameverse->send_event(currKeyStates, interval, game_ptr->ticks);
 
     while(SDL_PollEvent(&event)) 
     {   

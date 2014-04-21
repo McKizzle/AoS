@@ -20,7 +20,6 @@ namespace aos
 {
     class Camera;
     class System;
-    //class Integratable;
     
     /// \class Object Object.hpp
     /// \brief Represents a game object.
