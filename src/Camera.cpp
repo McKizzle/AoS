@@ -10,12 +10,12 @@ Camera::Camera(Object * ref_object)
 
 Camera::~Camera(){ }
 
-double Camera::x()
+const double Camera::x() const
 {
     return ref_object->state[Object::XIND];
 }
 
-double Camera::y()
+const double Camera::y() const
 {
     return ref_object->state[Object::YIND];
 }

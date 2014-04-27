@@ -69,6 +69,7 @@ int Game::init()
 
     // Create the game objects. 
     Object * plyr = Player::default_player(); // player ship
+    plyr->state[Object::XIND] = 120.0; 
 
     // TODO: Needing to create a player and then adding that player to the
     //      camera is confusing. Fix this later. 
@@ -82,11 +83,7 @@ int Game::init()
     grd->vertical_minor_spacing = 2;
     grd->camera = cmra;
     grd->obj_camera = cmra;
-    
-    // Create a planet. 
-    Object * plnt1 = circle(100, 360, 0.0, -120.0);
-    plnt1->camera = cmra;
-    
+     
     // Create a bunch of random asteroids
     std::vector< Object *> *asteroids = seed_for_asteroids(12345, 100, 5, 10, 10.0, 20.0); //FIXME: Get rid of vector pointer. 
     for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
@@ -95,8 +92,19 @@ int Game::init()
     }
     
     this->gameverse = new Systems(); // Contains all of the systems. 
+    
+    // Create a planet with gravity and add satellites to it (including the player.)
+    Systems *gravity_systems = new Systems();
+    Object * plnt1 = circle(100, 360, 0.0, 0.0);
+    plnt1->camera = cmra;
+    GravityWell *planet_gravity = new GravityWell(plnt1);
+    planet_gravity->push_back_orbit(plyr, 120.0);
+    for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
+    {
+        planet_gravity->push_back_orbit(*it, 120.0);
+    }
 
-    Systems *update = new Systems(); // Updates all of the objects. 
+    gravity_systems->push_back(planet_gravity);
 
     Systems *render = new Systems(); // Renders all of the objects.
     render->push_back(grd);
@@ -104,14 +112,18 @@ int Game::init()
     {
         render->push_back(*it);
     }
-    render->push_back(plyr);
     render->push_back(plnt1);
-
-    // Initialize a gravitywell to the single planet. 
-    System *planet_gravity = new GravityWell(plnt1);
-    planet_gravity->push_back(plyr);
+    render->push_back(plyr);
     
-    this->gameverse->push_back(planet_gravity); 
+    // Push items to the update system that calculates objects position. 
+    Systems *update = new Systems(); // Updates all of the objects. 
+    update->push_back(plyr);
+    for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
+    {
+        update->push_back(*it);
+    }
+
+    this->gameverse->push_back(gravity_systems); 
     this->gameverse->push_back(update);
     this->gameverse->push_back(render);
 
@@ -187,13 +199,6 @@ Uint32 Game::render(Uint32 interval, void *param)
     glLoadIdentity();
 
     gameverse->render(interval, this->ticks);
-
-    //for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
-    //{
-    //    Object *rndrf = *it;
-    //    rndrf->render(interval, this->ticks);
-    //}
-
     glFlush();
     SDL_GL_SwapWindow(this->sdl_window);
 
@@ -212,14 +217,7 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
         dt = aos_game_ptr->dt;
         fstart = SDL_GetTicks();
         
-        //std::vector<Object *> objects = aos_game_ptr->objects;
-        //for(std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it)
-        //{
-        //    Object *updtf = *it;
-        //    updtf->update(dt, aos_game_ptr->ticks);
-        //}
         aos_game_ptr->gameverse->update(dt, aos_game_ptr->ticks);
-
         
         ftime = SDL_GetTicks() - fstart;
         aos_game_ptr->ticks++;
@@ -257,11 +255,6 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
 
     // Get all of the keyboard events.
     const Uint8* currKeyStates = SDL_GetKeyboardState(NULL);
-    //for(std::vector< Object* >::iterator it = objects.begin(); it != objects.end(); ++it) 
-    //{
-    //    Object *evntf = *it;
-    //    evntf->send_event(currKeyStates, interval, game_ptr->ticks);
-    //}
     this->gameverse->send_event(currKeyStates, interval, game_ptr->ticks);
 
     while(SDL_PollEvent(&event)) 

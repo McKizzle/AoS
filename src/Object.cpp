@@ -35,8 +35,16 @@ void Object::render(Uint32 dt_ms, Uint32 time)
 
 void Object::update(Uint32 dt_ms, Uint32 time)
 {
-    std::vector< double > * new_state = intgr->integrate(this, &state, dt_ms, time);
-    state.swap(*new_state);
+    std::vector< double > * old_state = this->copy_state();
+    std::vector< double > * new_state = intgr->integrate(this, old_state, dt_ms, time);
+    
+    (*new_state)[AXIND] = 0.0;
+    (*new_state)[AYIND] = 0.0;
+    (*new_state)[AHIND] = 0.0;
+
+    this->swap_state(new_state);
+    
+    delete old_state;
     delete new_state;
 }
 
@@ -79,6 +87,18 @@ unsigned int Object::push_back(System * subsystem)
     return 0;
 }
 void Object::pop_back(){ }
+
+void Object::swap_state(std::vector< double> * new_state) 
+{
+    std::lock_guard< std::mutex > lock(swap_state_lock);
+    state.swap((*new_state));
+}
+
+std::vector< double > * Object::copy_state()
+{
+    std::lock_guard< std::mutex > lock(swap_state_lock);
+    return new std::vector< double >(this->state);
+}
 
 } // END namespace aos
 

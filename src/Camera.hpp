@@ -23,8 +23,8 @@ namespace aos
             Camera(Object *ref_object);
             ~Camera();
 
-            double x(); ///< Get the x coordinates of the camera. 
-            double y(); ///< Get the y coordinates of the camera. 
+            const double x() const; ///< Get the x coordinates of the camera. 
+            const double y() const; ///< Get the y coordinates of the camera. 
     };
 }
 

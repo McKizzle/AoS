@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <vector>
+#include <mutex>
 
 #ifdef __APPLE__
 #include <OpenGL/GL.h>
@@ -38,6 +39,7 @@ namespace aos
             static const unsigned int HIND = 6; ///< heading index
             static const unsigned int VHIND= 7; ///< heading velocity index
             static const unsigned int AHIND= 8; ///< heading acceleration index 
+            std::mutex swap_state_lock;         ///< When switching a new state
             std::vector< double > state;        ///< The current state of the object. 
             Integrator *intgr;                  ///< Handles the integration of the object. 
 
@@ -68,7 +70,9 @@ namespace aos
             virtual void add_edge(unsigned int v1,unsigned int v2);
 
             virtual unsigned int push_back(System * subsystem);
-            virtual void pop_back();
+            virtual void pop_back(); ///< Inherited from System
+            virtual void swap_state(std::vector< double > * new_state); ///< Thread-safe swap operation. 
+            virtual std::vector< double > * copy_state(); ///< Thread-safe swap operation. 
     };
 }
 #endif

@@ -2,7 +2,7 @@
 
 using namespace aos;
 
-Player::Player() 
+Player::Player()
 { 
     std::cout << "Player::Player" << std::endl; 
 }
@@ -13,21 +13,24 @@ Player::~Player()
 }
 
 void Player::update(Uint32 dt_ms, Uint32 time) 
-{
-    std::vector< double > * new_state = intgr->integrate(this, &state, dt_ms, time);
-    state.swap((*new_state));
-
+{ 
+    std::vector< double > * old_state = this->copy_state();
+    std::vector< double > * new_state = intgr->integrate(this, old_state, dt_ms, time);
+    //state.swap((*new_state));
+    
     // Nudge the ship heading velocity if it is close to zero and the heading thrusters are slowing it down. 
-    short sign_vheading = (state[VHIND] < 0.0) ? 1 : -1; 
-    state[VHIND] = (!heading_key_pressed && (sign_vheading != prev_sign_vheading)) ? 0.0 : state[VHIND];
+    short sign_vheading = ((*new_state)[VHIND] < 0.0) ? 1 : -1; 
+    (*new_state)[VHIND] = (!heading_key_pressed && (sign_vheading != prev_sign_vheading)) ? 0.0 : (*new_state)[VHIND];
     heading_key_pressed = false;
     thruster_key_pressed= false;
-    
+     
     // Change current state values
-    state[AXIND] = 0.0;
-    state[AYIND] = 0.0;
-    state[AHIND] = 0.0;
+    (*new_state)[AXIND] = 0.0;
+    (*new_state)[AYIND] = 0.0;
+    (*new_state)[AHIND] = 0.0;
 
+    this->swap_state(new_state);
+    delete old_state;
     delete new_state;
 }
 
@@ -60,21 +63,6 @@ std::vector< double > * Player::system(Uint32 t, std::vector< double > * x)
     return dxdt;
 }
 
-
-//void Player::render(Uint32 dt, Uint32 time)
-//{ 
-//    glColor3f(1.0f, 1.0f, 1.0f);
-//    glBegin(GL_QUADS); // Start drawing a quad primitive  
-//
-//    glVertex3f(-1.0f, -1.0f, 0.0f); // The bottom left corner  
-//    glVertex3f(-1.0f, 1.0f, 0.0f); // The top left corner  
-//    glVertex3f(1.0f, 1.0f, 0.0f); // The top right corner  
-//    glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner  
-//
-//    glEnd();  
-//}
-
-
 void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time) 
 {
     // Acceleration
@@ -82,39 +70,47 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
     double a_x = std::cos(theta) * thrusters_impulse;
     double a_y = std::sin(theta) * thrusters_impulse; 
      
-    std::vector< double > tmp_state(state);
+    //std::vector< double > tmp_state(state);
+    std::vector< double > &tmp_state = *(this->copy_state());
     if(keyboardStates[SDL_SCANCODE_A])
     {
         heading_key_pressed = true;
+
         tmp_state[AHIND] = heading_thrusters_impulse + tmp_state[AHIND];
     }
     if(keyboardStates[SDL_SCANCODE_W])
     {
         tmp_state[AXIND] = a_x + tmp_state[AXIND];
         tmp_state[AYIND] = a_y + tmp_state[AYIND];
+
         thruster_key_pressed = true;
     }
     if(keyboardStates[SDL_SCANCODE_D])
     { 
         heading_key_pressed = true;
+        
         tmp_state[AHIND] = -heading_thrusters_impulse + tmp_state[AHIND];
     }
     if(keyboardStates[SDL_SCANCODE_S])
     {   
         // TODO: Right now lets disable the back thrusters. They appear to be confusing the player. 
+        
         tmp_state[AXIND] = -a_x / 2.0 + tmp_state[AXIND];
         tmp_state[AYIND] = -a_y / 2.0 + tmp_state[AYIND];
+
         thruster_key_pressed = true;
     }
     if(keyboardStates[SDL_SCANCODE_SPACE]) 
     { 
         std::cout << "Fire" << std::endl;
     }
-    state[AHIND] = tmp_state[AHIND];
-    state[AXIND] = tmp_state[AXIND];
-    state[AYIND] = tmp_state[AYIND];
+    this->swap_state(&tmp_state);
+    delete &tmp_state;
+    //state[AHIND] = tmp_state[AHIND];
+    //state[AXIND] = tmp_state[AXIND];
+    //state[AYIND] = tmp_state[AYIND];
+    
 }
-
 
 void Player::test_vectors() 
 {

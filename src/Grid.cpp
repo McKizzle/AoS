@@ -85,9 +85,6 @@ void Grid::render(Uint32 dt_ms, Uint32 time)
     glPopMatrix();
 }
 
-void Grid::update(Uint32 dt_ms, Uint32 time)
-{
-    
-}
+void Grid::update(Uint32 dt_ms, Uint32 time) {}
 
 }
