@@ -46,6 +46,9 @@ $(info $(BIN))
 build: $(OBJS) $(BIN)
 	$(CXX) -o $(BIN) $(OBJS) $(ALL_FLAGS)
 
+cppcheck:
+	cppcheck --quiet --enable=all --inconclusive --std=c++11 * 2> cppcheck.txt
+
 # Builds and then runs the game.
 run: build
 	clear
