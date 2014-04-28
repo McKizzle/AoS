@@ -2,8 +2,8 @@
 
 ## Primary 
 
-  1. Implement gravity system. 
-  2. Implement collision detection system. 
+  1. ~~Implement gravity system.~~ 
+  2. Implement collision detection system. Perhaps FLANN is the solution?
   3. Implement weapons. 
   4. Implement scoring system.
 
