@@ -79,8 +79,10 @@ int Game::init()
     plyr->camera = cmra; // Set the camera for the player
 
     Grid * grd = new Grid(120.0, 120.0); // Grid to follow the player's ship
-    grd->horizontal_minor_spacing = 2;
-    grd->vertical_minor_spacing = 2;
+    grd->horizontal_minor_spacing = 10;
+    grd->vertical_minor_spacing = 10;
+    grd->horizontal_major_spacing = 20;
+    grd->vertical_major_spacing = 20;
     grd->camera = cmra;
     grd->obj_camera = cmra;
      
@@ -95,13 +97,13 @@ int Game::init()
     
     // Create a planet with gravity and add satellites to it (including the player.)
     Systems *gravity_systems = new Systems();
-    Object * plnt1 = circle(100, 360, 0.0, 0.0);
+    Object * plnt1 = circle(150, 1440, 0.0, 0.0);
     plnt1->camera = cmra;
     GravityWell *planet_gravity = new GravityWell(plnt1);
-    planet_gravity->push_back_orbit(plyr, 120.0);
+    planet_gravity->push_back_orbit(plyr, 200.0, 70);
     for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
     {
-        planet_gravity->push_back_orbit(*it, 120.0);
+        planet_gravity->push_back_orbit(*it, 200.0, 70);
     }
 
     gravity_systems->push_back(planet_gravity);
@@ -272,7 +274,7 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
                     interval = 0;
                 }
                 else 
-                {   
+                {    
                 }
                 break;
             default:

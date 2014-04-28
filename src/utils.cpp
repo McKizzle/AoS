@@ -42,7 +42,7 @@ std::vector< Object *> * seed_for_asteroids(unsigned int seed, unsigned int coun
         double max_radius, double max_heading_vel)
 {
     std::vector<Object *> * asteroids = new std::vector<Object *>();
-    std::srand(seed);
+    std::srand(std::time(NULL));
 
     for(unsigned int i = 0; i < count; i++)
     {   

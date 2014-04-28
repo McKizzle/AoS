@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <cmath>
 #include <cstdlib>
+#include <ctime>
 
 #define _USE_MATH_DEFINES
 
@@ -42,17 +43,12 @@ namespace aos
             unsigned int push_back(System * satellite); ///< Adds a satellite.
             virtual void pop_back(); ///< Removes a satellite
 
-            /// Places an object in orbit about the planet. 
-            /// 
-            /// \param [in, out] the satellite that will be affected by the gravity.
-            /// \param [in] the distance from the center of the celestial body. 
-            /// \param [in] the position in the orbit to place the object. Expects a value in 
-            ///     radians.
-            //unsigned int push_back_orbit(System * satellite, double distance, double position); ///< Adds an orbiting satellite at the specified distance from the body. 
-
             /// Behaves just like push_back_orbit except for that the objects are placed in 
             /// random locations around the orbit.
-            unsigned int push_back_orbit(System * satellite, double distance);
+            /// \param [in, out] the satellite that will be affected by the gravity.
+            /// \param [in] the distance from the center of the celestial body. 
+            /// \param [in] generate l between -lax and lax and then add it to the distance. 
+            unsigned int push_back_orbit(System * satellite, double distance, double lax);
             
             /// Calculates the gravitational forces between a satellite and the gravitational well.
             /// 

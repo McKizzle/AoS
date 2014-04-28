@@ -26,53 +26,40 @@ unsigned int GravityWell::push_back(System * satellite)
 }
 
 
-unsigned int GravityWell::push_back_orbit(System * satellite, double distance)
+unsigned int GravityWell::push_back_orbit(System * satellite, double distance, double lax)
 { 
     Object * stllt = (Object *) satellite; 
 
-    double position = 0.0; //((double) std::rand() / (double) RAND_MAX) * (M_PI / 4.0);
+    double l_dev = -(lax / 2) + (((double) std::rand() / (double) RAND_MAX) * lax);
+    double eps_distance = distance + this->epsilon + l_dev; // nudge the distance slighly. 
 
-    double x = std::cos(position) * distance;
-    double y = std::sin(position) * distance;
+    double position = ((double) std::rand() / (double) RAND_MAX) * (2 * M_PI);
+
+    // Calculate the new position of the satlite. 
+    double x = std::cos(position) * (distance + l_dev);
+    double y = std::sin(position) * (distance + l_dev);
+
+    double dx = std::abs(this->celestial_body->state[Object::XIND] - x);
+    double theta = position + (M_PI / 2);//(std::acos(dx / distance) * 2.0) + (M_PI / 2);
+    double v_0 = std::sqrt((GW_GM * this->mass) / (eps_distance)) * 0.70;
+    
+    double v_x = v_0 * std::cos(theta);
+    double v_y = v_0 * std::sin(theta);
+
+    stllt->state[Object::VXIND] = v_x;
+    stllt->state[Object::VYIND] = v_y;
+    
+    //std::cout << "dx = " << dx << " and distance = " << distance << std::endl;
+    //std::cout << "theta: " << theta << std::endl;
+    //std::cout << "v_0: " << v_0 << std::endl;
+    //std::cout << "( " << v_x << ", " << v_y << ")" << std::endl;
+
     stllt->state[Object::XIND] = this->celestial_body->state[Object::XIND] + x;
     stllt->state[Object::YIND] = this->celestial_body->state[Object::YIND] + y;
-
-    std::cout << "position: " << x << ", " << y << std::endl;
-    std::cout << "Distance: " << std::sqrt(std::pow(x, 2) + std::pow(y, 2)) << std::endl;
-    
-    // Calculate and set the velocity to stay in orbit.
-    double v_y = std::sqrt((GW_GM * this->mass ) / (distance + this->epsilon)) * 0.70;
-
-    //stllt->state[Object::VXIND] = v_x;
-    stllt->state[Object::VYIND] = v_y;
-      
+ 
     // Push the satellite into the system. 
     return this->push_back(satellite);
 }
-
-//unsigned int GravityWell::push_back_orbit(System * satellite, double distance, double position)
-//{
-//    Object * stllt = (Object *) satellite; 
-//
-//    double x = std::cos(position) * distance;
-//    double y = std::sin(position) * distance;
-//    stllt->state[Object::XIND] = x;
-//    stllt->state[Object::YIND] = y;
-//
-//    std::cout << "position: " << x << ", " << y << std::endl;
-//
-//    // Calculate and set the velocity to stay in orbit.
-//    double v_x = std::sqrt((GW_GM * this->mass) / x);
-//    double v_y = std::sqrt((GW_GM * this->mass) / y);
-//    
-//    std::cout << "velocity: " << v_x << ", " << v_y << std::endl;
-//
-//    //stllt->state[Object::VXIND] = v_x;
-//    //stllt->state[Object::VYIND] = v_y;
-//      
-//    // Push the satellite into the system. 
-//    return this->push_back(satellite);
-//}
 
 void GravityWell::pop_back()
 {
