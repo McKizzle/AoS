@@ -9,9 +9,7 @@
 #include "Eventful.hpp"
 
 namespace aos
-{     
-    
-
+{
     class System: public Updateable, public Renderable, public Eventful
     {
         public:

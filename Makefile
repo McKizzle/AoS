@@ -2,21 +2,27 @@
 # for now we will only worry about OS X and Linux. 
 UNAME_S = $(shell uname -s)
 
-CXXFLAGS = -g -std=c++11 -Wall -pedantic -pipe
+CXXFLAGS = -std=c++11 -Wall -pedantic -pipe -g 
 CXXLIBS = -pthread
 
 CXX = g++
+TST_CXX = g++
 ifeq ($(UNAME_S),Darwin)
-    CXX = g++-4.8 #/usr/local/bin/g++-4.8
+    CXX = g++-4.8 
+    TST_CXX = g++
     GGT_FLAGS = -I ~/.aos/include/
-    #OPEN_GL = -framework OpenGL
-    #GGT_FLAGS = -lgmtl
+    BOOST_INCLUDE = -I /usr/local/include
+    BOOST_LIB = -L /usr/local/lib -lboost_unit_framework-mt 
 endif
 ifeq ($(UNAME_S),Linux)
     CXX = g++-4.8
+    TST_CXX = g++-4.8
     CXXFLAGS := $(CXXFLAGS) -Wl,--no-as-needed #:= prevents recursive expansion
     GL_FLAGS = -lGL -lGLU
     GGT_FLAGS = -I /usr/local/include/
+    BOOST_INCLUDE = -L/usr/include/boostA
+    BOOST_LIB = -L /usr/lib/x86_64-linux-gnu/ -lboost_unit_test_framework
+
 endif
 
 SDL_CFLAGS = $(shell sdl2-config --cflags) 
@@ -24,27 +30,37 @@ SDL_LDFLAGS = $(shell sdl2-config --libs)
 SDL_SLIBS = $(shell sdl2-config --static-libs) 
 SDL_ADD_SLIBS = -lSDL2_image
 
-ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GGT_FLAGS)
+ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GGT_FLAGS) $(BOOST_LIBS)
 
+TST_FLAGS := -I src $(ALL_FLAGS) $(BOOST_INCLUDE) $(BOOST_LIB)
+
+TST_DIR = tests
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
 # DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
-# SRCS = $(wildcard $(SRC_DIR)/*.cpp) 
-SRCS = main.cpp utils.cpp System.cpp Systems.cpp Object.cpp Game.cpp Player.cpp Ode.cpp Camera.cpp Grid.cpp GravityWell.cpp #Collision.cpp
+# SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+TSTS = gravity_tests.cpp collision_tests.cpp
+SRCS = utils.cpp System.cpp Systems.cpp Object.cpp Game.cpp Player.cpp Ode.cpp Camera.cpp Grid.cpp GravityWell.cpp
+MAIN = main.cpp
+MBJS = $(MAIN:%.cpp=$(OBJ_DIR)/%.o)
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
+TBJS = $(TSTS:%.cpp=$(TST_DIR)/%.o)
 BIN = $(BIN_DIR)/AoS
+TBINS = $(TSTS:%.cpp=$(TST_DIR)/%.test)
 
-$(info $(SRCS))
-$(info $(OBJS))
-$(info $(BIN))
+$(info $(TBIN))
+#$(info $(TBJS))
+#$(info $(SRCS))
+#$(info $(OBJS))
+#$(info $(BIN))
 #$(info $(CXXFLAGS))
 
 # target: link the objects. 
 #	prerequisite: make sure that the objects are compiled first.
 #	prerequisite: check for any $(BIN) prerequisites.
-build: $(OBJS) $(BIN)
-	$(CXX) -o $(BIN) $(OBJS) $(ALL_FLAGS)
+build: $(OBJS) $(MBJS) $(BIN)
+	$(CXX) -o $(BIN) $(MBJS) $(OBJS) $(ALL_FLAGS)
 
 cppcheck:
 	cppcheck --quiet --enable=all --inconclusive --std=c++11 * 2> cppcheck.txt
@@ -73,6 +89,23 @@ $(BIN_DIR):
 # target: Make an object directory if necessary. 
 $(OBJ_DIR):
 	mkdir -p ./$(OBJ_DIR)
+
+# Build all of the test executables. 
+test: $(TBINS)
+
+run_tests:
+	sh $(TST_DIR)/run_tests.sh $(TBINS)
+
+# target: create each test binary. 	
+$(TST_DIR)/%.test: $(TST_DIR)/%.o $(OBJS)
+	$(TST_CXX) -o $@ $< $(OBJS) $(TST_FLAGS)
+
+$(TST_DIR)/%.o: $(TST_DIR)/%.cpp $(TST_DIR) 
+	$(TST_CXX) -o $@ -c $< $(TST_FLAGS)
+
+clean_tests:
+	rm -f $(TST_DIR)/*.o 
+	rm -f $(TST_DIR)/*.test
 
 print:
 	make build --just-print

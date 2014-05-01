@@ -6,7 +6,7 @@
 
 #define _USE_MATH_DEFINES
 
-#define GW_GM  1 //4.0 * (M_PI * M_PI)
+#define GW_GM  1.0 //4.0 * (M_PI * M_PI)
 
 
 #ifndef GRAVITYWELL_HPP
@@ -49,15 +49,30 @@ namespace aos
             /// \param [in] the distance from the center of the celestial body. 
             /// \param [in] generate l between -lax and lax and then add it to the distance. 
             unsigned int push_back_orbit(System * satellite, double distance, double lax);
-            
-            /// Calculates the gravitational forces between a satellite and the gravitational well.
+
+            /// Calculates the orbital velocity given a distance and position about the object 
+            /// in radians. 
+            /// \param [in] The distance from the center of the planet
+            /// \param [in] The position in radians about the planet. 
             /// 
+            /// \returns a vector that contains the xy-velocity. 
+            std::vector< double > distance_for_orbital_velocity(double distance, double position, double obj_mass);
+            
+            /// Calculates the xy position of an object relative to the origin of the celestial body. 
+            /// \param [in] The distance from the center of the planet
+            /// \param [in] The position in radians about the planet. 
+            /// 
+            /// \returns a vector that contains the xy-position RELATIVE to the center of the 
+            ///     celestial body. 
+            std::vector< double> position_to_celestial_body(double distance, double position);
+            
+            /// Calculates the gravitational forces between a satellite and the gravitational well. 
             /// \param [in] The satellite of interest.
             /// 
             /// \returns an (x,y) vector of the acting forces. 
             std::vector< double > F_g(Object * satellite);
 
-            /// Updates the forces acting on the bodies that are associated to the gravity well. 
+            /// Updates the forces acting on the bodies that are associated to the gravity wel 
             virtual void update(Uint32 dt_ms, Uint32 time);
     };
 }

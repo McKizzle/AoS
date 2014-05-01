@@ -3,15 +3,10 @@
 namespace aos
 {
 
-Game::Game()
-{ 
-    std::cout << "Game::~Game" << std::endl;  
-}
+Game::Game(){}
 
 Game::~Game()
 {   
-    std::cout << "Game::~Game" << std::endl;  
-
     delete gameverse;
 
     SDL_GL_DeleteContext(sdl_gl_context);
@@ -69,7 +64,7 @@ int Game::init()
 
     // Create the game objects. 
     Object * plyr = Player::default_player(); // player ship
-    plyr->state[Object::XIND] = 120.0; 
+    plyr->state[Object::XIND] = 120; 
 
     // TODO: Needing to create a player and then adding that player to the
     //      camera is confusing. Fix this later. 
@@ -78,7 +73,7 @@ int Game::init()
 
     plyr->camera = cmra; // Set the camera for the player
 
-    Grid * grd = new Grid(120.0, 120.0); // Grid to follow the player's ship
+    Grid * grd = new Grid(200.0, 200.0); // Grid to follow the player's ship
     grd->horizontal_minor_spacing = 10;
     grd->vertical_minor_spacing = 10;
     grd->horizontal_major_spacing = 20;
@@ -87,26 +82,44 @@ int Game::init()
     grd->obj_camera = cmra;
      
     // Create a bunch of random asteroids
-    std::vector< Object *> *asteroids = seed_for_asteroids(12345, 100, 5, 10, 10.0, 20.0); //FIXME: Get rid of vector pointer. 
+    std::vector< Object *> *asteroids = seed_for_asteroids(12345, 200, 5, 10, 10.0, 20.0); //FIXME: Get rid of vector pointer. 
     for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
     {
         (*it)->camera = cmra;
     }
+    //std::exit(0);
     
     this->gameverse = new Systems(); // Contains all of the systems. 
     
     // Create a planet with gravity and add satellites to it (including the player.)
     Systems *gravity_systems = new Systems();
-    Object * plnt1 = circle(150, 1440, 0.0, 0.0);
+    Object * plnt1 = circle(300, 360, 0.0, 0.0);
+    Object * plnt2 = circle(40, 360, 0.0, 0.0);
     plnt1->camera = cmra;
+    plnt2->camera = cmra;
     GravityWell *planet_gravity = new GravityWell(plnt1);
-    planet_gravity->push_back_orbit(plyr, 200.0, 70);
+    GravityWell *moon_gravity = new GravityWell(plnt2);
+
+    planet_gravity->push_back_orbit(plnt2, 400, 0);
+    planet_gravity->push_back_orbit(plyr, 310, 0);
+    //planet_gravity->push_back(plyr);
+    //moon_gravity->push_back_orbit(plyr, 50, 0);
+    moon_gravity->push_back(plyr);
+    //moon_gravity->push_back(plnt1);
+
+    int i = 0;
     for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
     {
-        planet_gravity->push_back_orbit(*it, 200.0, 70);
-    }
+        //if(i % 10 != 0)
+            planet_gravity->push_back_orbit(*it, 375, 45);
+            //moon_gravity->push_back(*it);
+        //else
+        //    moon_gravity->push_back_orbit(*it, 60, 5);
 
+        i++;
+    }
     gravity_systems->push_back(planet_gravity);
+    gravity_systems->push_back(moon_gravity);
 
     Systems *render = new Systems(); // Renders all of the objects.
     render->push_back(grd);
@@ -115,10 +128,12 @@ int Game::init()
         render->push_back(*it);
     }
     render->push_back(plnt1);
+    render->push_back(plnt2);
     render->push_back(plyr);
     
     // Push items to the update system that calculates objects position. 
     Systems *update = new Systems(); // Updates all of the objects. 
+    update->push_back(plnt2);
     update->push_back(plyr);
     for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
     {
@@ -177,7 +192,7 @@ int Game::init_gl()
     
     
     int setcurrent_result = SDL_GL_MakeCurrent(sdl_window, sdl_gl_context);
-    SDL_GL_SetSwapInterval(1); // Enable V-Sync
+    //SDL_GL_SetSwapInterval(1); // Enable V-Sync
     
     glViewport(0, 0, screen_width, screen_height);
     print_glError("GL Viewport");

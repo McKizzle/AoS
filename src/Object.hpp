@@ -48,6 +48,8 @@ namespace aos
             std::vector< std::vector<double> > vertices; ///< All of the vertices in the object. 
             std::vector< unsigned int > edges; ///< An even-length vector of the vertices to edges. 
             double bs_r = 0.0; ///< The minimum bounding radius. 
+            double density = 1.0; ///< The density per unit squared in the object. 
+            double mass = 1.0; ///< The mass of the object. (this is calculated automatically based on the densicyt)
 
             Camera *camera; ///< Used to render the object position relative to the camera. 
 
@@ -58,10 +60,15 @@ namespace aos
             virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time); ///< Inherited from Eventful
             virtual std::vector< double > * system(Uint32 t, std::vector< double > * x); ///< Inherited from Integratable. 
 
-            /// Adds a vertex (x, y) to the object. 
+            /// Adds a vertex (x, y) to the object.
             /// \param [in] x 
             /// \param [in] y 
             virtual void add_vertex(double x, double y);
+            
+            /// Calculates the mass of the object. This function assumes that the entire object
+            /// is a set of triangles which have a single point at the object's origin. It takes
+            /// the sum of their areas and calculats the mass based on the object density. 
+            virtual void calculate_mass();
             
             /// Adds an edge to the vertex. Instead of actual edges. Expects an index to the 
             /// vertex in the vertices array. 

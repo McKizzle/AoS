@@ -34,6 +34,7 @@ Object * circle(double radius, unsigned int sectors, double x, double y)
         circ->add_edge(idx1, idx2);
     }
 
+    circ->calculate_mass();
     return circ; 
 }
 
@@ -55,7 +56,7 @@ std::vector< Object *> * seed_for_asteroids(unsigned int seed, unsigned int coun
         asteroid->state[asteroid->VHIND] = heading_vel;
 
 
-        std::cout << "verts: " << verts << std::endl;
+        //std::cout << "verts: " << verts << std::endl;
         
         //  Now generate the points. 
         double theta_step_size = 2 * M_PI / (double) verts;
@@ -79,11 +80,12 @@ std::vector< Object *> * seed_for_asteroids(unsigned int seed, unsigned int coun
         }
         ave_x /= (double) verts;
         ave_y /= (double) verts;
-        std::cout << "Ave X: " << ave_x << ", Ave Y: " << ave_y << std::endl;
+        //std::cout << "Ave X: " << ave_x << ", Ave Y: " << ave_y << std::endl;
         for(std::vector< std::vector< double > >::iterator it = vertices.begin(); it != vertices.end(); ++it)
         {
             asteroid->add_vertex((*it)[0] - ave_x, (*it)[1] - ave_y);
         }
+        asteroid->calculate_mass();
         asteroids->push_back(asteroid);
     }
 

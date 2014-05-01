@@ -8,11 +8,6 @@
 #include <GravityWell.hpp>
 #include <utils.hpp>
  
-int add(int i, int j)
-{
-        return i + j;
-} 
-
 BOOST_AUTO_TEST_SUITE(Gravity)
 
 BOOST_AUTO_TEST_CASE(OrbitalPosition)
@@ -20,7 +15,6 @@ BOOST_AUTO_TEST_CASE(OrbitalPosition)
     double planet_radius = 10;
     double satellite_radius = 1;
     aos::Object *planet = aos::circle(planet_radius, 360, 0.0, 0.0);
-    aos::Object *satellite = aos::circle(satellite_radius, 360, 0.0, 0.0);
 
     aos::GravityWell gw(planet); 
 
@@ -54,33 +48,35 @@ BOOST_AUTO_TEST_CASE(OrbitalPosition)
 
 BOOST_AUTO_TEST_CASE(OrbitalVelocity)
 {
-    //aos::Object *planet = aos::circle(100, 360, 0, 0);
-    //aos::Object *satellite = aos::circle(1, 360, 0, 0);
-    //aos::GravityWell gw(planet);
+    double planet_radius = 10;
+    double satellite_radius = 1;
+    aos::Object *planet = aos::circle(planet_radius, 360, 0.0, 0.0);
 
-    //gw->push_back_orbit(
+    aos::GravityWell gw(planet); 
+
+    std::vector< double > thetas = { 
+        0.0,               M_PI / 4.0,         M_PI / 2.0, 
+        3.0 * M_PI / 4.0,  M_PI,               5.0 * M_PI / 4.0,
+        3.0 * M_PI / 2.0,  7.0 * M_PI / 4.0,   2.0 * M_PI
+    };
+    double distance = planet_radius + satellite_radius + 10; // 41
+    
+    for(unsigned int i = 0; i < thetas.size(); i++)
+    { 
+        // Calculate teh expected velocities. 
+        double theta = thetas[i] + (M_PI / 2.0);
+        double v_orbital = std::sqrt((GW_GM * (planet->mass)) / (distance + gw.epsilon)) * 0.70;
+        std::vector< double > ev = {v_orbital * std::cos(theta), v_orbital * std::sin(theta)};
+  
+        // Calculate the acutal velocities. 
+        theta = thetas[i];  
+        std::vector< double > cv = gw.distance_for_orbital_velocity(distance, theta, 0.0); // Get the calculated velocity
+
+        BOOST_CHECK_MESSAGE(
+            (std::abs(cv[0] - ev[0]) <= 0.01) && (std::abs(cv[1] - ev[1]) <= 0.01), 
+            "Expected a velocity of (" << ev[0] << ", " << ev[1] << " got a velocity of (" << cv[0] << ", " << cv[1] << ") at a distance and position of " << distance << " units and " << theta << " radians.");
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()
 
-//BOOST_AUTO_TEST_SUITE(Maths)
-// 
-//BOOST_AUTO_TEST_CASE(universeInOrder)
-//{
-//    BOOST_CHECK(add(2, 2) == 4);
-//}
-// 
-//BOOST_AUTO_TEST_SUITE_END()
-// 
-//BOOST_AUTO_TEST_SUITE(Physics)
-// 
-//BOOST_AUTO_TEST_CASE(specialTheory)
-//{
-//    int e = 32;
-//    int m = 2;
-//    int c = 4;
-// 
-//    BOOST_CHECK(e == m * c * c);
-//}
-// 
-//BOOST_AUTO_TEST_SUITE_END()

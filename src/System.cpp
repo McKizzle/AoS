@@ -6,15 +6,12 @@ unsigned int System::autonumber = 0;
 
 System::System()
 {
-    std::cout << "System::System" << std::endl;
     this->sys_id = System::autonumber;
     System::autonumber++;
-    std::cout << "ID: " << this->sys_id << std::endl;
 }
 
 System::~System()
 {
-    std::cout << "System::~System" <<std::endl;
 }
 
 unsigned int System::push_back(System * subsystem) { return 0; }

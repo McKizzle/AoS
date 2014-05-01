@@ -4,19 +4,16 @@ using namespace aos;
 
 Player::Player()
 { 
-    std::cout << "Player::Player" << std::endl; 
 }
 
 Player::~Player() 
 { 
-    std::cout << "Player::~Player" << std::endl; 
 }
 
 void Player::update(Uint32 dt_ms, Uint32 time) 
 { 
     std::vector< double > * old_state = this->copy_state();
     std::vector< double > * new_state = intgr->integrate(this, old_state, dt_ms, time);
-    //state.swap((*new_state));
     
     // Nudge the ship heading velocity if it is close to zero and the heading thrusters are slowing it down. 
     short sign_vheading = ((*new_state)[VHIND] < 0.0) ? 1 : -1; 
@@ -36,7 +33,6 @@ void Player::update(Uint32 dt_ms, Uint32 time)
 
 std::vector< double > * Player::system(Uint32 t, std::vector< double > * x)
 {
-    //std::cout << "Player::system" << std::endl; 
     std::vector< double > * dxdt = new std::vector< double >(x->size(), 0.0);
     
     // Calculate the heading acceleration. 
@@ -92,9 +88,7 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
         tmp_state[AHIND] = -heading_thrusters_impulse + tmp_state[AHIND];
     }
     if(keyboardStates[SDL_SCANCODE_S])
-    {   
-        // TODO: Right now lets disable the back thrusters. They appear to be confusing the player. 
-        
+    { 
         tmp_state[AXIND] = -a_x / 2.0 + tmp_state[AXIND];
         tmp_state[AYIND] = -a_y / 2.0 + tmp_state[AYIND];
 
@@ -102,33 +96,10 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
     }
     if(keyboardStates[SDL_SCANCODE_SPACE]) 
     { 
-        std::cout << "Fire" << std::endl;
     }
     this->swap_state(&tmp_state);
     delete &tmp_state;
-    //state[AHIND] = tmp_state[AHIND];
-    //state[AXIND] = tmp_state[AXIND];
-    //state[AYIND] = tmp_state[AYIND];
     
-}
-
-void Player::test_vectors() 
-{
-    std::cout << "VERTICIES: " << std::endl;
-    for(std::vector< std::vector<double> >::iterator it = vertices.begin(); it != vertices.end(); ++it) 
-    {
-        std::cout << "(";
-        for(std::vector<double>::iterator jt = it->begin(); jt != it->end(); ++jt) 
-        {
-            std::cout << *jt << " ,";
-        }
-        std::cout << ")" << std::endl;
-    }
-    std::cout << "EDGES: " << std::endl;
-    for(std::vector< unsigned int >::iterator it = edges.begin(); it != edges.end(); it += 2) {
-        std::vector< unsigned int >::iterator itn = it + 1;
-        std::cout << "(" << *it << ", " << *itn << ")" << std::endl;
-    }
 }
 
 Player * Player::default_player()
@@ -146,6 +117,8 @@ Player * Player::default_player()
     plyr2->add_edge(1, 2);
     plyr2->add_edge(2, 3);
     plyr2->add_edge(3, 0);
+
+    plyr2->calculate_mass();
     
     return plyr2;
 }

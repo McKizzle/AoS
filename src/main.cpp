@@ -46,7 +46,8 @@ int main(int argc, char *argv[]) {
     const char * shortopts = "hdx:y:r:a:"; ///< Define the program's short arguments for getopt.h
 
     std::string * aspect_ratio = new std::string("4:3"); 
-    int width = 1422, height = 800, refresh_rate = 60;
+    //int width = 1422, height = 800, refresh_rate = 60;
+    int width = 1600, height = 1000, refresh_rate = 60;
     
     // Extract program arguments.
     int longopts_index = 0;
@@ -96,6 +97,8 @@ int main(int argc, char *argv[]) {
     Game *aos_game = new Game();
     aos_game->screen_width = width;
     aos_game->screen_height = height;
+    aos_game->glortho_width = 40;
+    aos_game->glortho_height = 40;
     aos_game->init();
     int res = aos_game->start_game();
     
