@@ -18,8 +18,8 @@ void Player::update(Uint32 dt_ms, Uint32 time)
     // Nudge the ship heading velocity if it is close to zero and the heading thrusters are slowing it down. 
     short sign_vheading = ((*new_state)[VHIND] < 0.0) ? 1 : -1; 
     (*new_state)[VHIND] = (!heading_key_pressed && (sign_vheading != prev_sign_vheading)) ? 0.0 : (*new_state)[VHIND];
-    heading_key_pressed = false;
-    thruster_key_pressed= false;
+    //heading_key_pressed = false;
+    //thruster_key_pressed= false;
      
     // Change current state values
     (*new_state)[AXIND] = 0.0;
@@ -66,34 +66,38 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
     double a_x = std::cos(theta) * thrusters_impulse;
     double a_y = std::sin(theta) * thrusters_impulse; 
      
-    //std::vector< double > tmp_state(state);
     std::vector< double > &tmp_state = *(this->copy_state());
-    if(keyboardStates[SDL_SCANCODE_A])
+    /// LEFT RIGHT
+    if(keyboardStates[SDL_SCANCODE_A] || keyboardStates[SDL_SCANCODE_D])
     {
-        heading_key_pressed = true;
-
-        tmp_state[AHIND] = heading_thrusters_impulse + tmp_state[AHIND];
-    }
-    if(keyboardStates[SDL_SCANCODE_W])
-    {
-        tmp_state[AXIND] = a_x + tmp_state[AXIND];
-        tmp_state[AYIND] = a_y + tmp_state[AYIND];
-
-        thruster_key_pressed = true;
-    }
-    if(keyboardStates[SDL_SCANCODE_D])
-    { 
         heading_key_pressed = true;
         
-        tmp_state[AHIND] = -heading_thrusters_impulse + tmp_state[AHIND];
-    }
-    if(keyboardStates[SDL_SCANCODE_S])
-    { 
-        tmp_state[AXIND] = -a_x / 2.0 + tmp_state[AXIND];
-        tmp_state[AYIND] = -a_y / 2.0 + tmp_state[AYIND];
+        if(keyboardStates[SDL_SCANCODE_A]) 
+            tmp_state[AHIND] = heading_thrusters_impulse + tmp_state[AHIND];
+        else    
+            tmp_state[AHIND] = -heading_thrusters_impulse + tmp_state[AHIND];
 
-        thruster_key_pressed = true;
+    } else { 
+        heading_key_pressed = false;
     }
+
+    /// FORWARD BACKWARDS
+    if(keyboardStates[SDL_SCANCODE_W] || keyboardStates[SDL_SCANCODE_S] )
+    { 
+        thruster_key_pressed = true;
+
+        if(keyboardStates[SDL_SCANCODE_W]) 
+        {
+            tmp_state[AXIND] = a_x + tmp_state[AXIND];
+            tmp_state[AYIND] = a_y + tmp_state[AYIND];
+        } else {
+            tmp_state[AXIND] = -a_x / 2.0 + tmp_state[AXIND];
+            tmp_state[AYIND] = -a_y / 2.0 + tmp_state[AYIND];
+        }
+    } else {
+        thruster_key_pressed = false;
+    }
+    
     if(keyboardStates[SDL_SCANCODE_SPACE]) 
     { 
     }
