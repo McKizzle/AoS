@@ -20,7 +20,7 @@ ifeq ($(UNAME_S),Linux)
     CXXFLAGS := $(CXXFLAGS) -Wl,--no-as-needed #:= prevents recursive expansion
     GL_FLAGS = -lGL -lGLU
     GGT_FLAGS = -I /usr/local/include/
-    BOOST_INCLUDE = -L/usr/include/boostA
+    BOOST_INCLUDE = -L/usr/include/boost
     BOOST_LIB = -L /usr/lib/x86_64-linux-gnu/ -lboost_unit_test_framework
 
 endif
@@ -41,7 +41,7 @@ BIN_DIR = bin
 # DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
 # SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 TSTS = gravity_tests.cpp collision_tests.cpp
-SRCS = utils.cpp System.cpp Systems.cpp Object.cpp Game.cpp Player.cpp Ode.cpp Camera.cpp Grid.cpp GravityWell.cpp
+SRCS = utils.cpp System.cpp Systems.cpp Object.cpp Game.cpp Player.cpp Ode.cpp Camera.cpp Grid.cpp GravityWell.cpp Collidable.cpp Planet.cpp
 MAIN = main.cpp
 MBJS = $(MAIN:%.cpp=$(OBJ_DIR)/%.o)
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)

@@ -93,8 +93,8 @@ int Game::init()
     
     // Create a planet with gravity and add satellites to it (including the player.)
     Systems *gravity_systems = new Systems();
-    Object * plnt1 = circle(300, 360, 0.0, 0.0);
-    Object * plnt2 = circle(40, 360, 0.0, 0.0);
+    Object * plnt1 = new Planet(300, 360, 0.0, 0.0);
+    Object * plnt2 = new Planet(40, 360, 0.0, 0.0);
     plnt1->camera = cmra;
     plnt2->camera = cmra;
     GravityWell *planet_gravity = new GravityWell(plnt1);

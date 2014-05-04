@@ -80,6 +80,34 @@ void Object::add_edge(unsigned int v1, unsigned int v2)
     edges.push_back(v2);
 }
 
+std::vector< double > Object::vertex_average()
+{
+    std::vector< double > center = {0.0, 0.0};
+    
+    double count = 0;
+    for(std::vector< std::vector< double > >::iterator it = this->vertices.begin(); it != this->vertices.end(); ++it)
+    {
+        count++;
+        center[0] += (*it)[0];
+        center[1] += (*it)[1];
+    }
+    center[0] /= count;
+    center[1] /= count;
+
+    return center;
+}
+
+void Object::balance()
+{
+    std::vector< double > center = this->vertex_average();
+
+    for(std::vector< std::vector< double > >::iterator it = this->vertices.begin(); it != this->vertices.end(); ++it)
+    {
+        (*it)[0] -= center[0];
+        (*it)[1] -= center[1];
+    }
+}
+
 void Object::calculate_mass()
 {
     double new_mass = 0.0;
@@ -125,6 +153,49 @@ std::vector< double > * Object::copy_state()
 {
     std::lock_guard< std::mutex > lock(swap_state_lock);
     return new std::vector< double >(this->state);
+}
+
+bool Object::check_collision(std::vector< double > point)
+{
+    // Iterate through each triangle the the object and determine if the point is in the triangle. 
+    std::vector< double > p0 = {0, 0};
+    std::vector< double > t = {this->state[Object::XIND], this->state[Object::YIND]};
+
+    gmtl::Vec2d A, T, P; 
+    P.set(&point[0]);
+    T.set(&t[0]);
+    A.set(&p0[0]);
+
+    A = A + T; // Translate the origin (no need to rotate)
+    gmtl::Matrix22d R; // Rotation and translation matrix. 
+
+    double theta = DEG2RAD(this->state[Object::HIND]);
+    R[0][0] =  std::cos(theta);
+    R[1][0] =  std::sin(theta);
+    R[0][1] = -R[0][1];
+    R[1][1] =  R[1][1];
+
+    for(std::vector< unsigned int >::iterator it = this->edges.begin() + 1; it != this->edges.end(); ++it) 
+    { 
+        gmtl::Vec2d v1; v1.set(&(this->vertices[*(it - 1)][0]));
+        gmtl::Vec2d v2; v2.set(&(this->vertices[*it][0]));
+
+        // Next rotate the points about the origin. 
+        gmtl::Vec2d B, C;
+        B = R * v1;
+        C = R * v2;
+
+        // Next translate the points according to the position of the object. 
+        B = B + T;
+        C = C + T;
+
+        double u = 0, v = 0;
+        
+        if(this->point_in_triangle(P, A, B, C, u, v))
+            return false;
+    }
+    
+    return false; // For now nothing can collide. 
 }
 
 } // END namespace aos

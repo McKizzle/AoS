@@ -23,6 +23,7 @@
 //#include "Collision.hpp"
 #include "GravityWell.hpp"
 #include "Systems.hpp"
+#include "Planet.hpp"
 
 
 namespace aos {

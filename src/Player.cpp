@@ -18,8 +18,6 @@ void Player::update(Uint32 dt_ms, Uint32 time)
     // Nudge the ship heading velocity if it is close to zero and the heading thrusters are slowing it down. 
     short sign_vheading = ((*new_state)[VHIND] < 0.0) ? 1 : -1; 
     (*new_state)[VHIND] = (!heading_key_pressed && (sign_vheading != prev_sign_vheading)) ? 0.0 : (*new_state)[VHIND];
-    //heading_key_pressed = false;
-    //thruster_key_pressed= false;
      
     // Change current state values
     (*new_state)[AXIND] = 0.0;
@@ -110,10 +108,10 @@ Player * Player::default_player()
 {   
     Player *plyr2 = new Player();
 
-    plyr2->add_vertex(1.0, 0.0);
+    plyr2->add_vertex(1.5, 0.0);
     double theta = 2.0 * M_PI / 3.0; //one-third of 2pi
     plyr2->add_vertex(std::cos(theta), std::sin(theta));
-    plyr2->add_vertex(-1.0/3.0, 0.0);
+    plyr2->add_vertex(-1.0/4.0, 0.0);
     theta = 4.0 * M_PI / 3.0; // two-thirds of 2pi`
     plyr2->add_vertex(std::cos(theta), std::sin(theta));
     
@@ -121,6 +119,9 @@ Player * Player::default_player()
     plyr2->add_edge(1, 2);
     plyr2->add_edge(2, 3);
     plyr2->add_edge(3, 0);
+
+    plyr2->balance();
+
 
     plyr2->calculate_mass();
     
