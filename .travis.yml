@@ -19,6 +19,7 @@ before_install:
     - unzip $HOME/gmtl.zip -d $HOME/
     - cd $HOME/gmtl-master/
     - sudo scons install
+    - ln -s /usr/local/include/gmtl-0.6.1 /usr/local/include/gmtl
     - cd -
 
 script: make build
