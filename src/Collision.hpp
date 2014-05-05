@@ -4,15 +4,22 @@
 #define COLLISION_HPP
 
 #include "Object.hpp"
-#include "System.hpp"
+#include "Systems.hpp"
+#include "Collidable.hpp"
 
 namespace aos
 {    
-    class Collision: public System
+    class Collision: public Systems
     {
         public:
-            Collision();
+            Collidable *collider;
+            bool collision = false;
+
+            Collision(Collidable *collider);
             ~Collision();
+
+            /// Inherited from Updateful.hpp. Overrides update to search for collisions. 
+            virtual void update(Uint32 dt_ms, Uint32 time); ///< Inherited from Updateful
     };
 }
 

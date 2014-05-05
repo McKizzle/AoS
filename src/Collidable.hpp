@@ -14,6 +14,12 @@ namespace aos
             /// detection is needed. 
             virtual bool check_collision(std::vector< double > point) = 0;
 
+            /// Returns the verticies that belong to an object. 
+            virtual std::vector< gmtl::Vec2d > get_vertices() = 0;
+
+            virtual bool get_bounding_radius() = 0;
+            virtual gmtl::Vec2d get_center_coords() = 0;
+
             /// Determines if a point lies within a triangle. Solves for unkowns $u$ and $v$ in
             /// the formula
             ///
@@ -62,6 +68,18 @@ namespace aos
             /// \returns true or false for hit or miss
             static bool point_in_circle(
                 gmtl::Vec2d P, gmtl::Vec2d C, double radius);
+
+
+            /// Checks for the collision of a circle and circle. 
+            /// 
+            /// \param[in] Center of circle one. 
+            /// \param[in] Center of circle two. 
+            /// \param[in] Circle one radius. 
+            /// \param[in] Circle two radius.
+            ///
+            /// \returns true or false for hit or miss
+            static bool circle_in_circle(
+                gmtl::Vec2d C1, gmtl::Vec2d C2, double r1, double r2);
 
 
     };

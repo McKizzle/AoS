@@ -198,5 +198,45 @@ bool Object::check_collision(std::vector< double > point)
     return false; // For now nothing can collide. 
 }
 
+std::vector< gmtl::Vec2d > Object::get_vertices()
+{
+    std::vector< gmtl::Vec2d > verts;
+    
+    std::vector< double > t = {this->state[Object::XIND], this->state[Object::YIND]};
+    gmtl::Vec2d T;
+    T.set(&t[0]);
+
+    gmtl::Matrix22d R;
+    double theta = DEG2RAD(this->state[Object::HIND]);
+    R[0][0] =  std::cos(theta);
+    R[1][0] =  std::sin(theta);
+    R[0][1] = -R[0][1];
+    R[1][1] =  R[1][1];
+
+    for(std::vector< std::vector< double > >::iterator it = this->vertices.begin(); it != this->vertices.end(); ++it)
+    {
+        gmtl::Vec2d v; v.set(&(*it)[0]);
+        
+        gmtl::Vec2d V;
+        V = R * v;
+        V = V + T;
+        verts.push_back(V);
+    }
+
+    return verts;
+}
+
+inline bool Object::get_bounding_radius() 
+{
+    return this->bs_r;
+}
+
+inline gmtl::Vec2d Object::get_center_coords()
+{
+    gmtl::Vec2d C;
+    C.set(&(this->state[Object::XIND]));
+    return C;
+}
+
 } // END namespace aos
 

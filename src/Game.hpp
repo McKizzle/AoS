@@ -20,7 +20,7 @@
 #include "utils.hpp"
 #include "Camera.hpp"
 #include "Grid.hpp"
-//#include "Collision.hpp"
+#include "Collision.hpp"
 #include "GravityWell.hpp"
 #include "Systems.hpp"
 #include "Planet.hpp"

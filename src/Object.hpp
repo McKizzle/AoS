@@ -102,6 +102,9 @@ namespace aos
 
             /// Collision Detection Collidable interface. 
             virtual bool check_collision(std::vector< double > point);
+            virtual std::vector< gmtl::Vec2d > get_vertices();
+            virtual bool get_bounding_radius();
+            virtual gmtl::Vec2d get_center_coords();
     };
 }
 #endif

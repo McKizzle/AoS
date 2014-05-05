@@ -140,8 +140,19 @@ int Game::init()
         update->push_back(*it);
     }
 
+    // Setup the collision detection system. 
+    Collision *cllsn = new Collision(plyr);
+    cllsn->push_back(plnt1);
+    cllsn->push_back(plnt2);
+    for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
+    {
+        cllsn->push_back(*it);
+    }
+
+
     this->gameverse->push_back(gravity_systems); 
     this->gameverse->push_back(update);
+    this->gameverse->push_back(cllsn);
     this->gameverse->push_back(render);
 
     // End System test. 

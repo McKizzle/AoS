@@ -81,4 +81,14 @@ bool Collidable::point_in_circle(
     return (distance > radius) ? false : true;
 }
 
+/// Checks for a collision between two circles
+bool Collidable::circle_in_circle(
+    gmtl::Vec2d C1, gmtl::Vec2d C2, double r1, double r2
+    )
+{  
+    gmtl::Vec2d dx = C1 - C2;
+    double distance = std::sqrt(dx[0] * dx[0] + dx[1] * dx[1]);
+    return (distance > (r1 + r2)) ? false : true;
+}
+
 }
