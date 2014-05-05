@@ -11,8 +11,8 @@ ifeq ($(UNAME_S),Darwin)
     CXX = g++-4.8 
     TST_CXX = g++
     GGT_FLAGS = -I ~/.aos/include/
-    BOOST_INCLUDE = -I /usr/local/include
-    BOOST_LIB = -L /usr/local/lib -lboost_unit_framework-mt 
+    BOOST_INCLUDE = -I /usr/local/include/
+    BOOST_LIB = -L /usr/local/lib/ -lboost_unit_test_framework-mt 
 endif
 ifeq ($(UNAME_S),Linux)
     CXX = g++-4.8
@@ -41,7 +41,7 @@ BIN_DIR = bin
 # DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
 # SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 TSTS = gravity_tests.cpp collision_tests.cpp
-SRCS = utils.cpp System.cpp Systems.cpp Object.cpp Game.cpp Player.cpp Ode.cpp Camera.cpp Grid.cpp GravityWell.cpp Collidable.cpp Planet.cpp
+SRCS = utils.cpp System.cpp Systems.cpp Object.cpp Game.cpp Player.cpp Ode.cpp Camera.cpp Grid.cpp GravityWell.cpp Collidable.cpp Planet.cpp Collision.cpp
 MAIN = main.cpp
 MBJS = $(MAIN:%.cpp=$(OBJ_DIR)/%.o)
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
@@ -98,10 +98,10 @@ run_tests:
 
 # target: create each test binary. 	
 $(TST_DIR)/%.test: $(TST_DIR)/%.o $(OBJS)
-	$(TST_CXX) -o $@ $< $(OBJS) $(TST_FLAGS)
+	$(CXX) -o $@ $< $(OBJS) $(TST_FLAGS)
 
 $(TST_DIR)/%.o: $(TST_DIR)/%.cpp $(TST_DIR) 
-	$(TST_CXX) -o $@ -c $< $(TST_FLAGS)
+	$(CXX) -o $@ -c $< $(TST_FLAGS)
 
 clean_tests:
 	rm -f $(TST_DIR)/*.o 
