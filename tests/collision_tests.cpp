@@ -208,6 +208,39 @@ BOOST_AUTO_TEST_CASE(CirclePointCollision2)
     BOOST_CHECK_MESSAGE( inside == false,  "Point should be outside of the circle.");
 }
 
+BOOST_AUTO_TEST_CASE(CircleCircleCollision1)
+{
+    std::vector< double > p1 = {0.0, 0.0};
+    std::vector< double > p2 = {1.25, 10.25};
+    double r1 = 1.0;
+    double r2 = 1.0;
+
+    gmtl::Vec2d C1, C2;
+    C1.set(&p1[0]);
+    C2.set(&p2[0]); 
+
+    bool inside = aos::Collidable::circle_in_circle(C1, C2, r1, r2);
+
+    BOOST_CHECK_MESSAGE( inside == false,  "Circles should not intersect.");
+}
+
+BOOST_AUTO_TEST_CASE(CircleCircleCollision2)
+{
+    std::vector< double > p1 = {0.0, 0.0};
+    std::vector< double > p2 = {1.25, 1.25};
+    double r1 = 1.0;
+    double r2 = 2.0;
+
+    gmtl::Vec2d C1, C2;
+    C1.set(&p1[0]);
+    C2.set(&p2[0]); 
+
+    bool inside = aos::Collidable::circle_in_circle(C1, C2, r1, r2);
+
+    BOOST_CHECK_MESSAGE( inside == true,  "Circles should intersect.");
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 
