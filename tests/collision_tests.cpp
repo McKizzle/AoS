@@ -127,6 +127,28 @@ BOOST_AUTO_TEST_CASE(PointTriangleCollision5)
         );
 }
 
+BOOST_AUTO_TEST_CASE(PointTriangleCollision6)
+{
+    std::vector< double > p = {1.0, -1.25};
+    std::vector< double > p0  = {5.0,  0.0};
+    std::vector< double > p1  = {5.0, -5.0};
+    std::vector< double > p2  = {0.0, 0.0};
+
+    gmtl::Vec2d P, A, B, C;
+    P.set( &p[0]);
+    A.set(&p0[0]);
+    B.set(&p1[0]);
+    C.set(&p2[0]);
+
+    double u = 0, v = 0;
+
+    bool collision = aos::Collidable::point_in_triangle(P, A, B, C, u, v);
+
+    BOOST_CHECK_MESSAGE(collision == true, 
+        "Collision test failed P = (0.00, 0.90) for ((0.0, 0.0), (1.0, 0.0), (0.0, 1.0)) The calculated u and v are " << u << " and " << v
+        );
+}
+
 BOOST_AUTO_TEST_CASE(VectorAddition)
 {
     std::vector< double > v1 = {0.30, 0.25};
@@ -151,16 +173,16 @@ BOOST_AUTO_TEST_CASE(VectorRotation)
     gmtl::Matrix22d R; // Rotation and translation matrix. 
     double theta = M_PI / 2.0;
     R[0][0] =  std::cos(theta);
+    R[0][1] = -std::sin(theta);
     R[1][0] =  std::sin(theta);
-    R[0][1] = -R[0][1];
-    R[1][1] =  R[1][1];
+    R[1][1] =  std::cos(theta);
     
     gmtl::Vec2d g2 = R * g1;
     
     //std::cout << R << std::endl;
     //std::cout << g2[0] << ", " << g2[1] << std::endl;
 
-    BOOST_CHECK_MESSAGE( (g2[0] -  0.0) <= 0.0001 && ((g2[1] -1.0) <= 0.0001), "GMTL Rotation Sucess");
+    BOOST_CHECK_MESSAGE( (g2[0] -  0.0) <= 0.0001 && ((g2[1] - 1.0) <= 0.0001), "GMTL Rotation Sucess");
 }
 
 BOOST_AUTO_TEST_CASE(CirclePointCollision0)
