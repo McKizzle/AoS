@@ -7,6 +7,12 @@
 #define _USE_MATH_DEFINES
 
 #include "Object.hpp"
+#include "Systems.hpp"
+#include "GravityWell.hpp"
+#include "Collision.hpp"
+#include "Planet.hpp"
+#include "Player.hpp"
+#include "Grid.hpp"
 
 namespace aos
 {
@@ -21,6 +27,10 @@ namespace aos
     std::vector< Object * > * seed_for_asteroids(unsigned int seed, unsigned int count, 
             double verts_max, double verts_min,
             double max_radius, double max_heading_vel);
+    
+    /// Returns a system with two planets, 100 Asteroids and a player. 
+    Systems * single_asteroid();
+    Systems * two_planets(); 
 }
 
 #endif

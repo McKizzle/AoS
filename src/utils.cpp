@@ -92,4 +92,141 @@ std::vector< Object *> * seed_for_asteroids(unsigned int seed, unsigned int coun
     return asteroids;
 }
 
+Systems * single_asteroid()
+{
+    Systems * universe = new Systems();
+    
+    Object * plyr = Player::default_player(); // player ship 
+    Camera *cmra = new Camera(plyr); // focus the camera on the player
+    plyr->camera = cmra;
+
+    Grid * grd = new Grid(200.0, 200.0); // Grid to follow the player's ship
+    grd->horizontal_minor_spacing = 10;
+    grd->vertical_minor_spacing = 10;
+    grd->horizontal_major_spacing = 20;
+    grd->vertical_major_spacing = 20;
+    grd->camera = cmra;
+    grd->obj_camera = cmra;
+
+    std::vector< Object *> *asteroids = seed_for_asteroids(12345, 1, 5, 10, 10.0, 20.0);
+    Object * asteroid = circle(5, 4, 11.0, 0); //(*asteroids)[0]; 
+    asteroid->state[Object::XIND] = 5.0;
+    asteroid->camera = cmra;
+
+    delete asteroids;
+ 
+    Systems *render = new Systems(); // Renders all of the objects.
+    render->push_back(grd);
+    render->push_back(plyr);
+    render->push_back(asteroid);
+    
+    Systems *update = new Systems(); // Renders all of the objects.
+    update->push_back(plyr);
+    update->push_back(asteroid);
+
+    Collision *cllsn = new Collision(plyr);
+    cllsn->push_back(asteroid);
+
+    universe->push_back(update);
+    universe->push_back(render);
+    universe->push_back(cllsn);
+    
+    return universe;
+}
+
+Systems * two_planets()
+{
+    Systems *gameverse = new Systems();
+
+    Object * plyr = Player::default_player(); // player ship
+    plyr->state[Object::XIND] = 120; 
+
+    // TODO: Needing to create a player and then adding that player to the
+    //      camera is confusing. Fix this later. 
+    Camera *cmra = new Camera(plyr); // focus the camera on the player
+    //camera = cmra;
+
+    plyr->camera = cmra; // Set the camera for the player
+
+    Grid * grd = new Grid(200.0, 200.0); // Grid to follow the player's ship
+    grd->horizontal_minor_spacing = 10;
+    grd->vertical_minor_spacing = 10;
+    grd->horizontal_major_spacing = 20;
+    grd->vertical_major_spacing = 20;
+    grd->camera = cmra;
+    grd->obj_camera = cmra;
+     
+    // Create a bunch of random asteroids
+    std::vector< Object *> *asteroids = seed_for_asteroids(12345, 200, 5, 10, 10.0, 20.0); //FIXME: Get rid of vector pointer. 
+    for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
+    {
+        (*it)->camera = cmra;
+    }
+     
+    // Create a planet with gravity and add satellites to it (including the player.)
+    Systems *gravity_systems = new Systems();
+    Object * plnt1 = new Planet(300, 360, 0.0, 0.0);
+    Object * plnt2 = new Planet(40, 360, 0.0, 0.0);
+    plnt1->camera = cmra;
+    plnt2->camera = cmra;
+    GravityWell *planet_gravity = new GravityWell(plnt1);
+    GravityWell *moon_gravity = new GravityWell(plnt2);
+
+    planet_gravity->push_back_orbit(plnt2, 400, 0);
+    planet_gravity->push_back_orbit(plyr, 310, 0);
+    moon_gravity->push_back(plyr);
+
+    int i = 0;
+    for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
+    {
+        //if(i % 10 != 0)
+            planet_gravity->push_back_orbit(*it, 375, 45);
+            //moon_gravity->push_back(*it);
+        //else
+        //    moon_gravity->push_back_orbit(*it, 60, 5);
+
+        i++;
+    }
+    gravity_systems->push_back(planet_gravity);
+    gravity_systems->push_back(moon_gravity);
+
+    Systems *render = new Systems(); // Renders all of the objects.
+    render->push_back(grd);
+    for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
+    {
+        render->push_back(*it);
+    }
+    render->push_back(plnt1);
+    render->push_back(plnt2);
+    render->push_back(plyr);
+    
+    // Push items to the update system that calculates objects position. 
+    Systems *update = new Systems(); // Updates all of the objects. 
+    update->push_back(plnt2);
+    update->push_back(plyr);
+    for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
+    {
+        update->push_back(*it);
+    }
+
+    // Setup the collision detection system. 
+    Collision *cllsn = new Collision(plyr);
+    cllsn->push_back(plnt1);
+    cllsn->push_back(plnt2);
+    for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
+    {
+        cllsn->push_back(*it);
+    }
+
+
+    gameverse->push_back(gravity_systems); 
+    gameverse->push_back(update);
+    gameverse->push_back(cllsn);
+    gameverse->push_back(render);
+
+    delete asteroids;
+
+    return gameverse;
+}
+
 } //END namespace aos
