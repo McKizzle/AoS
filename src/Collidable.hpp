@@ -15,10 +15,11 @@ namespace aos
             virtual bool check_collision(std::vector< double > point) = 0;
 
             /// Returns the verticies that belong to an object. 
-            virtual std::vector< gmtl::Vec2d > get_vertices() = 0;
-
-            virtual bool get_bounding_radius() = 0;
-            virtual gmtl::Vec2d get_center_coords() = 0;
+            virtual void get_vertices( std::vector< gmtl::Vec2d > & verts ) = 0;
+            virtual void get_center_coords( gmtl::Vec2d & cords ) = 0;
+            
+            /// Gets the bounding radius of the Object. 
+            virtual double get_bounding_radius() = 0;
 
             /// Determines if a point lies within a triangle. Solves for unkowns $u$ and $v$ in
             /// the formula
