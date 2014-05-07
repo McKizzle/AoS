@@ -94,5 +94,9 @@ void GravityWell::update(Uint32 dt_ms, Uint32 time)
     }
 }
 
+
+void GravityWell::render(Uint32 dt_ms, Uint32 time) { }
+void GravityWell::send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time){ }
+
 }
 
