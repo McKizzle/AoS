@@ -137,12 +137,6 @@ void Object::calculate_mass()
     this->mass = new_mass;
 }
 
-unsigned int Object::push_back(System * subsystem)
-{
-    return 0;
-}
-void Object::pop_back(){ }
-
 void Object::swap_state(std::vector< double> * new_state) 
 {
     std::lock_guard< std::mutex > lock(swap_state_lock);
@@ -155,7 +149,15 @@ std::vector< double > * Object::copy_state()
     return new std::vector< double >(this->state);
 }
 
-bool Object::check_collision(std::vector< double > point)
+inline void Object::get_rotation_matrix(double theta, gmtl::Matrix22d & R)
+{
+    R[0][0] =  std::cos(theta);
+    R[0][1] = -std::sin(theta);
+    R[1][0] =  std::sin(theta); 
+    R[1][1] =  std::cos(theta);
+}
+
+inline bool Object::check_collision(std::vector< double > point)
 {
     // Iterate through each triangle the the object and determine if the point is in the triangle. 
     std::vector< double > p0 = {0, 0};
@@ -168,14 +170,7 @@ bool Object::check_collision(std::vector< double > point)
 
     A = A + T; // Translate the origin (no need to rotate)
     gmtl::Matrix22d R; // Rotation and translation matrix. 
-
-    double theta = DEG2RAD(this->state[Object::HIND]);
-
-    R[0][0] =  std::cos(theta);
-    R[0][1] = -std::sin(theta);
-    R[1][0] =  std::sin(theta); -R[0][1];
-    R[1][1] =  std::cos(theta);
-
+    this->get_rotation_matrix(DEG2RAD(this->state[Object::HIND]), R);
     
     for(std::vector< unsigned int >::iterator it = this->edges.begin(); it != this->edges.end(); it += 2) 
     {
@@ -205,7 +200,7 @@ bool Object::check_collision(std::vector< double > point)
             std::cout << "P: " << P[0] << ", " << P[1] << std::endl;
             std::cout << "T: " << T[0] << ", " << T[1] << std::endl;
             std::cout << "R: " << R << std::endl;
-            std::cout << "theta:\n " << theta << std::endl;
+            std::cout << "theta:\n " << DEG2RAD(this->state[Object::HIND]) << std::endl;
             std::cout << "------------------------" << std::endl;
             return true;
         }
@@ -214,18 +209,14 @@ bool Object::check_collision(std::vector< double > point)
     return false; // For now nothing can collide. 
 }
 
-void Object::get_vertices( std::vector< gmtl::Vec2d > & verts )
+inline void Object::get_vertices( std::vector< gmtl::Vec2d > & verts )
 { 
     std::vector< double > t = {this->state[Object::XIND], this->state[Object::YIND]};
     gmtl::Vec2d T;
     T.set(&t[0]);
 
-    gmtl::Matrix22d R;
-    double theta = DEG2RAD(this->state[Object::HIND]);
-    R[0][0] =  std::cos(theta);
-    R[0][1] = -std::sin(theta);
-    R[1][0] =  std::sin(theta); 
-    R[1][1] =  std::cos(theta);
+    gmtl::Matrix22d R; // Rotation and translation matrix. 
+    this->get_rotation_matrix(DEG2RAD(this->state[Object::HIND]), R);
 
     for(std::vector< std::vector< double > >::iterator it = this->vertices.begin(); it != this->vertices.end(); ++it)
     {
@@ -238,14 +229,15 @@ void Object::get_vertices( std::vector< gmtl::Vec2d > & verts )
     }
 }
 
-double Object::get_bounding_radius() 
+inline double Object::get_bounding_radius() 
 {
     return this->bs_r;
 }
 
-void Object::get_center_coords( gmtl::Vec2d & cords ) 
+inline void Object::get_center_coords( gmtl::Vec2d & cords ) 
 {
     cords.set(&(this->state[Object::XIND]));
 }
+
 } // END namespace aos
 

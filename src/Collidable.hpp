@@ -20,26 +20,7 @@ namespace aos
             
             /// Gets the bounding radius of the Object. 
             virtual double get_bounding_radius() = 0;
-
-            /// Determines if a point lies within a triangle. Solves for unkowns $u$ and $v$ in
-            /// the formula
-            ///
-            /// $ P = A + u(B - A) + v(C - A) $
-            /// 
-            /// \param[in] the point of interest
-            /// \param[in] Vertex A
-            /// \param[in] Vertex B
-            /// \param[in] Vertex C
-            /// \param[in, out] u
-            /// \param[in, out] v
-            /// 
-            /// \returns true / false if inside / ouside.
-            static bool point_in_triangle(
-                std::vector< double > P, std::vector< double > A, 
-                std::vector< double > B, std::vector< double > C,
-                double &u, double &v
-                ); 
-            
+ 
             
             /// Determines if a point lies within a triangle. Solves for unkowns $u$ and $v$ in
             /// the formula
@@ -81,7 +62,6 @@ namespace aos
             /// \returns true or false for hit or miss
             static bool circle_in_circle(
                 gmtl::Vec2d C1, gmtl::Vec2d C2, double r1, double r2);
-
 
     };
 }

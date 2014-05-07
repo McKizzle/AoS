@@ -31,29 +31,16 @@ void Collision::update(Uint32 dt_ms, Uint32 time)
         
         if(Collidable::circle_in_circle(C1, C2, r1, r2))
         {   
-            std::vector< double > point = {clld_verts[0][0], clld_verts[0][1]};
-            if(collidable->check_collision(point) == true)
+            for(std::vector< gmtl::Vec2d >::iterator it = clld_verts.begin(); it != clld_verts.end(); ++it)
             {
-                std::cout << "Collision with: " << ((System *) collidable)->sys_id << std::endl;
-            }
-
-            //for(std::vector< gmtl::Vec2d >::iterator it = clld_verts.begin(); it != clld_verts.end(); ++it)
-            //{
-            //    std::vector< double > point = { (*it)[0], (*it)[1] };
-            //    if(collidable->check_collision(point) == true)
-            //    {
-            //        std::cout << "Collision with: " << ((System *) collidable)->sys_id << std::endl;
-            //    }
-
-            //}
-        }
-        else
-        {
-            if(time % 10 == 0)
-            {
-                std::cout << "No Collision. " << std::endl;
+                std::vector< double > point = { (*it)[0], (*it)[1] };
+                if(collidable->check_collision(point) == true)
+                {
+                    std::cout << "Collision with: " << ((System *) collidable)->sys_id << std::endl;
+                }
             }
         }
+        else {}
     }
 }
 

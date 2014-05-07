@@ -68,7 +68,7 @@ namespace aos
             virtual void render(Uint32 dt_ms, Uint32 time); ///< Inherited from Renderable
             virtual void update(Uint32 dt_ms, Uint32 time); ///< Inherited from Updatable
             virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time); ///< Inherited from Eventful
-            virtual std::vector< double > * system(Uint32 t, std::vector< double > * x); ///< Inherited from Integratable. 
+            virtual std::vector< double > * system(Uint32 t, std::vector< double > * x); ///< Inherited from Integratable.
 
             /// Adds a vertex (x, y) to the object.
             /// \param [in] x 
@@ -94,17 +94,23 @@ namespace aos
             /// \param [in] index to the second vertex. 
             virtual void add_edge(unsigned int v1,unsigned int v2);
 
-            virtual unsigned int push_back(System * subsystem);
-            virtual void pop_back(); ///< Inherited from System
-            virtual void swap_state(std::vector< double > * new_state); ///< Thread-safe swap operation. 
-            virtual std::vector< double > * copy_state(); ///< Thread-safe swap operation. 
-
+            /// Locks the current thread and swaps the state. 
+            /// \param [in] the state to swap in. 
+            void swap_state(std::vector< double > * new_state); ///< Thread-safe swap operation. 
+            /// Locks the current thread and copies the state. 
+            /// \return the copied state. 
+            std::vector< double > * copy_state(); ///< Thread-safe swap operation. 
+            /// Returns a populated 2x2 rotation matrix that performs a counter clockwise rotation. 
+            /// \param [in] theta in radians
+            /// \param [in, out] the gmtl::Matrix to populate. 
+            void get_rotation_matrix(double theta, gmtl::Matrix22d & R);
 
             /// Collision Detection Collidable interface. 
             virtual bool check_collision(std::vector< double > point);
             virtual double get_bounding_radius();
             virtual void get_vertices( std::vector< gmtl::Vec2d > & verts );
             virtual void get_center_coords( gmtl::Vec2d & cords );
+
     };
 }
 #endif
