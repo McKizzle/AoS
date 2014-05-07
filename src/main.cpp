@@ -46,8 +46,8 @@ int main(int argc, char *argv[]) {
     const char * shortopts = "hdx:y:r:a:"; ///< Define the program's short arguments for getopt.h
 
     std::string * aspect_ratio = new std::string("4:3"); 
-    //int width = 1422, height = 800, refresh_rate = 60;
-    int width = 1600, height = 1000, refresh_rate = 60;
+    int width = 1422, height = 800, refresh_rate = 60;
+    //int width = 1600, height = 1000, refresh_rate = 60;
     
     // Extract program arguments.
     int longopts_index = 0;
