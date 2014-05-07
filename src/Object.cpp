@@ -67,17 +67,17 @@ void Object::send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time){}
 
 void Object::add_vertex(double x, double y)
 {
-    double r = std::sqrt(std::pow(x, 2.0) + std::pow(x, 2.0));
-    bs_r = (r > bs_r) ? r : bs_r;
+    double r = std::sqrt(x * x + y * y);
+    this->bs_r = (r > this->bs_r) ? r : this->bs_r;
 
     std::vector< double > p = {x, y};
-    vertices.push_back(p);
+    this->vertices.push_back(p);
 }
 
 void Object::add_edge(unsigned int v1, unsigned int v2)
 {
-    edges.push_back(v1);
-    edges.push_back(v2);
+    this->edges.push_back(v1);
+    this->edges.push_back(v2);
 }
 
 std::vector< double > Object::vertex_average()
@@ -170,38 +170,52 @@ bool Object::check_collision(std::vector< double > point)
     gmtl::Matrix22d R; // Rotation and translation matrix. 
 
     double theta = DEG2RAD(this->state[Object::HIND]);
-    R[0][0] =  std::cos(theta);
-    R[1][0] =  std::sin(theta);
-    R[0][1] = -R[0][1];
-    R[1][1] =  R[1][1];
 
-    for(std::vector< unsigned int >::iterator it = this->edges.begin() + 1; it != this->edges.end(); ++it) 
-    { 
-        gmtl::Vec2d v1; v1.set(&(this->vertices[*(it - 1)][0]));
+    R[0][0] =  std::cos(theta);
+    R[0][1] = -std::sin(theta);
+    R[1][0] =  std::sin(theta); -R[0][1];
+    R[1][1] =  std::cos(theta);
+
+    
+    for(std::vector< unsigned int >::iterator it = this->edges.begin(); it != this->edges.end(); it += 2) 
+    {
+        gmtl::Vec2d v1; v1.set(&(this->vertices[*(it + 1)][0]));
         gmtl::Vec2d v2; v2.set(&(this->vertices[*it][0]));
 
         // Next rotate the points about the origin. 
         gmtl::Vec2d B, C;
         B = R * v1;
         C = R * v2;
-
-        // Next translate the points according to the position of the object. 
-        B = B + T;
-        C = C + T;
-
-        double u = 0, v = 0;
         
+        B = (B + T);
+        C = (C + T);
+
+        double u = 0, v = 0; 
         if(this->point_in_triangle(P, A, B, C, u, v))
-            return false;
+        {  
+            std::cout << "------------------------" << std::endl;
+            std::cout << "i: " << *it << std::endl;
+            std::cout << "i + 1: " << *(it + 1) << std::endl;
+            std::cout << "(u, v): " << u << ", " << v << std::endl;
+            std::cout << "A: " << A[0] << ", " << A[1] << std::endl;
+            std::cout << "b: " << v1[0] << ", " << v1[1] << std::endl;
+            std::cout << "B: " << B[0] << ", " << B[1] << std::endl;
+            std::cout << "c: " << v2[0] << ", " << v2[1] << std::endl;
+            std::cout << "C: " << C[0] << ", " << C[1] << std::endl;
+            std::cout << "P: " << P[0] << ", " << P[1] << std::endl;
+            std::cout << "T: " << T[0] << ", " << T[1] << std::endl;
+            std::cout << "R: " << R << std::endl;
+            std::cout << "theta:\n " << theta << std::endl;
+            std::cout << "------------------------" << std::endl;
+            return true;
+        }
     }
     
     return false; // For now nothing can collide. 
 }
 
-std::vector< gmtl::Vec2d > Object::get_vertices()
-{
-    std::vector< gmtl::Vec2d > verts;
-    
+void Object::get_vertices( std::vector< gmtl::Vec2d > & verts )
+{ 
     std::vector< double > t = {this->state[Object::XIND], this->state[Object::YIND]};
     gmtl::Vec2d T;
     T.set(&t[0]);
@@ -209,34 +223,29 @@ std::vector< gmtl::Vec2d > Object::get_vertices()
     gmtl::Matrix22d R;
     double theta = DEG2RAD(this->state[Object::HIND]);
     R[0][0] =  std::cos(theta);
-    R[1][0] =  std::sin(theta);
-    R[0][1] = -R[0][1];
-    R[1][1] =  R[1][1];
+    R[0][1] = -std::sin(theta);
+    R[1][0] =  std::sin(theta); 
+    R[1][1] =  std::cos(theta);
 
     for(std::vector< std::vector< double > >::iterator it = this->vertices.begin(); it != this->vertices.end(); ++it)
     {
-        gmtl::Vec2d v; v.set(&(*it)[0]);
-        
+        gmtl::Vec2d v; v.set(&(*it)[0]); 
+
         gmtl::Vec2d V;
         V = R * v;
         V = V + T;
         verts.push_back(V);
     }
-
-    return verts;
 }
 
-inline bool Object::get_bounding_radius() 
+double Object::get_bounding_radius() 
 {
     return this->bs_r;
 }
 
-inline gmtl::Vec2d Object::get_center_coords()
+void Object::get_center_coords( gmtl::Vec2d & cords ) 
 {
-    gmtl::Vec2d C;
-    C.set(&(this->state[Object::XIND]));
-    return C;
+    cords.set(&(this->state[Object::XIND]));
 }
-
 } // END namespace aos
 

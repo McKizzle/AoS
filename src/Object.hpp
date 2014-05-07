@@ -16,7 +16,7 @@
 
 #define _USE_MATH_DEFINES
 
-#define DEG2RAD( deg ) deg * 360.0 / (2.0 * M_PI)
+#define DEG2RAD( deg ) deg * 2.0 * M_PI / (360.0)
 
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
@@ -57,7 +57,7 @@ namespace aos
 
             std::vector< std::vector<double> > vertices; ///< All of the vertices in the object. 
             std::vector< unsigned int > edges; ///< An even-length vector of the vertices to edges. 
-            double bs_r = 0.0; ///< The minimum bounding radius. 
+            double bs_r = 1.0; ///< The minimum bounding radius. 
             double density = 1.0; ///< The density per unit squared in the object. 
             double mass = 1.0; ///< The mass of the object. (this is calculated automatically based on the densicyt)
 
@@ -102,9 +102,9 @@ namespace aos
 
             /// Collision Detection Collidable interface. 
             virtual bool check_collision(std::vector< double > point);
-            virtual std::vector< gmtl::Vec2d > get_vertices();
-            virtual bool get_bounding_radius();
-            virtual gmtl::Vec2d get_center_coords();
+            virtual double get_bounding_radius();
+            virtual void get_vertices( std::vector< gmtl::Vec2d > & verts );
+            virtual void get_center_coords( gmtl::Vec2d & cords );
     };
 }
 #endif

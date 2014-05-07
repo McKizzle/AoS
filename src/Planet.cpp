@@ -20,10 +20,11 @@ Planet::Planet(double radius, unsigned int sectors, double x, double y)
         unsigned int idx2 = (idx1 + 1) % sectors;
         this->add_edge(idx1, idx2);
     }
+    
+    this->bs_r = radius; // Set the bounding radius. 
 }
 
 Planet::~Planet() { }
-
 
 bool Planet::check_collision(std::vector< double > point)
 {
@@ -31,11 +32,14 @@ bool Planet::check_collision(std::vector< double > point)
     p0.set(&(this->state[Object::XIND]));
     p1.set(&point[0]);
 
-    dp = p1 - p0; 
+    dp = p1 - p0;
 
-    
+    double dist = std::sqrt(dp[0] * dp[0] + dp[1] * dp[1]);
 
-    return false;
+    if(dist > this->bs_r)
+        return false;
+    else
+        return true;
 }
 
 }
