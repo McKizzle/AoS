@@ -37,6 +37,8 @@ void Collision::update(Uint32 dt_ms, Uint32 time)
                 if(collidable->check_collision(point) == true)
                 {
                     std::cout << "Collision with: " << ((System *) collidable)->sys_id << std::endl;
+                    this->collider->set_collision(collidable);
+                    collidable->set_collision(collider);
                 }
             }
         }

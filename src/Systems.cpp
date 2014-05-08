@@ -5,40 +5,65 @@
 namespace aos 
 {
 
-Systems::Systems()
-{
-} 
+Systems::Systems(){ } 
 
-Systems::~Systems()
-{
-} 
+Systems::~Systems(){ } 
 
-unsigned int Systems::push_back(System * subsystem)
+inline unsigned int Systems::push_back(System * subsystem)
 {
     this->children.push_back(subsystem);
-    return 0;
+    return subsystem->sys_id;
 }
 
-void Systems::pop_back()
+inline System * Systems::pop_back()
 {
-    this->children.pop_back();
+    
+    if(this->children.empty())
+    {
+        return nullptr;
+    }
+    else 
+    { 
+        System * sys = this->children.back();
+        this->children.pop_back();
+        return sys;
+    }
+    
 }
 
-void Systems::render(Uint32 dt_ms, Uint32 time) 
+inline System * Systems::erase(unsigned int id)
+{
+   //Find the system. When found delete it.
+   std::vector< System * >::iterator it = this->children.begin();
+   System *sys = nullptr;
+   for(int i = 0; i < this->children.size(); i++)
+   {
+        if(this->children[i]->sys_id == id)
+        { 
+            sys = this->children[i];
+            this->children.erase(this->children.begin() + i);
+        }
+   }
+   return sys;
+}
+
+inline void Systems::render(Uint32 dt_ms, Uint32 time) 
 {
     for(std::vector<System *>::iterator it = this->children.begin(); it != this->children.end(); ++it)
     {
         (*it)->render(dt_ms, time);
     }
 }
-void Systems::update(Uint32 dt_ms, Uint32 time) 
+
+inline void Systems::update(Uint32 dt_ms, Uint32 time) 
 {  
     for(std::vector<System *>::iterator it = this->children.begin(); it != this->children.end(); ++it)
     {
         (*it)->update(dt_ms, time);
     }
 }
-void Systems::send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time)
+
+inline void Systems::send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time)
 {
     for(std::vector<System *>::iterator it = this->children.begin(); it != this->children.end(); ++it)
     {

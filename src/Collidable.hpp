@@ -14,6 +14,10 @@ namespace aos
             /// detection is needed. 
             virtual bool check_collision(std::vector< double > point) = 0;
 
+            /// Tells the object that it has collided and whom it collided with. 
+            /// \param [in] The object that it has collided with. 
+            virtual void set_collision(Collidable * collider) = 0;
+
             /// Returns the verticies that belong to an object. 
             virtual void get_vertices( std::vector< gmtl::Vec2d > & verts ) = 0;
             virtual void get_center_coords( gmtl::Vec2d & cords ) = 0;

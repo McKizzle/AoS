@@ -6,10 +6,10 @@
 #define PLANET_HPP
 
 #include "Object.hpp"
+#include "Collidable.hpp"
 
 namespace aos
 {
-
     class Planet: public Object
     {
         public: 
@@ -17,7 +17,10 @@ namespace aos
             ~Planet();
 
             /// Only perform circle point collision detection.  
-            virtual bool check_collision(std::vector< double > point);
+            bool check_collision(std::vector< double > point);
+
+
+            void set_collision(Collidable * collider);
     };
 }
 

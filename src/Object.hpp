@@ -61,6 +61,10 @@ namespace aos
             double density = 1.0; ///< The density per unit squared in the object. 
             double mass = 1.0; ///< The mass of the object. (this is calculated automatically based on the densicyt)
 
+            bool is_collidable = true;
+            bool is_visible    = true;
+
+            Collidable * collider = nullptr; /// Last object to have collide with. 
             Camera *camera; ///< Used to render the object position relative to the camera. 
 
             Object(); 
@@ -110,6 +114,7 @@ namespace aos
             virtual double get_bounding_radius();
             virtual void get_vertices( std::vector< gmtl::Vec2d > & verts );
             virtual void get_center_coords( gmtl::Vec2d & cords );
+            virtual void set_collision(Collidable * collider);
 
     };
 }

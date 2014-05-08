@@ -16,19 +16,22 @@ Object::~Object()
     delete intgr;
 }
 
-void Object::render(Uint32 dt_ms, Uint32 time) 
+inline void Object::render(Uint32 dt_ms, Uint32 time) 
 {
-    glPushMatrix();
-    glTranslatef(state[XIND] - camera->x(), state[YIND] - camera->y(), 0.0);
-    glRotatef(state[HIND], 0, 0, 1);
-    glBegin(GL_LINES);  
-        glColor3f(color[0], color[1], color[2]);
-        for(std::vector< unsigned int>::iterator it = this->edges.begin(); it != edges.end(); ++it)
-        {
-            glVertex2f((GLfloat)vertices[*it][0], (GLfloat)vertices[*it][1]);
-        }
-    glEnd();
-    glPopMatrix();
+    if(this->is_visible)
+    {
+        glPushMatrix();
+        glTranslatef(state[XIND] - camera->x(), state[YIND] - camera->y(), 0.0);
+        glRotatef(state[HIND], 0, 0, 1);
+        glBegin(GL_LINES);  
+            glColor3f(color[0], color[1], color[2]);
+            for(std::vector< unsigned int>::iterator it = this->edges.begin(); it != edges.end(); ++it)
+            {
+                glVertex2f((GLfloat)vertices[*it][0], (GLfloat)vertices[*it][1]);
+            }
+        glEnd();
+        glPopMatrix();
+    }
 }
 
 void Object::update(Uint32 dt_ms, Uint32 time)
@@ -137,13 +140,13 @@ void Object::calculate_mass()
     this->mass = new_mass;
 }
 
-void Object::swap_state(std::vector< double> * new_state) 
+inline void Object::swap_state(std::vector< double> * new_state) 
 {
     std::lock_guard< std::mutex > lock(swap_state_lock);
     state.swap((*new_state));
 }
 
-std::vector< double > * Object::copy_state()
+inline std::vector< double > * Object::copy_state()
 {
     std::lock_guard< std::mutex > lock(swap_state_lock);
     return new std::vector< double >(this->state);
@@ -202,7 +205,7 @@ inline bool Object::check_collision(std::vector< double > point)
             std::cout << "R: " << R << std::endl;
             std::cout << "theta:\n " << DEG2RAD(this->state[Object::HIND]) << std::endl;
             std::cout << "------------------------" << std::endl;
-            return true;
+            return true && this->is_collidable;
         }
     }
     
@@ -237,6 +240,14 @@ inline double Object::get_bounding_radius()
 inline void Object::get_center_coords( gmtl::Vec2d & cords ) 
 {
     cords.set(&(this->state[Object::XIND]));
+}
+
+inline void Object::set_collision(Collidable * collider)
+{
+    // TODO: Act on the collision. 
+    this->collider = collider; 
+
+
 }
 
 } // END namespace aos

@@ -37,9 +37,17 @@ bool Planet::check_collision(std::vector< double > point)
     double dist = std::sqrt(dp[0] * dp[0] + dp[1] * dp[1]);
 
     if(dist > this->bs_r)
-        return false;
+        return false && this->is_collidable;
     else
         return true;
+}
+
+inline void Planet::set_collision(Collidable * collider)
+{
+    // TODO: Act on the collision. 
+    this->collider = collider; 
+
+    // Decrement the score. 
 }
 
 }
