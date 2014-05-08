@@ -22,7 +22,7 @@ ifeq ($(UNAME_S),Linux)
     GGT_FLAGS = -I /usr/local/include/
     BOOST_INCLUDE = -L/usr/include/boost
     BOOST_LIB = -L /usr/lib/x86_64-linux-gnu/ -lboost_unit_test_framework
-
+    GLUT_LIB = -lglut
 endif
 
 SDL_CFLAGS = $(shell sdl2-config --cflags) 
@@ -30,7 +30,7 @@ SDL_LDFLAGS = $(shell sdl2-config --libs)
 SDL_SLIBS = $(shell sdl2-config --static-libs) 
 SDL_ADD_SLIBS = -lSDL2_image
 
-ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GGT_FLAGS) $(BOOST_LIBS)
+ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GGT_FLAGS) $(BOOST_LIBS) $(GLUT_LIB)
 
 TST_FLAGS := -I src $(ALL_FLAGS) $(BOOST_INCLUDE) $(BOOST_LIB)
 
@@ -40,8 +40,8 @@ OBJ_DIR = obj
 BIN_DIR = bin
 # DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
 # SRCS = $(wildcard $(SRC_DIR)/*.cpp)
-TSTS = gravity_tests.cpp collision_tests.cpp
-SRCS = utils.cpp System.cpp Systems.cpp Object.cpp Game.cpp Player.cpp Ode.cpp Camera.cpp Grid.cpp GravityWell.cpp Collidable.cpp Planet.cpp Collision.cpp
+TSTS = gravity_tests.cpp collision_tests.cpp system_tests.cpp
+SRCS = utils.cpp System.cpp Systems.cpp Object.cpp Game.cpp Player.cpp Ode.cpp Camera.cpp Grid.cpp GravityWell.cpp Collidable.cpp Planet.cpp Collision.cpp Projectile.cpp AsteroidsOnSteroids.cpp Score.cpp
 MAIN = main.cpp
 MBJS = $(MAIN:%.cpp=$(OBJ_DIR)/%.o)
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
