@@ -2,7 +2,7 @@
 # for now we will only worry about OS X and Linux. 
 UNAME_S = $(shell uname -s)
 
-CXXFLAGS = -std=c++11 -Wall -pedantic -pipe -g 
+CXXFLAGS = -std=c++11 -Wall -pedantic -pipe -g # Minimize what the user needs to install. 
 CXXLIBS = -pthread
 
 CXX = g++
@@ -13,6 +13,7 @@ ifeq ($(UNAME_S),Darwin)
     GGT_FLAGS = -I ~/.aos/include/
     BOOST_INCLUDE = -I /usr/local/include/
     BOOST_LIB = -L /usr/local/lib/ -lboost_unit_test_framework-mt 
+    GLUT_LIB = -Wl,-framework,GLUT
 endif
 ifeq ($(UNAME_S),Linux)
     CXX = g++-4.8
@@ -26,11 +27,11 @@ ifeq ($(UNAME_S),Linux)
 endif
 
 SDL_CFLAGS = $(shell sdl2-config --cflags) 
-SDL_LDFLAGS = $(shell sdl2-config --libs)
+#SDL_LDFLAGS = $(shell sdl2-config --libs)
 SDL_SLIBS = $(shell sdl2-config --static-libs) 
 SDL_ADD_SLIBS = -lSDL2_image
 
-ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GGT_FLAGS) $(BOOST_LIBS) $(GLUT_LIB)
+ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GGT_FLAGS) $(BOOST_LIBS) $(GLUT_LIB) 
 
 TST_FLAGS := -I src $(ALL_FLAGS) $(BOOST_INCLUDE) $(BOOST_LIB)
 
