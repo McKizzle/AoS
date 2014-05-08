@@ -18,6 +18,7 @@ before_install:
     - sudo apt-get install -qq -y libboost-dev
     - sudo apt-get install -qq -y libboost-test-dev
     - sudo apt-get install -qq -y libftgl2
+    - sudo apt-get install -qq -y freeglut3-dev freeglut3
     - wget -N https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip
     - unzip $HOME/gmtl.zip -d $HOME/
     - cd $HOME/gmtl-master/
@@ -25,5 +26,5 @@ before_install:
     - sudo ln -sf /usr/local/include/gmtl-0.7.0/gmtl /usr/local/include/gmtl 
     - cd -
 
-script: make build
+script: make build -j4
 
