@@ -40,7 +40,7 @@ Object * circle(double radius, unsigned int sectors, double x, double y)
 
 std::vector< Object *> * seed_for_asteroids(unsigned int seed, unsigned int count, 
         double verts_max, double verts_min,
-        double max_radius, double max_heading_vel)
+        double min_radius, double max_radius, double max_heading_vel)
 {
     std::vector<Object *> * asteroids = new std::vector<Object *>();
     std::srand(std::time(NULL));
@@ -65,7 +65,7 @@ std::vector< Object *> * seed_for_asteroids(unsigned int seed, unsigned int coun
         double ave_y = 0.0;
         for(unsigned int j = 0; j < verts; j++)
         { 
-            double r = ((double) std::rand() / (double) RAND_MAX) * max_radius;
+            double r = (max_radius - min_radius ) * ((double) std::rand() / (double) RAND_MAX) + min_radius;
             double theta = theta_step_size * j;
              
             double x = r * std::cos(theta);
@@ -100,6 +100,8 @@ Systems * single_asteroid()
     Camera *cmra = new Camera(plyr); // focus the camera on the player
     plyr->camera = cmra;
 
+    System * score = new Score(30, 30);
+
     Grid * grd = new Grid(200.0, 200.0); // Grid to follow the player's ship
     grd->horizontal_minor_spacing = 10;
     grd->vertical_minor_spacing = 10;
@@ -108,17 +110,15 @@ Systems * single_asteroid()
     grd->camera = cmra;
     grd->obj_camera = cmra;
 
-    std::vector< Object *> *asteroids = seed_for_asteroids(12345, 1, 5, 10, 10.0, 20.0);
     Object * asteroid = circle(5, 4, 11.0, 0); //(*asteroids)[0]; 
     asteroid->state[Object::XIND] = 5.0;
     asteroid->camera = cmra;
-
-    delete asteroids;
  
     Systems *render = new Systems(); // Renders all of the objects.
     render->push_back(grd);
     render->push_back(plyr);
     render->push_back(asteroid);
+    render->push_back(score);
     
     Systems *update = new Systems(); // Renders all of the objects.
     update->push_back(plyr);
@@ -144,9 +144,10 @@ Systems * two_planets()
     // TODO: Needing to create a player and then adding that player to the
     //      camera is confusing. Fix this later. 
     Camera *cmra = new Camera(plyr); // focus the camera on the player
-    //camera = cmra;
 
     plyr->camera = cmra; // Set the camera for the player
+    
+    System * score = new Score(30, 30);
 
     Grid * grd = new Grid(200.0, 200.0); // Grid to follow the player's ship
     grd->horizontal_minor_spacing = 10;
@@ -157,7 +158,7 @@ Systems * two_planets()
     grd->obj_camera = cmra;
      
     // Create a bunch of random asteroids
-    std::vector< Object *> *asteroids = seed_for_asteroids(12345, 200, 5, 10, 10.0, 20.0); //FIXME: Get rid of vector pointer. 
+    std::vector< Object *> *asteroids = seed_for_asteroids(12345, 200, 5, 10, 1.0, 10.0, 20.0); //FIXME: Get rid of vector pointer. 
     for(std::vector< Object *>::iterator it = asteroids->begin(); it != asteroids->end(); ++it)
     {
         (*it)->camera = cmra;
@@ -199,6 +200,7 @@ Systems * two_planets()
     render->push_back(plnt1);
     render->push_back(plnt2);
     render->push_back(plyr);
+    render->push_back(score);
     
     // Push items to the update system that calculates objects position. 
     Systems *update = new Systems(); // Updates all of the objects. 

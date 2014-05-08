@@ -7,6 +7,7 @@
 #include "Ode.hpp"
 
 #include <getopt.h> 
+#include <GL/glut.h>
 
 using namespace aos;
 
@@ -30,7 +31,9 @@ int optarg_to_int(char * optarg) {
 /// 
 /// \param[in] argc The number of arguments. 
 /// \param[in,out] argv The arguments passed in. 
-int main(int argc, char *argv[]) { 
+int main(int argc, char *argv[]) {  
+    glutInit(&argc, argv); // To render text. TODO: REMOVE HACK!
+
     bool DEBUG = false;
 
     const struct option longopts[] { ///< Define the program's long arguments for getopt.h
