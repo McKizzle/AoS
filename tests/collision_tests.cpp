@@ -144,8 +144,8 @@ BOOST_AUTO_TEST_CASE(PointTriangleCollision6)
 
     bool collision = aos::Collidable::point_in_triangle(P, A, B, C, u, v);
 
-    BOOST_CHECK_MESSAGE(collision == true, 
-        "Collision test failed P = (0.00, 0.90) for ((0.0, 0.0), (1.0, 0.0), (0.0, 1.0)) The calculated u and v are " << u << " and " << v
+    BOOST_CHECK_MESSAGE(collision == false, 
+        "Collision test failed P = (1.0, -1.25) for ((5.0, 0.0), (5.0, -5.0), (0.0, 0.0)) The calculated u and v are " << u << " and " << v
         );
 }
 
