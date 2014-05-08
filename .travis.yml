@@ -17,6 +17,7 @@ before_install:
     - sudo apt-get install -qq -y wget
     - sudo apt-get install -qq -y libboost-dev
     - sudo apt-get install -qq -y libboost-test-dev
+    - sudo apt-get install -qq -y libftgl2
     - wget -N https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip
     - unzip $HOME/gmtl.zip -d $HOME/
     - cd $HOME/gmtl-master/
