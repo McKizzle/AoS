@@ -12,7 +12,7 @@
 #ifndef GRAVITYWELL_HPP
 #define GRAVITYWELL_HPP
 
-#include "System.hpp"
+#include "Systems.hpp"
 #include "Object.hpp"
 
 
@@ -25,7 +25,7 @@ namespace aos
     /// The CelestialBody class takes in an object and associates gravitational forces
     /// to it. It is issentially a simple 1body system where the you have the ability to 
     /// associate 'satellite' objects to it which will be affected by its gravity. 
-    class GravityWell: public System
+    class GravityWell: public Systems
     {
         // TODO: Mass and density should be an object property.
         public: 
@@ -34,14 +34,10 @@ namespace aos
             double pe      = 0.005;    ///< A percentage dampener of the object radius to the minimum distance. 
             double epsilon = 1.0;    ///< Dampen by a distance of one.
             Object * celestial_body; ///< The object that represents the celestial body. 
-            std::vector<Object *> satellites;
             
             /// Create a gravity well associated with a celestial body. 
             GravityWell(Object * celestial_body);
             ~GravityWell();
-
-            unsigned int push_back(System * satellite); ///< Adds a satellite.
-            virtual void pop_back(); ///< Removes a satellite
 
             /// Behaves just like push_back_orbit except for that the objects are placed in 
             /// random locations around the orbit.

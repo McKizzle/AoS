@@ -58,12 +58,7 @@ std::vector< double > * Player::system(Uint32 t, std::vector< double > * x)
 }
 
 void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time) 
-{
-    // Acceleration
-    double theta = 2.0 * M_PI * state[HIND] / 360.0;
-    double a_x = std::cos(theta) * thrusters_impulse;
-    double a_y = std::sin(theta) * thrusters_impulse; 
-     
+{ 
     std::vector< double > &tmp_state = *(this->copy_state());
     /// LEFT RIGHT
     if(keyboardStates[SDL_SCANCODE_A] || keyboardStates[SDL_SCANCODE_D])
@@ -71,9 +66,9 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
         heading_key_pressed = true;
         
         if(keyboardStates[SDL_SCANCODE_A]) 
-            tmp_state[AHIND] = heading_thrusters_impulse + tmp_state[AHIND];
+            tmp_state[AHIND] = (this->heading_thrusters_impulse / this->mass) + tmp_state[AHIND];
         else    
-            tmp_state[AHIND] = -heading_thrusters_impulse + tmp_state[AHIND];
+            tmp_state[AHIND] = -(this->heading_thrusters_impulse / this->mass) + tmp_state[AHIND];
 
     } else { 
         heading_key_pressed = false;
@@ -84,13 +79,19 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
     { 
         thruster_key_pressed = true;
 
+        double theta = 2.0 * M_PI * state[HIND] / 360.0;
+        double a_x = std::cos(theta) * this->thrusters_impulse / this->mass;
+        double ra_x = std::cos(theta) * this->rev_thrusters_impulse / this->mass;
+        double a_y = std::sin(theta) * this->thrusters_impulse / this->mass; 
+        double ra_y = std::sin(theta) * this->rev_thrusters_impulse / this->mass;
+
         if(keyboardStates[SDL_SCANCODE_W]) 
         {
             tmp_state[AXIND] = a_x + tmp_state[AXIND];
             tmp_state[AYIND] = a_y + tmp_state[AYIND];
         } else {
-            tmp_state[AXIND] = -a_x / 2.0 + tmp_state[AXIND];
-            tmp_state[AYIND] = -a_y / 2.0 + tmp_state[AYIND];
+            tmp_state[AXIND] = -ra_x + tmp_state[AXIND];
+            tmp_state[AYIND] = -ra_y + tmp_state[AYIND];
         }
     } else {
         thruster_key_pressed = false;
@@ -102,6 +103,27 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
     this->swap_state(&tmp_state);
     delete &tmp_state;
     
+}
+
+inline void Player::render(Uint32 dt, Uint32 time)
+{
+    Object::render(dt, time);
+      
+    // TODO: Implement the thrusters. 
+    ///if(this->is_visible)
+    ///{
+    ///    glPushMatrix();
+    ///    glTranslatef(state[XIND] - camera->x(), state[YIND] - camera->y(), 0.0);
+    ///    glRotatef(state[HIND], 0, 0, 1);
+    ///    glBegin(GL_LINES);  
+    ///        glColor3f(color[0], color[1], color[2]);
+    ///        for(std::vector< unsigned int>::iterator it = this->edges.begin(); it != edges.end(); ++it)
+    ///        {
+    ///            glVertex2f((GLfloat)vertices[*it][0], (GLfloat)vertices[*it][1]);
+    ///        }
+    ///    glEnd();
+    ///    glPopMatrix();
+    ///}
 }
 
 Player * Player::default_player()
@@ -119,6 +141,12 @@ Player * Player::default_player()
     plyr2->add_edge(1, 2);
     plyr2->add_edge(2, 3);
     plyr2->add_edge(3, 0);
+
+    /// Create the forward thrusters. 
+
+    /// Crate the heading thrusters. 
+
+    /// Create the reverse thrusters. 
 
     plyr2->balance();
 

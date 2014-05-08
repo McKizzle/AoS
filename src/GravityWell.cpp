@@ -16,11 +16,11 @@ GravityWell::~GravityWell()
 {
 }
 
-unsigned int GravityWell::push_back(System * satellite)
-{
-    this->satellites.push_back((Object *) satellite);
-    return 0;
-}
+//unsigned int GravityWell::push_back(System * subsystem)
+//{
+//    this->children.push_back(subsystem);
+//    return 0;
+//}
 
 unsigned int GravityWell::push_back_orbit(System * satellite, double distance, double lax)
 { 
@@ -43,7 +43,7 @@ unsigned int GravityWell::push_back_orbit(System * satellite, double distance, d
 
  
     // Push the satellite into the system. 
-    return this->push_back(satellite);
+    return Systems::push_back(satellite);
 }
 
 std::vector< double > GravityWell::position_to_celestial_body(double distance, double position)
@@ -65,12 +65,14 @@ std::vector< double > GravityWell::distance_for_orbital_velocity(double distance
     return {v_x, v_y};
 }
 
-void GravityWell::pop_back()
-{
-    this->satellites.pop_back();
-}
+//System * GravityWell::pop_back()
+//{ 
+//    System * sys = this->children.back();
+//    this->children.back();
+//    return sys;
+//}
 
-std::vector< double > GravityWell::F_g(Object * satellite) 
+inline std::vector< double > GravityWell::F_g(Object * satellite) 
 { 
     std::vector< double > p_0 = { this->celestial_body->state[Object::XIND], this->celestial_body->state[Object::YIND] }; // point one.
     std::vector< double > p_s = { satellite->state[Object::XIND], satellite->state[Object::YIND] };  // point two.
@@ -83,14 +85,14 @@ std::vector< double > GravityWell::F_g(Object * satellite)
     return F_s;
 }
 
-// TODO: The implementation is wasteful. I am recalculateing variables too many times. 
-void GravityWell::update(Uint32 dt_ms, Uint32 time)
+inline void GravityWell::update(Uint32 dt_ms, Uint32 time)
 {
-    for(std::vector<Object *>::iterator it = this->satellites.begin(); it != this->satellites.end(); ++it)
+    for(std::vector<System *>::iterator it = this->children.begin(); it != this->children.end(); ++it)
     {
-        std::vector< double > F_s = this->F_g(*it);
-        (*it)->state[Object::AXIND] += F_s[0];
-        (*it)->state[Object::AYIND] += F_s[1];
+        Object * stllt = (Object*)(*it);
+        std::vector< double > F_s = this->F_g(stllt);
+        stllt->state[Object::AXIND] += F_s[0];
+        stllt->state[Object::AYIND] += F_s[1];
     }
 }
 
