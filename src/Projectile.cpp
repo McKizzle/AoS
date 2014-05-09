@@ -30,8 +30,8 @@ void Projectile::set_collision(Collidable * collider)
     this->is_visible = false;
     this->is_collidable = false;
     /// Notify the owner of its collision
-    this->owner->notify_hit((Object *) collider);
-    /// Notify the Systems manager of its collision 
+    std::cout<< "Projectile::set_collision" << std::endl;
+    this->owner->notify_hit(collider);
 }
 
 }

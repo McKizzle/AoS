@@ -33,7 +33,7 @@ namespace aos
             double hit_score  = 100; // Points to add to the score.
             double min_fire_charge = 1.0; // A what charge a projectile can be fired. 
             double charge_rate = 1.0; // The rate defaults to 4 shots per second. 
-            double muzzle_velocity = 100; // Launches a projectile at 25 units per second. 
+            double muzzle_velocity = 20.0; // Launches a projectile at 25 units per second. 
             bool   pull_trigger = false; 
             double  density = 1;
             
@@ -49,7 +49,7 @@ namespace aos
             /// Tell the weapon to launch a projectile on it's next update. 
             virtual void fire();
             /// Notify the player of projectile collision
-            virtual void notify_hit(Object * victim);
+            virtual void notify_hit(Collidable * victim);
             virtual void launch_projectile();
 
             virtual void update(Uint32 dt_ms, Uint32 time);

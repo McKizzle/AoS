@@ -22,6 +22,8 @@ Planet::Planet(double radius, unsigned int sectors, double x, double y)
     }
     
     this->bs_r = radius; // Set the bounding radius. 
+
+    this->is_invincible = true; 
 }
 
 Planet::~Planet() { }
@@ -44,10 +46,7 @@ bool Planet::check_collision(std::vector< double > point)
 
 inline void Planet::set_collision(Collidable * collider)
 {
-    // TODO: Act on the collision. 
     this->collider = collider; 
-
-    // Decrement the score. 
 }
 
 }

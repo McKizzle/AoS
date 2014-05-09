@@ -27,6 +27,8 @@ namespace aos
             
             /// Determines if the object is collidable. 
             virtual bool isa_collidable() = 0;
+
+            virtual bool isa_invincible() = 0;
  
             
             /// Determines if a point lies within a triangle. Solves for unkowns $u$ and $v$ in

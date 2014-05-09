@@ -1,5 +1,7 @@
 #include "Weapon.hpp"
 
+#include<iostream>
+
 namespace aos
 {
 
@@ -29,9 +31,10 @@ void Weapon::fire()
     this->pull_trigger = true; 
 }
 
-void Weapon::notify_hit(Object * victim)
+void Weapon::notify_hit(Collidable * victim)
 {
-   this->owner->notify_hit(victim);     
+    std::cout<< "Weapon::notify_hit" << std::endl;
+    this->owner->notify_hit(victim);     
 }
 
 void Weapon::launch_projectile()
@@ -78,9 +81,9 @@ void Weapon::update(Uint32 dt_ms, Uint32 time)
         std::cout << "Fireing projectile" << std::endl;
         (*new_state)[CIND] = 0.0;
         this->launch_projectile();
-        this->pull_trigger = false;
     }
-    
+    this->pull_trigger = false; 
+
     this->state.swap(*new_state);
 } 
 

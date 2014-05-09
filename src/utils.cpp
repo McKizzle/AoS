@@ -112,6 +112,7 @@ Systems * single_asteroid()
         ammo->push_back((new Projectile()));
     }
     Weapon * laser = new Weapon(plyr, ammo); 
+    laser->muzzle_velocity = 100;
     plyr->weapon = laser;
 
     Grid * grd = new Grid(200.0, 200.0); // Grid to follow the player's ship
@@ -181,6 +182,7 @@ Systems * two_planets()
         ammo->push_back((new Projectile()));
     }
     Weapon * laser = new Weapon(plyr, ammo); 
+    laser->muzzle_velocity = 100.0;
     plyr->weapon = laser;
     
     Grid * grd = new Grid(200.0, 200.0); // Grid to follow the player's ship

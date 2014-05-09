@@ -1,5 +1,7 @@
 #include "Player.hpp"
 
+#include <iostream>
+
 using namespace aos;
 
 Player::Player() {}
@@ -11,9 +13,14 @@ void Player::fire()
     this->weapon->fire();
 }
 
-void Player::notify_hit(Object * victim)
-{ 
-    this->score->incrementScore(15.0);
+void Player::notify_hit(Collidable * victim)
+{   
+    std::cout << "Player::notify_hit" << std::endl;
+    //std::cout << victim->isa_invincible() << std::endl;
+    //if(!victim->isa_invincible())
+    //{
+      this->score->incrementScore(15.0);
+    //}
 }
 
 void Player::update(Uint32 dt_ms, Uint32 time) 

@@ -63,6 +63,7 @@ namespace aos
 
             bool is_collidable = true;
             bool is_visible    = true;
+            bool is_invincible  = false;
 
             Collidable * collider = nullptr; /// Last object to have collide with. 
             Camera *camera; ///< Used to render the object position relative to the camera. 
@@ -116,6 +117,7 @@ namespace aos
             virtual void get_center_coords( gmtl::Vec2d & cords );
             virtual void set_collision(Collidable * collider);
             virtual bool isa_collidable();
+            virtual bool isa_invincible();
 
     };
 }

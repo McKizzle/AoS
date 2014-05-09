@@ -20,8 +20,6 @@ namespace aos
         public:
             Weapon * owner; ///< The owner of the projectile. (usually a weapon.)
             
-            double ttl = 4.0; /// The time to live for the projectile. 
-
             Projectile();
             virtual ~Projectile();
  

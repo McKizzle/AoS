@@ -246,9 +246,17 @@ inline void Object::set_collision(Collidable * collider)
 {
     // TODO: Act on the collision. 
     this->collider = collider; 
+    
+    if(!this->is_invincible)
+    {
+        this->is_visible = false;
+        this->is_collidable = false;
+    }
+}
 
-    this->is_visible = false;
-    this->is_collidable = false;
+inline bool Object::isa_invincible()
+{
+    return this->is_invincible;
 }
 
 inline bool Object::isa_collidable()

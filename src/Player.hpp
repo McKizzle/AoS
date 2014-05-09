@@ -40,7 +40,7 @@ namespace aos {
             /// Fire weapon
             virtual void fire();
             /// Notify the player of projectile collision
-            virtual void notify_hit(Object * victim);
+            virtual void notify_hit(Collidable * victim);
 
             virtual void render(Uint32 dt, Uint32 time);
             virtual void update(Uint32 dt, Uint32 time);
