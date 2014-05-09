@@ -30,6 +30,7 @@ namespace aos {
             double thruster_key_pressed = false; ///< Remember if the player pressed one of the thrusters keys.
 
             bool fire_key_pressed = false;
+            bool respawn = false;
 
             Score * score;
             Weapon * weapon = nullptr;

@@ -53,6 +53,7 @@ namespace aos
     Systems * one_planet(); 
     /// Pin the ship!
     Systems * pin_the_ship();
+    Systems * bunch_of_rocks();
 }
 
 #endif

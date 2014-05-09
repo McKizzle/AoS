@@ -44,13 +44,16 @@ int main(int argc, char *argv[]) {
         {"height",       optional_argument,  0,    'y'}, 
         {"frame-rate",   optional_argument,  0,    'r'}, 
         {"aspect-ratio", optional_argument,  0,    'a'}, 
+        {"mode",         optional_argument,  0,    'm'},
         {0,              0,                  0,     0 }
     };
     const char * shortopts = "hdx:y:r:a:"; ///< Define the program's short arguments for getopt.h
 
     std::string * aspect_ratio = new std::string("4:3"); 
-    int width = 1422, height = 800, refresh_rate = 60;
+    int mode = 0;
     //int width = 1600, height = 1000, refresh_rate = 60;
+    int width = 1422, height = 800, refresh_rate = 60;
+    //int width = 800, height = 600, refresh_rate = 60;
     
     // Extract program arguments.
     int longopts_index = 0;
@@ -84,6 +87,10 @@ int main(int argc, char *argv[]) {
                     aspect_ratio = new std::string(optarg); 
                 }
                 break;
+            case 'm':
+                if(optarg != 0) {
+                    mode = optarg_to_int(optarg);
+                }
         }
     }
           
@@ -100,8 +107,10 @@ int main(int argc, char *argv[]) {
     Game *aos_game = new Game();
     aos_game->screen_width = width;
     aos_game->screen_height = height;
-    aos_game->glortho_width = 40;
+    aos_game->glortho_width = 40; //40 before.
     aos_game->glortho_height = 40;
+
+    aos_game->game_mode = mode;
     aos_game->init();
     int res = aos_game->start_game();
     

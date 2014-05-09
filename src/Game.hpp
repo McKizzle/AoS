@@ -52,6 +52,8 @@ namespace aos {
             Systems *gameverse; ///< The game system goes here. 
             Camera *camera = nullptr;
 
+            int game_mode = 0; /// TODO: This is a temporary variable to handle start mode of the game.
+
             Game();
             ~Game();
             /// The init method calls all of the necessary code in order to setup 

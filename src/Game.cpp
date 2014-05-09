@@ -61,10 +61,21 @@ int Game::init()
     {
        this->logSDLError(std::cout, "init_gl(): "); 
     }
-
-    //this->gameverse = two_planets();
-    this->gameverse = one_planet();
-    //this->gameverse = single_asteroid();
+    
+    switch(this->game_mode)
+    {
+        case 0:
+            this->gameverse = single_asteroid(); break;
+        case 1:
+            this->gameverse = bunch_of_rocks(); break;
+        case 2:
+            this->gameverse = one_planet(); break;
+        case 3:
+            this->gameverse = two_planets(); break;
+        default:
+            this->gameverse = two_planets(); break;
+        
+    }
     
     return 1;
 }

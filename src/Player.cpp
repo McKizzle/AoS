@@ -25,11 +25,17 @@ void Player::notify_hit(Collidable * victim)
 
 void Player::update(Uint32 dt_ms, Uint32 time) 
 { 
+    if(this->respawn)
+    { 
+        this->is_collidable = true;
+        this->is_visible    = true;
+    }
+
     // update and fire the weapon. 
-    if(weapon != nullptr)
+    if(this->weapon != nullptr)
     { 
         this->weapon->update(dt_ms, time);
-        if(this->fire_key_pressed)
+        if(this->fire_key_pressed && this->is_collidable && this->is_visible)
         {
             //std::cout << "Pulling Trigger" << std::endl;
             this->fire();
@@ -85,11 +91,12 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
 { 
     std::vector< double > &tmp_state = *(this->copy_state());
     /// LEFT RIGHT
-    if(keyboardStates[SDL_SCANCODE_A] || keyboardStates[SDL_SCANCODE_D])
+    if(keyboardStates[SDL_SCANCODE_A] || keyboardStates[SDL_SCANCODE_D] 
+        || keyboardStates[SDL_SCANCODE_RIGHT] || keyboardStates[SDL_SCANCODE_LEFT] )
     {
         this->heading_key_pressed = true;
         
-        if(keyboardStates[SDL_SCANCODE_A]) 
+        if(keyboardStates[SDL_SCANCODE_A] || keyboardStates[SDL_SCANCODE_LEFT]) 
             tmp_state[AHIND] = (this->heading_thrusters_impulse / this->mass) + tmp_state[AHIND];
         else    
             tmp_state[AHIND] = -(this->heading_thrusters_impulse / this->mass) + tmp_state[AHIND];
@@ -99,7 +106,8 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
     }
 
     /// FORWARD BACKWARDS
-    if(keyboardStates[SDL_SCANCODE_W] || keyboardStates[SDL_SCANCODE_S] )
+    if(keyboardStates[SDL_SCANCODE_W] || keyboardStates[SDL_SCANCODE_S]
+        || keyboardStates[SDL_SCANCODE_UP] || keyboardStates[SDL_SCANCODE_DOWN] )
     { 
         this->thruster_key_pressed = true;
 
@@ -109,7 +117,7 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
         double a_y = std::sin(theta) * this->thrusters_impulse / this->mass; 
         double ra_y = std::sin(theta) * this->rev_thrusters_impulse / this->mass;
 
-        if(keyboardStates[SDL_SCANCODE_W]) 
+        if(keyboardStates[SDL_SCANCODE_W] || keyboardStates[SDL_SCANCODE_UP]) 
         {
             tmp_state[AXIND] = a_x + tmp_state[AXIND];
             tmp_state[AYIND] = a_y + tmp_state[AYIND];
@@ -119,6 +127,13 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
         }
     } else {
         thruster_key_pressed = false;
+    }
+
+    if(keyboardStates[SDL_SCANCODE_R])
+    {
+        this->respawn = true;
+    } else {
+        this->respawn = false;
     }
     
     if(keyboardStates[SDL_SCANCODE_SPACE]) 
@@ -158,7 +173,7 @@ inline void Player::set_collision(Collidable * collider)
 {
     Object::set_collision(collider); 
     
-    this->score->incrementScore(-10.0);
+    this->score->incrementScore(-50.0);
 
     /// Now hope that the Systems manager gets the player ship out of there asap. 
     //this->systems_manager->respawn(self);

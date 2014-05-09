@@ -46,6 +46,9 @@ void Weapon::launch_projectile()
     // The projectile has a velocity of 
     double pvx = std::cos(theta) * this->muzzle_velocity;
     double pvy = std::sin(theta) * this->muzzle_velocity;
+
+    double px = std::cos(theta) * owner->bs_r;
+    double py = std::sin(theta) * owner->bs_r;
     
     // Now we can create a new projectile and pass it to the game manager.
     Projectile *prjtl = ammo_round[(next_round % ammo_round.size())];
@@ -53,7 +56,9 @@ void Weapon::launch_projectile()
 
     std::vector< double > *new_state = this->owner->copy_state();
     prjtl->swap_state(new_state);
-
+    
+    prjtl->state[Object::XIND] += px;
+    prjtl->state[Object::YIND] += py;
     prjtl->state[Object::VXIND] += pvx;
     prjtl->state[Object::VYIND] += pvy; 
     prjtl->state[Object::AXIND] = 0.0;
@@ -61,8 +66,6 @@ void Weapon::launch_projectile()
 
     prjtl->is_visible = true;
     prjtl->is_collidable = true;
-
-    // Notify the system manager of a new projectile. 
 }
 
 void Weapon::update(Uint32 dt_ms, Uint32 time) 
