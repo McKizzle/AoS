@@ -50,6 +50,7 @@ namespace aos
     Systems * single_asteroid();
     /// Returns a system with two planets, 100 Asteroids and a player. 
     Systems * two_planets(); 
+    Systems * one_planet(); 
     /// Pin the ship!
     Systems * pin_the_ship();
 }
