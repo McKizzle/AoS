@@ -11,17 +11,17 @@ Score::Score(double x, double y)
 }
 Score::~Score() { }
 
-inline void Score::incrementScore(double value) 
+void Score::incrementScore(double value) 
 {
     this->score += value;
 }
 
-inline void Score::setScore(double value)
+void Score::setScore(double value)
 {
     this->score = value;
 }
 
-inline void Score::resetScore()
+void Score::resetScore()
 {
     this->score = 0.0;
 }

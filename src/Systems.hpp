@@ -31,6 +31,9 @@ namespace aos
             /// \return the removed system pointer. If not found return a nullptr.
             virtual System * erase(unsigned int id); 
 
+            /// Clones the current System. 
+            //virtual System * clone();
+
             virtual void render(Uint32 dt_ms, Uint32 time); ///< By default simply call the render method for all children. 
             virtual void update(Uint32 dt_ms, Uint32 time); ///< By default simply call the update method for all children. 
             virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time); ///< By default simply call the send_event for all children. 

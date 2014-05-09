@@ -33,19 +33,32 @@ inline System * Systems::pop_back()
 
 inline System * Systems::erase(unsigned int id)
 {
-   //Find the system. When found delete it.
-   std::vector< System * >::iterator it = this->children.begin();
-   System *sys = nullptr;
-   for(int i = 0; i < this->children.size(); i++)
-   {
+    // TODO: Build test cases for recursive erasing. 
+    System *sys = nullptr;
+    for(std::vector<System *>::iterator it = this->children.begin(); it != this->children.end(); ++it)
+    {
+        sys = (*it)->erase(id);
+    }
+
+    //Find the system. When found delete it.
+    std::vector< System * >::iterator it = this->children.begin();
+    for(unsigned int i = 0; i < this->children.size(); i++)
+    {
         if(this->children[i]->sys_id == id)
         { 
             sys = this->children[i];
             this->children.erase(this->children.begin() + i);
         }
-   }
-   return sys;
+    }
+    return sys;
 }
+
+//virtual Systems * clone()
+//{
+//    Systems * clone = new Systems();
+//    clone.children(this->children);
+//    return clone;
+//}
 
 inline void Systems::render(Uint32 dt_ms, Uint32 time) 
 {

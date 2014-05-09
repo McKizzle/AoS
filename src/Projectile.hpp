@@ -4,9 +4,12 @@
 #define PROJECTILE_HPP
 
 #include "Object.hpp"
+#include "Weapon.hpp"
+//#include "AsteroidsOnSteroids.hpp"
 
 namespace aos
 {
+    class Weapon;
     /// \class Projectile Projectile.hpp
     /// \brief Represents a projectile. 
     ///  
@@ -15,10 +18,14 @@ namespace aos
     class Projectile: public Object
     {
         public:
-            Object * owner; ///< The owner of the projectile.
+            Weapon * owner; ///< The owner of the projectile. (usually a weapon.)
+            
+            double ttl = 4.0; /// The time to live for the projectile. 
 
-            Projectile(Object * owner, std::vector< double > init_state, double velocity_x, double velocity_y);
-            ~Projectile();
+            Projectile();
+            virtual ~Projectile();
+ 
+            virtual void set_collision(Collidable * collider); 
     };
 }
 

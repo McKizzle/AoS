@@ -64,8 +64,7 @@ int Game::init()
 
     this->gameverse = two_planets();
     //this->gameverse = single_asteroid();
-
-
+    
     return 1;
 }
 

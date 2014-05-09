@@ -12,11 +12,16 @@ namespace aos
     class Collision: public Systems
     {
         public:
-            Collidable *collider;
+            std::vector<Collidable *> colliders; 
+            //Collidable *collider;
             bool collision = false;
 
             Collision(Collidable *collider);
             ~Collision();
+
+            //Collision * clone();
+            void add_collider(Collidable * collider);
+            bool check_collision(Collidable *collider, Object *collidable);
 
             /// Inherited from Updateful.hpp. Overrides update to search for collisions. 
             virtual void update(Uint32 dt_ms, Uint32 time); ///< Inherited from Updateful

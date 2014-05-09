@@ -14,6 +14,7 @@
 #include "Player.hpp"
 #include "Grid.hpp"
 #include "Score.hpp"
+#include "Projectile.hpp"
 
 namespace aos
 {

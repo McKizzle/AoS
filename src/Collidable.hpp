@@ -24,6 +24,9 @@ namespace aos
             
             /// Gets the bounding radius of the Object. 
             virtual double get_bounding_radius() = 0;
+            
+            /// Determines if the object is collidable. 
+            virtual bool isa_collidable() = 0;
  
             
             /// Determines if a point lies within a triangle. Solves for unkowns $u$ and $v$ in

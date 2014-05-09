@@ -115,6 +115,7 @@ namespace aos
             virtual void get_vertices( std::vector< gmtl::Vec2d > & verts );
             virtual void get_center_coords( gmtl::Vec2d & cords );
             virtual void set_collision(Collidable * collider);
+            virtual bool isa_collidable();
 
     };
 }

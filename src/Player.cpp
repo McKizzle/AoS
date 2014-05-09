@@ -2,19 +2,36 @@
 
 using namespace aos;
 
-Player::Player()
-{ 
+Player::Player() {}
+
+Player::~Player() {}
+
+void Player::fire()
+{
+    this->weapon->fire();
 }
 
-Player::~Player() 
+void Player::notify_hit(Object * victim)
 { 
+    this->score->incrementScore(15.0);
 }
 
 void Player::update(Uint32 dt_ms, Uint32 time) 
 { 
+    // update and fire the weapon. 
+    if(weapon != nullptr)
+    { 
+        this->weapon->update(dt_ms, time);
+        if(this->fire_key_pressed)
+        {
+            //std::cout << "Pulling Trigger" << std::endl;
+            this->fire();
+        }
+    }
+
     std::vector< double > * old_state = this->copy_state();
     std::vector< double > * new_state = intgr->integrate(this, old_state, dt_ms, time);
-    
+     
     // Nudge the ship heading velocity if it is close to zero and the heading thrusters are slowing it down. 
     short sign_vheading = ((*new_state)[VHIND] < 0.0) ? 1 : -1; 
     (*new_state)[VHIND] = (!heading_key_pressed && (sign_vheading != prev_sign_vheading)) ? 0.0 : (*new_state)[VHIND];
@@ -63,7 +80,7 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
     /// LEFT RIGHT
     if(keyboardStates[SDL_SCANCODE_A] || keyboardStates[SDL_SCANCODE_D])
     {
-        heading_key_pressed = true;
+        this->heading_key_pressed = true;
         
         if(keyboardStates[SDL_SCANCODE_A]) 
             tmp_state[AHIND] = (this->heading_thrusters_impulse / this->mass) + tmp_state[AHIND];
@@ -71,13 +88,13 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
             tmp_state[AHIND] = -(this->heading_thrusters_impulse / this->mass) + tmp_state[AHIND];
 
     } else { 
-        heading_key_pressed = false;
+        this->heading_key_pressed = false;
     }
 
     /// FORWARD BACKWARDS
     if(keyboardStates[SDL_SCANCODE_W] || keyboardStates[SDL_SCANCODE_S] )
     { 
-        thruster_key_pressed = true;
+        this->thruster_key_pressed = true;
 
         double theta = 2.0 * M_PI * state[HIND] / 360.0;
         double a_x = std::cos(theta) * this->thrusters_impulse / this->mass;
@@ -99,6 +116,9 @@ void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time)
     
     if(keyboardStates[SDL_SCANCODE_SPACE]) 
     { 
+        this->fire_key_pressed = true;
+    } else {
+        this->fire_key_pressed = false;
     }
     this->swap_state(&tmp_state);
     delete &tmp_state;
@@ -124,6 +144,17 @@ inline void Player::render(Uint32 dt, Uint32 time)
     ///    glEnd();
     ///    glPopMatrix();
     ///}
+}
+
+
+inline void Player::set_collision(Collidable * collider)
+{
+    Object::set_collision(collider); 
+    
+    this->score->incrementScore(-10.0);
+
+    /// Now hope that the Systems manager gets the player ship out of there asap. 
+    //this->systems_manager->respawn(self);
 }
 
 Player * Player::default_player()

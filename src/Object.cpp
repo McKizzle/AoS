@@ -191,20 +191,20 @@ inline bool Object::check_collision(std::vector< double > point)
         double u = 0, v = 0; 
         if(this->point_in_triangle(P, A, B, C, u, v))
         {  
-            std::cout << "------------------------" << std::endl;
-            std::cout << "i: " << *it << std::endl;
-            std::cout << "i + 1: " << *(it + 1) << std::endl;
-            std::cout << "(u, v): " << u << ", " << v << std::endl;
-            std::cout << "A: " << A[0] << ", " << A[1] << std::endl;
-            std::cout << "b: " << v1[0] << ", " << v1[1] << std::endl;
-            std::cout << "B: " << B[0] << ", " << B[1] << std::endl;
-            std::cout << "c: " << v2[0] << ", " << v2[1] << std::endl;
-            std::cout << "C: " << C[0] << ", " << C[1] << std::endl;
-            std::cout << "P: " << P[0] << ", " << P[1] << std::endl;
-            std::cout << "T: " << T[0] << ", " << T[1] << std::endl;
-            std::cout << "R: " << R << std::endl;
-            std::cout << "theta:\n " << DEG2RAD(this->state[Object::HIND]) << std::endl;
-            std::cout << "------------------------" << std::endl;
+            //std::cout << "------------------------" << std::endl;
+            //std::cout << "i: " << *it << std::endl;
+            //std::cout << "i + 1: " << *(it + 1) << std::endl;
+            //std::cout << "(u, v): " << u << ", " << v << std::endl;
+            //std::cout << "A: " << A[0] << ", " << A[1] << std::endl;
+            //std::cout << "b: " << v1[0] << ", " << v1[1] << std::endl;
+            //std::cout << "B: " << B[0] << ", " << B[1] << std::endl;
+            //std::cout << "c: " << v2[0] << ", " << v2[1] << std::endl;
+            //std::cout << "C: " << C[0] << ", " << C[1] << std::endl;
+            //std::cout << "P: " << P[0] << ", " << P[1] << std::endl;
+            //std::cout << "T: " << T[0] << ", " << T[1] << std::endl;
+            //std::cout << "R: " << R << std::endl;
+            //std::cout << "theta:\n " << DEG2RAD(this->state[Object::HIND]) << std::endl;
+            //std::cout << "------------------------" << std::endl;
             return true && this->is_collidable;
         }
     }
@@ -247,7 +247,13 @@ inline void Object::set_collision(Collidable * collider)
     // TODO: Act on the collision. 
     this->collider = collider; 
 
+    this->is_visible = false;
+    this->is_collidable = false;
+}
 
+inline bool Object::isa_collidable()
+{
+    return this->is_collidable;
 }
 
 } // END namespace aos

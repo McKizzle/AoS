@@ -10,8 +10,12 @@
 #define PLAYER_HPP
 
 #include "Object.hpp"
+#include "Score.hpp"
+#include "Weapon.hpp"
 
 namespace aos {
+    class Weapon;
+
     class Player: public Object
     {
         public: 
@@ -25,16 +29,27 @@ namespace aos {
             double rev_thrusters_impulse = 10.0; ///< The reverse thruster impulse.
             double thruster_key_pressed = false; ///< Remember if the player pressed one of the thrusters keys.
 
-            //std::vector< Projectile *> projectiles; ///< The player's projectiles. 
+            bool fire_key_pressed = false;
+
+            Score * score;
+            Weapon * weapon = nullptr;
             
             Player();
             ~Player();
+
+            /// Fire weapon
+            virtual void fire();
+            /// Notify the player of projectile collision
+            virtual void notify_hit(Object * victim);
+
             virtual void render(Uint32 dt, Uint32 time);
             virtual void update(Uint32 dt, Uint32 time);
             virtual void send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time);
             virtual std::vector< double > * system(Uint32 t, std::vector< double > * x);
             static Player * default_player();
             void test_vectors();
+
+            void set_collision(Collidable * collider); /// Update the score of the player. 
     };
 }
 
