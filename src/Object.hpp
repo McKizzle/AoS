@@ -53,7 +53,7 @@ namespace aos
             std::vector< double > state;        ///< The current state of the object. 
             Integrator *intgr;                  ///< Handles the integration of the object. 
 
-            std::vector< float > color = {1.0, 1.0, 1.0, 1.0}; ///< The color of the object. 
+            std::vector< float > color = {1.0, 0.969, 0.788, 1.0}; ///< The color of the object. 
 
             std::vector< std::vector<double> > vertices; ///< All of the vertices in the object. 
             std::vector< unsigned int > edges; ///< An even-length vector of the vertices to edges. 

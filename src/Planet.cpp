@@ -4,7 +4,9 @@ namespace aos
 {
 
 Planet::Planet(double radius, unsigned int sectors, double x, double y)
-{
+{ 
+    this->color = {0.5, 0.5, 0.5, 1.0}; ///< The color of the object. 
+
     this->state[Object::XIND] = x;
     this->state[Object::YIND] = y;
 

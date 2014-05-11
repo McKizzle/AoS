@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     std::string * aspect_ratio = new std::string("4:3"); 
     int mode = 0;
     //int width = 1600, height = 1000, refresh_rate = 60;
-    int width = 1422, height = 800, refresh_rate = 60;
+    int width = 1152, height = 720, refresh_rate = 60;
     //int width = 800, height = 600, refresh_rate = 60;
     
     // Extract program arguments.

@@ -6,7 +6,7 @@
 namespace aos
 {
 
-Object::Object(): state(9, 0.0) 
+Object::Object(): state(9, 0.0), color(4, 1.0)
 {
     intgr = new Integrator();
 }
@@ -23,11 +23,11 @@ inline void Object::render(Uint32 dt_ms, Uint32 time)
         glPushMatrix();
         glTranslatef(state[XIND] - camera->x(), state[YIND] - camera->y(), 0.0);
         glRotatef(state[HIND], 0, 0, 1);
-        glBegin(GL_LINES);  
-            glColor3f(color[0], color[1], color[2]);
+        glBegin(GL_POLYGON);  
+            glColor3f(this->color[0], this->color[1], this->color[2]);
             for(std::vector< unsigned int>::iterator it = this->edges.begin(); it != edges.end(); ++it)
             {
-                glVertex2f((GLfloat)vertices[*it][0], (GLfloat)vertices[*it][1]);
+                glVertex2f((GLfloat)this->vertices[*it][0], (GLfloat)this->vertices[*it][1]);
             }
         glEnd();
         glPopMatrix();

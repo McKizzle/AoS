@@ -5,6 +5,8 @@ namespace aos
 
 Projectile::Projectile() 
 {
+    this->color = {0.329, 0.957, 1.0, 1.0};
+
     this->owner = owner; 
     
     double r = 0.25;

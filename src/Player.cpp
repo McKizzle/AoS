@@ -4,7 +4,11 @@
 
 using namespace aos;
 
-Player::Player() {}
+Player::Player()
+{
+    //this->color = {0.839, 0.706, 0.118, 1.0}; ///< Overide default color. 
+    this->color = {1.0, 1.0, 1.0, 1.0}; ///< Overide default color. 
+}
 
 Player::~Player() {}
 

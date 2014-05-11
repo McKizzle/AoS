@@ -45,6 +45,8 @@ std::vector< Object *> * seed_for_asteroids(unsigned int seed, unsigned int coun
     std::vector<Object *> * asteroids = new std::vector<Object *>();
     std::srand(std::time(NULL));
 
+    std::vector< double > color = {200.0/255.0, 150.0/255.0, 30.0/255.0, 1.0};
+
     for(unsigned int i = 0; i < count; i++)
     {   
         Object * asteroid = new Object();
@@ -54,7 +56,6 @@ std::vector< Object *> * seed_for_asteroids(unsigned int seed, unsigned int coun
 
         double heading_vel = (double) std::rand() / (double) RAND_MAX * max_heading_vel;
         asteroid->state[asteroid->VHIND] = heading_vel;
-
 
         //std::cout << "verts: " << verts << std::endl;
         
@@ -86,6 +87,12 @@ std::vector< Object *> * seed_for_asteroids(unsigned int seed, unsigned int coun
             asteroid->add_vertex((*it)[0] - ave_x, (*it)[1] - ave_y);
         }
         asteroid->calculate_mass();
+
+        /// Generate a random shade of brown for teh asteroid. 
+        asteroid->color[0] = color[0] + ((double) std::rand() / (double) RAND_MAX * 40.0 / 255.0);
+        asteroid->color[1] = color[1] + ((double) std::rand() / (double) RAND_MAX * 40.0 / 255.0);
+        asteroid->color[2] = color[2] + ((double) std::rand() / (double) RAND_MAX * 40.0 / 255.0);
+
         asteroids->push_back(asteroid);
     }
 
