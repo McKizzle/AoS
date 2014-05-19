@@ -7,13 +7,13 @@ AoS will deliver the all time classic Asteroids straight to your computer.
 With a few minor differences though gravity and meaner bosses. 
 Prepare to have your fingers blown away as you sporadicly attempt to maneuver through debris fields of hell, dodge enemy super lasers, and gravity cannons. 
 
-### Debian Installation, Building, and Execution
+## Debian Installation, Building, and Execution
 Open the terminal and run the following set of commands and then jump to the _Ubuntu Installation, Building, and Execution_ section.
 
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
     sudo add-apt-repository -y ppa:zoogie/sdl2-snapshots
 
-### Ubuntu Installation, Building, and Execution
+## Ubuntu Installation, Building, and Execution
 Open the terminal and install the following applications. 
 
     sudo apt-get update -y -qq
@@ -41,11 +41,10 @@ Open the terminal and install the following applications.
     make clean && make -j4
 
 
-### OS X Installation, Building, and Execution
+## OS X Installation, Building, and Execution
 First install Homebrew by running the command in the _Install Homebrew_ section at [brew.sh](http://brew.sh/) in the OS X terminal. 
 After installing homebrew make sure to run `brew doctor` to ensure that their will be no conflicts with brew installations. 
 
-#### Libraries
 To build and run AoS run the following commands in the terminal.  
 
     brew install sdl2
@@ -70,7 +69,6 @@ To build and run AoS run the following commands in the terminal.
     make clean && make -j4
 
     # run the software
-    bin/AoS
-
+    bin/AoS --mode=3
 
 
