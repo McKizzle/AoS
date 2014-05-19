@@ -10,7 +10,7 @@ To build and run AoS run the following commands.
     brew install gcc # should install the newest version (gcc4.8)    
 
     brew install git
-    git clone git@github.com:McKizzle/AoS.git $HOME/AoS
+    git clone https://github.com/McKizzle/AoS.git $HOME/AoS
 
     mkdir $HOME/.aos 
     brew install wget
