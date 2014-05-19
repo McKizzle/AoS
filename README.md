@@ -36,9 +36,12 @@ Open the terminal and install the following applications.
     sudo scons install
     sudo ln -sf /usr/local/include/gmtl-0.7.0/gmtl /usr/local/include/gmtl
 
-    git clone git@github.com:McKizzle/AoS.git $HOME/AoS
+    git clone https://github.com/McKizzle/AoS.git $HOME/AoS
     cd $HOME/AoS
     make clean && make -j4
+    
+    # Run the software
+    bin/AoS --mode=3
 
 
 ## OS X Installation, Building, and Execution
