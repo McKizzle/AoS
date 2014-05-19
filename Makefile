@@ -42,7 +42,7 @@ BIN_DIR = bin
 # DIRS = $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
 # SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 TSTS = gravity_tests.cpp collision_tests.cpp system_tests.cpp
-SRCS = utils.cpp System.cpp Systems.cpp Object.cpp Game.cpp Player.cpp Ode.cpp Camera.cpp Grid.cpp GravityWell.cpp Collidable.cpp Planet.cpp Collision.cpp Projectile.cpp Score.cpp Weapon.cpp 
+SRCS = utils.cpp System.cpp Systems.cpp Object.cpp Game.cpp Player.cpp Ode.cpp Camera.cpp Grid.cpp GravityWell.cpp Collidable.cpp Planet.cpp Collision.cpp Projectile.cpp Score.cpp Weapon.cpp #QuadTree.cpp QuadTreeNode.cpp
 #AsteroidsOnSteroids.cpp
 MAIN = main.cpp
 MBJS = $(MAIN:%.cpp=$(OBJ_DIR)/%.o)
