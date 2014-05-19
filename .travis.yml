@@ -1,5 +1,4 @@
 language: cpp
-compiler: g++-4.8 
 before_install: 
     - pwd
     - lsb_release -a
