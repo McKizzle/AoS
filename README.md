@@ -39,6 +39,9 @@ Open the terminal and install the following applications.
     git clone git@github.com:McKizzle/AoS.git $HOME/AoS
     cd $HOME/AoS
     make clean && make -j4
+    
+    # Run the software
+    bin/AoS --mode=3
 
 
 ## OS X Installation, Building, and Execution
