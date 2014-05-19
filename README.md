@@ -38,7 +38,36 @@ AoS makes use of the Graphics Math Template Library to perform its math calculat
     cd gmtl-master/
     sudo scons install
 
-OS X users will need to install gmtl to there home directory if they are using Homebrew. 
+### OS X Users
+First install Homebrew by running the command in the _Install Homebrew_ section at [brew.sh](http://brew.sh/) in the OS X terminal. 
+After installing homebrew make sure to run `brew doctor` to ensure that their will be no conflicts with brew installations. 
+
+## Libraries
+To build and run AoS run the following commands in the terminal.  
+
+    brew install sdl2
+    brew tap homebrew/versions
+    brew install gcc # should install the newest version (gcc4.8)    
+
+    brew install git
+    git clone git@github.com:McKizzle/AoS.git $HOME/AoS
+
+    mkdir $HOME/.aos 
+    brew install wget
+    wget -N https://github.com/imvu/gmtl/archive/master.zip -O $HOME/.aos/gmtl.zip
+    unzip $HOME/gmtl.zip -d $HOME/.aos
+
+    brew install scons # needed for the gmtl installer. 
+    cd $HOME/.aos/gmtl-master
+    scons install prefix=$HOME/.aos
+    ln -sf $HOME/.aos/include/gmtl-0.7.0/gmtl $HOME/.aos/include/gmtl
+
+    # build the software
+    cd $HOME/AoS
+    make -j4
+
+    # run the software
+    bin/AoS
 
 ### Debian Users
 Debian users will have to run these two commands before they can run the commands listed above. 

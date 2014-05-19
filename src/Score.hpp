@@ -1,4 +1,9 @@
-#include <GL/glut.h> // Only to render the text. 
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#elif __linux__
+#include <GL/glut.h>
+#endif
+
 #include <iostream>
 #include <sstream>
 
