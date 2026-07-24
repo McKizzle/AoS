@@ -2,7 +2,7 @@
 
 sudo apt-get update -y -qq
 sudo apt-get install -qq -y g++-4.8
-sudo apt-get install -qq -y libsdl2-dev
+sudo apt-get install -qq -y libsdl3-dev
 sudo apt-get install -qq -y libasound2-dev
 sudo apt-get install -qq -y libxss-dev
 sudo apt-get install -qq -y libxxf86vm-dev

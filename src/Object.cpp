@@ -66,7 +66,7 @@ std::vector< double > * Object::system(Uint32 t, std::vector< double > * x)
     return dxdt;
 }
 
-void Object::send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time){}
+void Object::send_event(const bool * keyboardStates, Uint32 dt, Uint32 time){}
 
 void Object::add_vertex(double x, double y)
 {

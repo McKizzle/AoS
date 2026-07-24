@@ -20,6 +20,6 @@ inline System * System::erase(unsigned int id) { return nullptr; }
 
 void System::render(Uint32 dt_ms, Uint32 time) { }
 void System::update(Uint32 dt_ms, Uint32 time) { }
-void System::send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time) { }
+void System::send_event(const bool * keyboardStates, Uint32 dt, Uint32 time) { }
 
 } // END namespace aos

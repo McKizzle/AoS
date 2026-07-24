@@ -40,7 +40,7 @@ sub debian
     @result = `sudo add-apt-repository -y ppa:zoogie/sdl2-snapshots`;
     @result = `sudo apt-get update -y -qq`;
     @result = `sudo apt-get install -qq -y g++-4.8`;
-    @result = `sudo apt-get install -qq -y libsdl2-dev`;
+    @result = `sudo apt-get install -qq -y libsdl3-dev`;
     @result = `sudo apt-get install -qq -y scons`;
     @result = `sudo apt-get install -qq -y wget`;
     
@@ -60,7 +60,7 @@ sub ubuntu
 
     my @result = `sudo apt-get update -y -qq`;
     @result = `sudo apt-get install -qq -y g++-4.8`;
-    @result = `sudo apt-get install -qq -y libsdl2-dev`;
+    @result = `sudo apt-get install -qq -y libsdl3-dev`;
     @result = `sudo apt-get install -qq -y scons`;
     @result = `sudo apt-get install -qq -y wget`;
     

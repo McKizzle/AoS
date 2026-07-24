@@ -11,14 +11,13 @@ Prepare to have your fingers blown away as you sporadicly attempt to maneuver th
 Open the terminal and run the following set of commands and then jump to the _Ubuntu Installation, Building, and Execution_ section.
 
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    sudo add-apt-repository -y ppa:zoogie/sdl2-snapshots
 
 ## Ubuntu Installation, Building, and Execution
 Open the terminal and install the following applications. 
 
     sudo apt-get update -y -qq
     sudo apt-get install -qq -y g++-4.8
-    sudo apt-get install -qq -y libsdl2-dev
+    sudo apt-get install -qq -y libsdl3-dev
     sudo apt-get install -qq -y libasound2-dev
     sudo apt-get install -qq -y libxss-dev
     sudo apt-get install -qq -y libxxf86vm-dev
@@ -50,7 +49,7 @@ After installing homebrew make sure to run `brew doctor` to ensure that their wi
 
 To build and run AoS run the following commands in the terminal.  
 
-    brew install sdl2
+    brew install sdl3
     brew tap homebrew/versions
     brew install gcc # should install the newest version (gcc4.8)    
 

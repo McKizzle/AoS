@@ -36,7 +36,7 @@ namespace aos
 
             virtual void render(Uint32 dt_ms, Uint32 time); ///< By default simply call the render method for all children. 
             virtual void update(Uint32 dt_ms, Uint32 time); ///< By default simply call the update method for all children. 
-            virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time); ///< By default simply call the send_event for all children. 
+            virtual void send_event(const bool * keyboardStates, Uint32 dt, Uint32 time); ///< By default simply call the send_event for all children. 
     };
 }
 

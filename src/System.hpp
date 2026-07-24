@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <iostream>
 
 #ifndef SYSTEM_HPP
@@ -38,7 +38,7 @@ namespace aos
 
             virtual void render(Uint32 dt_ms, Uint32 time);
             virtual void update(Uint32 dt_ms, Uint32 time);
-            virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time); ///< Inherited from Eventful
+            virtual void send_event(const bool * keyboardStates, Uint32 dt, Uint32 time); ///< Inherited from Eventful
     };
 }
 #endif

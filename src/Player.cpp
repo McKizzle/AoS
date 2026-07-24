@@ -91,7 +91,7 @@ std::vector< double > * Player::system(Uint32 t, std::vector< double > * x)
     return dxdt;
 }
 
-void Player::send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time) 
+void Player::send_event(const bool * keyboardStates, Uint32 dt, Uint32 time) 
 { 
     std::vector< double > &tmp_state = *(this->copy_state());
     /// LEFT RIGHT

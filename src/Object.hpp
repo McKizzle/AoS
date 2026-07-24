@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <vector>
 #include <mutex>
 
@@ -72,7 +72,7 @@ namespace aos
             virtual ~Object();
             virtual void render(Uint32 dt_ms, Uint32 time); ///< Inherited from Renderable
             virtual void update(Uint32 dt_ms, Uint32 time); ///< Inherited from Updatable
-            virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time); ///< Inherited from Eventful
+            virtual void send_event(const bool * keyboardStates, Uint32 dt, Uint32 time); ///< Inherited from Eventful
             virtual std::vector< double > * system(Uint32 t, std::vector< double > * x); ///< Inherited from Integratable.
 
             /// Adds a vertex (x, y) to the object.

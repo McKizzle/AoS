@@ -26,10 +26,9 @@ ifeq ($(UNAME_S),Linux)
     GLUT_LIB = -lglut
 endif
 
-SDL_CFLAGS = $(shell sdl2-config --cflags) 
-#SDL_LDFLAGS = $(shell sdl2-config --libs)
-SDL_SLIBS = $(shell sdl2-config --static-libs) 
-SDL_ADD_SLIBS = -lSDL2_image
+SDL_CFLAGS = $(shell pkg-config --cflags sdl3)
+#SDL_LDFLAGS = $(shell pkg-config --libs sdl3)
+SDL_SLIBS = $(shell pkg-config --libs sdl3)
 
 ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GGT_FLAGS) $(BOOST_LIBS) $(GLUT_LIB) 
 

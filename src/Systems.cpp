@@ -76,7 +76,7 @@ inline void Systems::update(Uint32 dt_ms, Uint32 time)
     }
 }
 
-inline void Systems::send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time)
+inline void Systems::send_event(const bool * keyboardStates, Uint32 dt, Uint32 time)
 {
     for(std::vector<System *>::iterator it = this->children.begin(); it != this->children.end(); ++it)
     {
