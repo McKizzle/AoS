@@ -1,5 +1,7 @@
 #include "Projectile.hpp"
 
+#include "Weapon.hpp"
+
 namespace aos
 {
 

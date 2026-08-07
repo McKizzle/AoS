@@ -20,22 +20,21 @@
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
 
-#include "Camera.hpp"
 #include "Ode.hpp"
 #include "System.hpp"
 #include "Collidable.hpp"
 
-namespace aos 
+namespace aos
 {
     class Camera;
     class System;
     class Collidable;
-    
+
     /// \class Object Object.hpp
     /// \brief Represents a game object.
-    ///  
+    ///
     /// All objects in the game that need to be rendered and integrated
-    /// must inherit from the Object class. 
+    /// must inherit from the Object class.
     class Object: public System, public Integratable, public Collidable
     {
         public:
@@ -47,27 +46,27 @@ namespace aos
             static const unsigned int AYIND= 5; ///< y acceleration index
             static const unsigned int HIND = 6; ///< heading index
             static const unsigned int VHIND= 7; ///< heading velocity index
-            static const unsigned int AHIND= 8; ///< heading acceleration index 
+            static const unsigned int AHIND= 8; ///< heading acceleration index
             std::mutex swap_state_lock;         ///< When switching a new state
-            std::vector< double > state;        ///< The current state of the object. 
-            Integrator *intgr;                  ///< Handles the integration of the object. 
+            std::vector< double > state;        ///< The current state of the object.
+            Integrator *intgr;                  ///< Handles the integration of the object.
 
-            std::vector< float > color = {1.0, 0.969, 0.788, 1.0}; ///< The color of the object. 
+            std::vector< float > color = {1.0, 0.969, 0.788, 1.0}; ///< The color of the object.
 
-            std::vector< std::vector<double> > vertices; ///< All of the vertices in the object. 
-            std::vector< unsigned int > edges; ///< An even-length vector of the vertices to edges. 
-            double bs_r = 1.0; ///< The minimum bounding radius. 
-            double density = 1.0; ///< The density per unit squared in the object. 
+            std::vector< std::vector<double> > vertices; ///< All of the vertices in the object.
+            std::vector< unsigned int > edges; ///< An even-length vector of the vertices to edges.
+            double bs_r = 1.0; ///< The minimum bounding radius.
+            double density = 1.0; ///< The density per unit squared in the object.
             double mass = 1.0; ///< The mass of the object. (this is calculated automatically based on the densicyt)
 
             bool is_collidable = true;
             bool is_visible    = true;
             bool is_invincible  = false;
 
-            Collidable * collider = nullptr; /// Last object to have collide with. 
-            Camera *camera; ///< Used to render the object position relative to the camera. 
+            Collidable * collider = nullptr; /// Last object to have collide with.
+            Camera *camera; ///< Used to render the object position relative to the camera.
 
-            Object(); 
+            Object();
             virtual ~Object();
             virtual void render(Uint32 dt_ms, Uint32 time); ///< Inherited from Renderable
             virtual void update(Uint32 dt_ms, Uint32 time); ///< Inherited from Updatable
@@ -75,36 +74,36 @@ namespace aos
             virtual std::vector< double > * system(Uint32 t, std::vector< double > * x); ///< Inherited from Integratable.
 
             /// Adds a vertex (x, y) to the object.
-            /// \param [in] x 
-            /// \param [in] y 
+            /// \param [in] x
+            /// \param [in] y
             virtual void add_vertex(double x, double y);
-            
+
             ///Find the center point of all of the vertices. Not to be confused with the center
-            /// of gravity. 
-            /// \returns a vector of the central x and y values. 
+            /// of gravity.
+            /// \returns a vector of the central x and y values.
             virtual std::vector< double > vertex_average();
 
             /// Balances the vertices about the vertex avarage
             virtual void balance();
-            
+
             /// Calculates the mass of the object. This function assumes that the entire object
             /// is a set of triangles which have a single point at the object's origin. It takes
-            /// the sum of their areas and calculats the mass based on the object density. 
+            /// the sum of their areas and calculats the mass based on the object density.
             virtual void calculate_mass();
-            
-            /// Adds an edge to the vertex. Instead of actual edges. Expects an index to the 
-            /// vertex in the vertices array. 
+
+            /// Adds an edge to the vertex. Instead of actual edges. Expects an index to the
+            /// vertex in the vertices array.
             /// \param [in] index to the first vertex.
-            /// \param [in] index to the second vertex. 
+            /// \param [in] index to the second vertex.
             virtual void add_edge(unsigned int v1,unsigned int v2);
 
-            /// Locks the current thread and swaps the state. 
-            /// \param [in] the state to swap in. 
-            void swap_state(std::vector< double > * new_state); ///< Thread-safe swap operation. 
-            /// Locks the current thread and copies the state. 
-            /// \return the copied state. 
-            std::vector< double > * copy_state(); ///< Thread-safe swap operation. 
-            /// Returns a populated 2x2 rotation matrix that performs a counter clockwise rotation. 
+            /// Locks the current thread and swaps the state.
+            /// \param [in] the state to swap in.
+            void swap_state(std::vector< double > * new_state); ///< Thread-safe swap operation.
+            /// Locks the current thread and copies the state.
+            /// \return the copied state.
+            std::vector< double > * copy_state(); ///< Thread-safe swap operation.
+            /// Returns a populated 2x2 rotation matrix that performs a counter clockwise rotation.
             /// \param [in] theta in radians
             /// \param [in, out] the glm::dmat2 to populate.
             void get_rotation_matrix(double theta, glm::dmat2 & R);
@@ -121,5 +120,3 @@ namespace aos
     };
 }
 #endif
-
-

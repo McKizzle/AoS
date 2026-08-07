@@ -2,6 +2,7 @@
 #include <cmath>
 
 #include "Object.hpp"
+#include "Camera.hpp"
 
 namespace aos
 {
@@ -16,14 +17,14 @@ Object::~Object()
     delete intgr;
 }
 
-inline void Object::render(Uint32 dt_ms, Uint32 time) 
+inline void Object::render(Uint32 dt_ms, Uint32 time)
 {
     if(this->is_visible)
     {
         glPushMatrix();
         glTranslatef(state[XIND] - camera->x(), state[YIND] - camera->y(), 0.0);
         glRotatef(state[HIND], 0, 0, 1);
-        glBegin(GL_POLYGON);  
+        glBegin(GL_POLYGON);
             glColor3f(this->color[0], this->color[1], this->color[2]);
             for(std::vector< unsigned int>::iterator it = this->edges.begin(); it != edges.end(); ++it)
             {
@@ -38,13 +39,13 @@ void Object::update(Uint32 dt_ms, Uint32 time)
 {
     std::vector< double > * old_state = this->copy_state();
     std::vector< double > * new_state = intgr->integrate(this, old_state, dt_ms, time);
-    
+
     (*new_state)[AXIND] = 0.0;
     (*new_state)[AYIND] = 0.0;
     (*new_state)[AHIND] = 0.0;
 
     this->swap_state(new_state);
-    
+
     delete old_state;
     delete new_state;
 }
@@ -57,12 +58,12 @@ std::vector< double > * Object::system(Uint32 t, std::vector< double > * x)
     (*dxdt)[YIND]  = (*x)[VYIND];
     (*dxdt)[VXIND] = (*x)[AXIND];
     (*dxdt)[VYIND] = (*x)[AYIND];
-    (*dxdt)[AXIND] = 0.0;  
-    (*dxdt)[AYIND] = 0.0;  
+    (*dxdt)[AXIND] = 0.0;
+    (*dxdt)[AYIND] = 0.0;
     (*dxdt)[HIND]  = (*x)[VHIND];
-    (*dxdt)[VHIND] = 0.0; 
-    (*dxdt)[AHIND] = 0.0; 
- 
+    (*dxdt)[VHIND] = 0.0;
+    (*dxdt)[AHIND] = 0.0;
+
     return dxdt;
 }
 
@@ -86,7 +87,7 @@ void Object::add_edge(unsigned int v1, unsigned int v2)
 std::vector< double > Object::vertex_average()
 {
     std::vector< double > center = {0.0, 0.0};
-    
+
     double count = 0;
     for(std::vector< std::vector< double > >::iterator it = this->vertices.begin(); it != this->vertices.end(); ++it)
     {
@@ -114,7 +115,7 @@ void Object::balance()
 void Object::calculate_mass()
 {
     double new_mass = 0.0;
-    for(std::vector< unsigned int >::iterator it = this->edges.begin() + 1; it != this->edges.end(); ++it) 
+    for(std::vector< unsigned int >::iterator it = this->edges.begin() + 1; it != this->edges.end(); ++it)
     {
         std::vector< double > p1 = this->vertices[*(it - 1)];
         std::vector< double > p2 = this->vertices[*it];
@@ -140,7 +141,7 @@ void Object::calculate_mass()
     this->mass = new_mass;
 }
 
-inline void Object::swap_state(std::vector< double> * new_state) 
+inline void Object::swap_state(std::vector< double> * new_state)
 {
     std::lock_guard< std::mutex > lock(swap_state_lock);
     state.swap((*new_state));
@@ -162,7 +163,7 @@ inline void Object::get_rotation_matrix(double theta, glm::dmat2 & R)
 
 inline bool Object::check_collision(std::vector< double > point)
 {
-    // Iterate through each triangle the the object and determine if the point is in the triangle. 
+    // Iterate through each triangle the the object and determine if the point is in the triangle.
     std::vector< double > p0 = {0, 0};
     std::vector< double > t = {this->state[Object::XIND], this->state[Object::YIND]};
 
@@ -184,13 +185,13 @@ inline bool Object::check_collision(std::vector< double > point)
         glm::dvec2 B, C;
         B = R * v1;
         C = R * v2;
-        
+
         B = (B + T);
         C = (C + T);
 
-        double u = 0, v = 0; 
+        double u = 0, v = 0;
         if(this->point_in_triangle(P, A, B, C, u, v))
-        {  
+        {
             //std::cout << "------------------------" << std::endl;
             //std::cout << "i: " << *it << std::endl;
             //std::cout << "i + 1: " << *(it + 1) << std::endl;
@@ -208,8 +209,8 @@ inline bool Object::check_collision(std::vector< double > point)
             return true && this->is_collidable;
         }
     }
-    
-    return false; // For now nothing can collide. 
+
+    return false; // For now nothing can collide.
 }
 
 inline void Object::get_vertices( std::vector< glm::dvec2 > & verts )
@@ -231,7 +232,7 @@ inline void Object::get_vertices( std::vector< glm::dvec2 > & verts )
     }
 }
 
-inline double Object::get_bounding_radius() 
+inline double Object::get_bounding_radius()
 {
     return this->bs_r;
 }
@@ -243,9 +244,9 @@ inline void Object::get_center_coords( glm::dvec2 & cords )
 
 inline void Object::set_collision(Collidable * collider)
 {
-    // TODO: Act on the collision. 
-    this->collider = collider; 
-    
+    // TODO: Act on the collision.
+    this->collider = collider;
+
     if(!this->is_invincible)
     {
         this->is_visible = false;
@@ -264,4 +265,3 @@ inline bool Object::isa_collidable()
 }
 
 } // END namespace aos
-

@@ -1,6 +1,7 @@
 #include "Camera.hpp"
+#include "Object.hpp"
 
-namespace aos 
+namespace aos
 {
 
 Camera::Camera(Object * ref_object)
@@ -21,4 +22,3 @@ const double Camera::y() const
 }
 
 }
-
