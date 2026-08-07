@@ -13,7 +13,6 @@ sudo apt-get install -qq -y wget
 sudo apt-get install -qq -y libboost-dev
 sudo apt-get install -qq -y libboost-test-dev
 sudo apt-get install -qq -y libftgl2
-sudo apt-get install -qq -y freeglut3-dev freeglut3
 
 git clone https://github.com/McKizzle/AoS.git $HOME/AoS
 cd $HOME/AoS

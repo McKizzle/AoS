@@ -11,6 +11,7 @@ The game currently uses the following old libraries.
   1. Generic Math Template Library [gmtl](https://github.com/imvu/gmtl/)
   2. LibSDL 2
   3. The README lists out other libraries that I beleive are needed by LibSDL2
+  4. freeglut - this was original used to display the score. This has been removed in favor of manual drawing.
 
 #### GMTL Migration Notes
 

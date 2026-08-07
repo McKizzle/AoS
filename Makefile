@@ -13,7 +13,6 @@ ifeq ($(UNAME_S),Darwin)
     GLM_FLAGS = -I $(shell brew --prefix glm)/include # glm is header-only; installed via `brew install glm`
     BOOST_INCLUDE = -I /usr/local/include/
     BOOST_LIB = -L /usr/local/lib/ -lboost_unit_test_framework-mt
-    GLUT_LIB = -Wl,-framework,GLUT
 endif
 ifeq ($(UNAME_S),Linux)
     CXX = g++
@@ -23,14 +22,13 @@ ifeq ($(UNAME_S),Linux)
     GLM_FLAGS = # glm is header-only; `dnf install glm-devel` puts headers on the default include path
     BOOST_INCLUDE = -L/usr/include/boost
     BOOST_LIB = -L /usr/lib/x86_64-linux-gnu/ -lboost_unit_test_framework
-    GLUT_LIB = -lglut
 endif
 
 SDL_CFLAGS = $(shell pkg-config --cflags sdl3)
 #SDL_LDFLAGS = $(shell pkg-config --libs sdl3)
 SDL_SLIBS = $(shell pkg-config --libs sdl3)
 
-ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GLM_FLAGS) $(BOOST_LIBS) $(GLUT_LIB)
+ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GLM_FLAGS) $(BOOST_LIBS)
 
 TST_FLAGS := -I src $(ALL_FLAGS) $(BOOST_INCLUDE) $(BOOST_LIB)
 
