@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/McKizzle/AoS.png?branch=master)](https://travis-ci.org/McKizzle/AoS)
-
 AoS
 ===
 
@@ -57,5 +55,3 @@ To build and run AoS run the following commands in the terminal.
 
     # run the software
     bin/AoS --mode=3
-
-
