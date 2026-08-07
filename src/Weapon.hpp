@@ -1,5 +1,3 @@
-#include <cmath>
-
 #define _USE_MATH_DEFINES
 
 #define DEG2RAD( deg ) deg * 2.0 * M_PI / (360.0)

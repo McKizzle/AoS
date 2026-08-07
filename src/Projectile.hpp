@@ -1,5 +1,3 @@
-#include <vector>
-
 #ifndef PROJECTILE_HPP
 #define PROJECTILE_HPP
 
