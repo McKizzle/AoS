@@ -1,9 +1,6 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#include <cmath>
-#include <cstdlib>
-
 #define _USE_MATH_DEFINES
 
 #include "Object.hpp"
@@ -12,7 +9,6 @@
 #include "Collision.hpp"
 #include "Planet.hpp"
 #include "Player.hpp"
-#include "Grid.hpp"
 #include "Score.hpp"
 #include "Projectile.hpp"
 #include "Weapon.hpp"

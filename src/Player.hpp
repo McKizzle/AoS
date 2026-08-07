@@ -1,8 +1,5 @@
 #include <SDL3/SDL.h>
-#include <cmath>
-#include <utility>
 #include <vector>
-#include <mutex> //Testing thread locking.
 
 #define _USE_MATH_DEFINES
 
