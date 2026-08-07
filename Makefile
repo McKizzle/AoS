@@ -62,7 +62,7 @@ build: $(OBJS) $(MBJS) $(BIN)
 	$(CXX) -o $(BIN) $(MBJS) $(OBJS) $(ALL_FLAGS)
 
 cppcheck:
-	cppcheck --quiet --enable=all --inconclusive --std=c++23 * 2> cppcheck.txt
+	cppcheck --quiet --enable=all --inconclusive --std=c++23 --library=gnu $(SRC_DIR) $(TST_DIR) 2> cppcheck.txt
 
 # Builds and then runs the game.
 run: build
