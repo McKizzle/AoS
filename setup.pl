@@ -32,10 +32,9 @@ sub osx
 
 sub debian
 {
-    my @result = `sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test`;
-    @result = `sudo add-apt-repository -y ppa:zoogie/sdl2-snapshots`;
+    my @result = `sudo add-apt-repository -y ppa:zoogie/sdl2-snapshots`;
     @result = `sudo apt-get update -y -qq`;
-    @result = `sudo apt-get install -qq -y g++-4.8`;
+    @result = `sudo apt-get install -qq -y clang`;
     @result = `sudo apt-get install -qq -y libsdl3-dev`;
     @result = `sudo apt-get install -qq -y libglm-dev`;
     @result = `sudo apt-get install -qq -y wget`;
@@ -46,7 +45,7 @@ sub debian
 sub ubuntu
 {
     my @result = `sudo apt-get update -y -qq`;
-    @result = `sudo apt-get install -qq -y g++-4.8`;
+    @result = `sudo apt-get install -qq -y clang`;
     @result = `sudo apt-get install -qq -y libsdl3-dev`;
     @result = `sudo apt-get install -qq -y libglm-dev`;
     @result = `sudo apt-get install -qq -y wget`;

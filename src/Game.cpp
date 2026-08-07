@@ -6,15 +6,15 @@ namespace aos
 Game::Game(){}
 
 Game::~Game()
-{   
+{
     delete gameverse;
 
     SDL_GL_DestroyContext(sdl_gl_context);
     SDL_DestroyWindow(sdl_window);
-    SDL_Quit();    
-} 
+    SDL_Quit();
+}
 
-Uint32 Game::main_loop() 
+Uint32 Game::main_loop()
 {
     Uint32 fstart, ftime;
     while(!this->exit)
@@ -23,19 +23,19 @@ Uint32 Game::main_loop()
         this->render(dt, this);
         this->input_handler(dt, this);
         ftime = (Uint32)SDL_GetTicks() - fstart;
-        
-        if(ftime < dt) 
+
+        if(ftime < dt)
         {
             SDL_Delay((int)(dt - ftime));
         }
-        else { if(ftime > dt) 
+        else if(ftime > dt)
         {
             dt = max_dt;
         }
-        else 
+        else
         {
             dt = ftime;
-        }}
+        }
     }
 
     return 1;
@@ -50,18 +50,18 @@ int Game::start_game()
     return 0;
 }
 
-int Game::init() 
+int Game::init()
 {
     // Initialize SDL and openGL
-    if(init_sdl() != 0) 
+    if(init_sdl() != 0)
     {
         this->logSDLError(std::cout, "init_sdl(): ");
     }
     if(init_gl() != 0)
     {
-       this->logSDLError(std::cout, "init_gl(): "); 
+       this->logSDLError(std::cout, "init_gl(): ");
     }
-    
+
     switch(this->game_mode)
     {
         case 0:
@@ -74,9 +74,9 @@ int Game::init()
             this->gameverse = two_planets(); break;
         default:
             this->gameverse = two_planets(); break;
-        
+
     }
-    
+
     return 1;
 }
 
@@ -103,29 +103,29 @@ int Game::init_sdl()
 }
 
 int Game::init_gl()
-{ 
+{
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2); // Request openGL 3
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Set up double buffering
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); // Set the color depth. 
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); // Set the color depth.
 
     // 3) Create an SDL opengl Context.
     sdl_gl_context = SDL_GL_CreateContext(sdl_window);
-    if(sdl_gl_context == nullptr) 
-    { 
+    if(sdl_gl_context == nullptr)
+    {
         std::cout << SDL_GetError() << std::endl;
         std::cout << "Quitting AoS" << std::endl;
         std::exit(0);
-    } 
+    }
     else
     {
         std::cout << glGetString(GL_VERSION) << std::endl;
     }
-    
-    
-    bool setcurrent_result = SDL_GL_MakeCurrent(sdl_window, sdl_gl_context);
+
+
+    SDL_GL_MakeCurrent(sdl_window, sdl_gl_context);
     //SDL_GL_SetSwapInterval(1); // Enable V-Sync
-    
+
     glViewport(0, 0, screen_width, screen_height);
     print_glError("GL Viewport");
     glMatrixMode(GL_PROJECTION);
@@ -157,10 +157,10 @@ Uint32 Game::render(Uint32 interval, void *param)
 Uint32 Game::update_loop(Uint32 interval, void * param)
 {
     Uint32 fstart, ftime;
-    Game *aos_game_ptr = (Game * )param; 
+    Game *aos_game_ptr = (Game * )param;
     Uint32 min_dt = aos_game_ptr->min_dt;
     Uint32 max_dt = aos_game_ptr->max_dt;
-    Uint32 dt; 
+    Uint32 dt;
     while(!aos_game_ptr->exit)
     {
         dt = aos_game_ptr->dt;
@@ -170,25 +170,25 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
 
         ftime = (Uint32)SDL_GetTicks() - fstart;
         aos_game_ptr->ticks++;
-        
-        
-        // Allow a variable dt between the minimum and maximum dt specified in 
+
+
+        // Allow a variable dt between the minimum and maximum dt specified in
         // the game class.
         if(ftime < min_dt) // Only sleep if execution time takes less than dt.
-        {  
+        {
             aos_game_ptr->dt = min_dt;
 
             std::chrono::milliseconds stime(dt - ftime);
             std::this_thread::sleep_for(stime);
-        } 
-        else { if(ftime > max_dt) {
-            aos_game_ptr->dt = max_dt;
-                    
         }
-        else 
-        { 
+        else if(ftime > max_dt) {
+            aos_game_ptr->dt = max_dt;
+
+        }
+        else
+        {
             aos_game_ptr->dt = ftime;
-        }}
+        }
 
     }
 
@@ -220,8 +220,8 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
                     game_ptr->exit = true;
                     interval = 0;
                 }
-                else 
-                {    
+                else
+                {
                 }
                 break;
             default:

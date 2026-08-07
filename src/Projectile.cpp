@@ -1,14 +1,14 @@
 #include "Projectile.hpp"
 
-namespace aos 
+#include "Weapon.hpp"
+
+namespace aos
 {
 
-Projectile::Projectile() 
+Projectile::Projectile()
 {
     this->color = {0.329, 0.957, 1.0, 1.0};
 
-    this->owner = owner; 
-    
     double r = 0.25;
     this->add_vertex(r, 0.0);
     double theta = 2.0 * M_PI / 3.0; //one-third of 2pi

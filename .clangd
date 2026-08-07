@@ -1,0 +1,9 @@
+CompileFlags:
+  Compiler: clang++
+  Add: [-std=c++17, -Wall, -pedantic, -pthread]
+
+---
+If:
+  PathMatch: tests/.*
+CompileFlags:
+  Add: [-I../src]
