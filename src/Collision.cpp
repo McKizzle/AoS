@@ -18,20 +18,20 @@ void Collision::add_collider(Collidable * collider)
 bool Collision::check_collision(Collidable *collider, Object *collidable)
 {
     // Collider Parameters. 
-    double r1 = collider->get_bounding_radius(); 
-    gmtl::Vec2d C1;
+    double r1 = collider->get_bounding_radius();
+    glm::dvec2 C1;
     collider->get_center_coords(C1);
-    std::vector< gmtl::Vec2d > clld_verts;
+    std::vector< glm::dvec2 > clld_verts;
     collider->get_vertices(clld_verts);
 
-    // Collidable Parameters. 
+    // Collidable Parameters.
     double r2 = collidable->get_bounding_radius();
-    gmtl::Vec2d C2;
+    glm::dvec2 C2;
     collidable->get_center_coords( C2 );
-    
+
     if(Collidable::circle_in_circle(C1, C2, r1, r2))
-    {   
-        for(std::vector< gmtl::Vec2d >::iterator it = clld_verts.begin(); it != clld_verts.end(); ++it)
+    {
+        for(std::vector< glm::dvec2 >::iterator it = clld_verts.begin(); it != clld_verts.end(); ++it)
         {
             std::vector< double > point = { (*it)[0], (*it)[1] };
             if(collidable->check_collision(point) == true)
@@ -63,7 +63,7 @@ void Collision::update(Uint32 dt_ms, Uint32 time)
 
 void Collision::render(Uint32 dt_ms, Uint32 time) { }
 
-void Collision::send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time){ }
+void Collision::send_event(const bool * keyboardStates, Uint32 dt, Uint32 time){ }
 
 
 }

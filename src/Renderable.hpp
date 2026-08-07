@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #ifdef __APPLE__
 #include <OpenGL/GL.h>
 #elif __linux__

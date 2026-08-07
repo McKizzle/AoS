@@ -32,9 +32,9 @@ Planet::~Planet() { }
 
 bool Planet::check_collision(std::vector< double > point)
 {
-    gmtl::Vec2d p0, p1, dp;
-    p0.set(&(this->state[Object::XIND]));
-    p1.set(&point[0]);
+    glm::dvec2 p0, p1, dp;
+    p0 = glm::make_vec2(&(this->state[Object::XIND]));
+    p1 = glm::make_vec2(&point[0]);
 
     dp = p1 - p0;
 

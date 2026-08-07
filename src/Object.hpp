@@ -1,10 +1,9 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <vector>
 #include <mutex>
 
-#include <gmtl/gmtl.h>
-#include <gmtl/VecOps.h>
-#include <gmtl/MatrixOps.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #ifdef __APPLE__
 #include <OpenGL/GL.h>
@@ -72,7 +71,7 @@ namespace aos
             virtual ~Object();
             virtual void render(Uint32 dt_ms, Uint32 time); ///< Inherited from Renderable
             virtual void update(Uint32 dt_ms, Uint32 time); ///< Inherited from Updatable
-            virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time); ///< Inherited from Eventful
+            virtual void send_event(const bool * keyboardStates, Uint32 dt, Uint32 time); ///< Inherited from Eventful
             virtual std::vector< double > * system(Uint32 t, std::vector< double > * x); ///< Inherited from Integratable.
 
             /// Adds a vertex (x, y) to the object.
@@ -107,14 +106,14 @@ namespace aos
             std::vector< double > * copy_state(); ///< Thread-safe swap operation. 
             /// Returns a populated 2x2 rotation matrix that performs a counter clockwise rotation. 
             /// \param [in] theta in radians
-            /// \param [in, out] the gmtl::Matrix to populate. 
-            void get_rotation_matrix(double theta, gmtl::Matrix22d & R);
+            /// \param [in, out] the glm::dmat2 to populate.
+            void get_rotation_matrix(double theta, glm::dmat2 & R);
 
-            /// Collision Detection Collidable interface. 
+            /// Collision Detection Collidable interface.
             virtual bool check_collision(std::vector< double > point);
             virtual double get_bounding_radius();
-            virtual void get_vertices( std::vector< gmtl::Vec2d > & verts );
-            virtual void get_center_coords( gmtl::Vec2d & cords );
+            virtual void get_vertices( std::vector< glm::dvec2 > & verts );
+            virtual void get_center_coords( glm::dvec2 & cords );
             virtual void set_collision(Collidable * collider);
             virtual bool isa_collidable();
             virtual bool isa_invincible();

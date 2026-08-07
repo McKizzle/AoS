@@ -23,3 +23,6 @@ tags
 # OS X Finder Files
 .DS_Store
 
+# Ignore generated `make cppcheck` file. 
+cppcheck.txt
+

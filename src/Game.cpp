@@ -9,7 +9,7 @@ Game::~Game()
 {   
     delete gameverse;
 
-    SDL_GL_DeleteContext(sdl_gl_context);
+    SDL_GL_DestroyContext(sdl_gl_context);
     SDL_DestroyWindow(sdl_window);
     SDL_Quit();    
 } 
@@ -19,10 +19,10 @@ Uint32 Game::main_loop()
     Uint32 fstart, ftime;
     while(!this->exit)
     {
-        fstart = SDL_GetTicks();
+        fstart = (Uint32)SDL_GetTicks();
         this->render(dt, this);
         this->input_handler(dt, this);
-        ftime = SDL_GetTicks() - fstart;
+        ftime = (Uint32)SDL_GetTicks() - fstart;
         
         if(ftime < dt) 
         {
@@ -80,23 +80,24 @@ int Game::init()
     return 1;
 }
 
-int Game::init_sdl() 
+int Game::init_sdl()
 {
-    if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER ) != 0)
+    if( !SDL_Init(SDL_INIT_VIDEO) )
     {
         return 1;
-    } 
+    }
 
     sdl_window = SDL_CreateWindow(
             "Asteroids on Steroids",
-            10, 10, 
-            screen_width, screen_height,
-            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN
+            (int)screen_width, (int)screen_height,
+            SDL_WINDOW_OPENGL
     );
-    if( this->sdl_window == nullptr ) 
+    if( this->sdl_window == nullptr )
     {
         return 2;
     }
+
+    SDL_SetWindowPosition(sdl_window, 10, 10);
 
     return 0;
 }
@@ -122,7 +123,7 @@ int Game::init_gl()
     }
     
     
-    int setcurrent_result = SDL_GL_MakeCurrent(sdl_window, sdl_gl_context);
+    bool setcurrent_result = SDL_GL_MakeCurrent(sdl_window, sdl_gl_context);
     //SDL_GL_SetSwapInterval(1); // Enable V-Sync
     
     glViewport(0, 0, screen_width, screen_height);
@@ -163,11 +164,11 @@ Uint32 Game::update_loop(Uint32 interval, void * param)
     while(!aos_game_ptr->exit)
     {
         dt = aos_game_ptr->dt;
-        fstart = SDL_GetTicks();
-        
+        fstart = (Uint32)SDL_GetTicks();
+
         aos_game_ptr->gameverse->update(dt, aos_game_ptr->ticks);
-        
-        ftime = SDL_GetTicks() - fstart;
+
+        ftime = (Uint32)SDL_GetTicks() - fstart;
         aos_game_ptr->ticks++;
         
         
@@ -202,19 +203,19 @@ Uint32 Game::input_handler(Uint32 interval, void * param)
 
 
     // Get all of the keyboard events.
-    const Uint8* currKeyStates = SDL_GetKeyboardState(NULL);
+    const bool* currKeyStates = SDL_GetKeyboardState(NULL);
     this->gameverse->send_event(currKeyStates, interval, game_ptr->ticks);
 
-    while(SDL_PollEvent(&event)) 
-    {   
-        switch(event.type) 
+    while(SDL_PollEvent(&event))
+    {
+        switch(event.type)
         {
-            case SDL_QUIT:
+            case SDL_EVENT_QUIT:
                 game_ptr->exit = true;
                 interval = 0;
                 break;
-            case SDL_KEYDOWN:
-                if(event.key.keysym.sym == SDLK_ESCAPE) 
+            case SDL_EVENT_KEY_DOWN:
+                if(event.key.key == SDLK_ESCAPE)
                 {
                     game_ptr->exit = true;
                     interval = 0;

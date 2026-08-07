@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #ifndef EVENTFUL_HPP
 #define EVENTFUL_HPP
@@ -14,7 +14,7 @@ namespace aos {
             /// \param [in] the event to react to.
             /// \param [in] the time step size
             /// \param [in] the game time
-            virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time) = 0;
+            virtual void send_event(const bool * keyboardStates, Uint32 dt, Uint32 time) = 0;
     };
 }
 

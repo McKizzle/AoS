@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use Getopt::Long;
-use Cwd 'abs_path';
 
 my $osx = 0;
 my $debian = 0;
@@ -33,42 +32,24 @@ sub osx
 
 sub debian
 {
-    my $WORKING_DIR = abs_path($0);
-    my $HOME = $ENV{"HOME"};  
-
     my @result = `sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test`;
     @result = `sudo add-apt-repository -y ppa:zoogie/sdl2-snapshots`;
     @result = `sudo apt-get update -y -qq`;
     @result = `sudo apt-get install -qq -y g++-4.8`;
-    @result = `sudo apt-get install -qq -y libsdl2-dev`;
-    @result = `sudo apt-get install -qq -y scons`;
+    @result = `sudo apt-get install -qq -y libsdl3-dev`;
+    @result = `sudo apt-get install -qq -y libglm-dev`;
     @result = `sudo apt-get install -qq -y wget`;
-    
-    @result = `wget -N https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip`;
-    @result = `unzip -o $HOME/gmtl.zip -d $HOME/`;
-    chdir "$HOME/gmtl-master/";
-    @result = `sudo scons install`;
-    chdir $WORKING_DIR;
 
     return @result;
 }
 
 sub ubuntu
 {
-    my $WORKING_DIR = abs_path($0);
-    my $HOME = $ENV{"HOME"};  
-
     my @result = `sudo apt-get update -y -qq`;
     @result = `sudo apt-get install -qq -y g++-4.8`;
-    @result = `sudo apt-get install -qq -y libsdl2-dev`;
-    @result = `sudo apt-get install -qq -y scons`;
+    @result = `sudo apt-get install -qq -y libsdl3-dev`;
+    @result = `sudo apt-get install -qq -y libglm-dev`;
     @result = `sudo apt-get install -qq -y wget`;
-    
-    @result = `wget -N https://github.com/imvu/gmtl/archive/master.zip -O $HOME/gmtl.zip`;
-    @result = `unzip -o $HOME/gmtl.zip -d $HOME/`;
-    chdir "$HOME/gmtl-master/";
-    @result = `sudo scons install`;
-    chdir $WORKING_DIR;
 
     return @result;
     return 0;

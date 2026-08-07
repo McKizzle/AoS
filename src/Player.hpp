@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <cmath>
 #include <utility>
 #include <vector>
@@ -45,7 +45,7 @@ namespace aos {
 
             virtual void render(Uint32 dt, Uint32 time);
             virtual void update(Uint32 dt, Uint32 time);
-            virtual void send_event(const Uint8 * keyboardStates, Uint32 dt, Uint32 time);
+            virtual void send_event(const bool * keyboardStates, Uint32 dt, Uint32 time);
             virtual std::vector< double > * system(Uint32 t, std::vector< double > * x);
             static Player * default_player();
             void test_vectors();

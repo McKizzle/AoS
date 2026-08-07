@@ -1,5 +1,5 @@
 #include <vector>
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
@@ -71,7 +71,7 @@ namespace aos
             /// Updates the forces acting on the bodies that are associated to the gravity wel 
             virtual void update(Uint32 dt_ms, Uint32 time);
             virtual void render(Uint32 dt_ms, Uint32 time); 
-            virtual void send_event(const Uint8* keyboardStates, Uint32 dt, Uint32 time); 
+            virtual void send_event(const bool * keyboardStates, Uint32 dt, Uint32 time); 
     };
 }
 
