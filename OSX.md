@@ -6,8 +6,8 @@ First install Homebrew by running the command in the _Install Homebrew_ section 
 To build and run AoS run the following commands. 
 
     brew install sdl3
-    brew tap homebrew/versions
-    brew install gcc # should install the newest version (gcc4.8)    
+    # clang++ ships with the Xcode Command Line Tools, which Homebrew already
+    # requires, so no separate compiler install is needed.
 
     brew install git
     brew install glm

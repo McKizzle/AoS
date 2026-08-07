@@ -2,21 +2,21 @@
 # for now we will only worry about OS X and Linux.
 UNAME_S = $(shell uname -s)
 
-CXXFLAGS = -std=c++11 -Wall -pedantic -pipe -g # Minimize what the user needs to install.
+CXXFLAGS = -std=c++17 -Wall -pedantic -pipe -g # Minimize what the user needs to install.
 CXXLIBS = -pthread
 
-CXX = g++
-TST_CXX = g++
+CXX = clang++
+TST_CXX = clang++
 ifeq ($(UNAME_S),Darwin)
-    CXX = g++-4.8
-    TST_CXX = g++
+    CXX = clang++
+    TST_CXX = clang++
     GLM_FLAGS = -I $(shell brew --prefix glm)/include # glm is header-only; installed via `brew install glm`
     BOOST_INCLUDE = -I /usr/local/include/
     BOOST_LIB = -L /usr/local/lib/ -lboost_unit_test_framework-mt
 endif
 ifeq ($(UNAME_S),Linux)
-    CXX = g++
-    TST_CXX = g++
+    CXX = clang++
+    TST_CXX = clang++
     CXXFLAGS := $(CXXFLAGS) -Wl,--no-as-needed #:= prevents recursive expansion
     GL_FLAGS = -lGL -lGLU
     GLM_FLAGS = # glm is header-only; `dnf install glm-devel` puts headers on the default include path

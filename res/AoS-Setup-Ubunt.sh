@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 sudo apt-get update -y -qq
-sudo apt-get install -qq -y g++-4.8
+sudo apt-get install -qq -y clang
 sudo apt-get install -qq -y libsdl3-dev
 sudo apt-get install -qq -y libasound2-dev
 sudo apt-get install -qq -y libxss-dev
