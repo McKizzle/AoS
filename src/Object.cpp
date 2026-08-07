@@ -152,12 +152,12 @@ inline std::vector< double > * Object::copy_state()
     return new std::vector< double >(this->state);
 }
 
-inline void Object::get_rotation_matrix(double theta, gmtl::Matrix22d & R)
+inline void Object::get_rotation_matrix(double theta, glm::dmat2 & R)
 {
-    R[0][0] =  std::cos(theta);
-    R[0][1] = -std::sin(theta);
-    R[1][0] =  std::sin(theta); 
-    R[1][1] =  std::cos(theta);
+    // glm::dmat2 is column-major, so this is built via the column-major
+    // constructor (col0.x, col0.y, col1.x, col1.y) rather than R[row][col]
+    // assignment, to avoid silently transposing the rotation.
+    R = glm::dmat2(std::cos(theta), std::sin(theta), -std::sin(theta), std::cos(theta));
 }
 
 inline bool Object::check_collision(std::vector< double > point)
@@ -166,22 +166,22 @@ inline bool Object::check_collision(std::vector< double > point)
     std::vector< double > p0 = {0, 0};
     std::vector< double > t = {this->state[Object::XIND], this->state[Object::YIND]};
 
-    gmtl::Vec2d A, T, P; 
-    P.set(&point[0]);
-    T.set(&t[0]);
-    A.set(&p0[0]);
+    glm::dvec2 A, T, P;
+    P = glm::make_vec2(&point[0]);
+    T = glm::make_vec2(&t[0]);
+    A = glm::make_vec2(&p0[0]);
 
     A = A + T; // Translate the origin (no need to rotate)
-    gmtl::Matrix22d R; // Rotation and translation matrix. 
+    glm::dmat2 R; // Rotation and translation matrix.
     this->get_rotation_matrix(DEG2RAD(this->state[Object::HIND]), R);
-    
-    for(std::vector< unsigned int >::iterator it = this->edges.begin(); it != this->edges.end(); it += 2) 
-    {
-        gmtl::Vec2d v1; v1.set(&(this->vertices[*(it + 1)][0]));
-        gmtl::Vec2d v2; v2.set(&(this->vertices[*it][0]));
 
-        // Next rotate the points about the origin. 
-        gmtl::Vec2d B, C;
+    for(std::vector< unsigned int >::iterator it = this->edges.begin(); it != this->edges.end(); it += 2)
+    {
+        glm::dvec2 v1 = glm::make_vec2(&(this->vertices[*(it + 1)][0]));
+        glm::dvec2 v2 = glm::make_vec2(&(this->vertices[*it][0]));
+
+        // Next rotate the points about the origin.
+        glm::dvec2 B, C;
         B = R * v1;
         C = R * v2;
         
@@ -212,20 +212,19 @@ inline bool Object::check_collision(std::vector< double > point)
     return false; // For now nothing can collide. 
 }
 
-inline void Object::get_vertices( std::vector< gmtl::Vec2d > & verts )
-{ 
+inline void Object::get_vertices( std::vector< glm::dvec2 > & verts )
+{
     std::vector< double > t = {this->state[Object::XIND], this->state[Object::YIND]};
-    gmtl::Vec2d T;
-    T.set(&t[0]);
+    glm::dvec2 T = glm::make_vec2(&t[0]);
 
-    gmtl::Matrix22d R; // Rotation and translation matrix. 
+    glm::dmat2 R; // Rotation and translation matrix.
     this->get_rotation_matrix(DEG2RAD(this->state[Object::HIND]), R);
 
     for(std::vector< std::vector< double > >::iterator it = this->vertices.begin(); it != this->vertices.end(); ++it)
     {
-        gmtl::Vec2d v; v.set(&(*it)[0]); 
+        glm::dvec2 v = glm::make_vec2(&(*it)[0]);
 
-        gmtl::Vec2d V;
+        glm::dvec2 V;
         V = R * v;
         V = V + T;
         verts.push_back(V);
@@ -237,9 +236,9 @@ inline double Object::get_bounding_radius()
     return this->bs_r;
 }
 
-inline void Object::get_center_coords( gmtl::Vec2d & cords ) 
+inline void Object::get_center_coords( glm::dvec2 & cords )
 {
-    cords.set(&(this->state[Object::XIND]));
+    cords = glm::make_vec2(&(this->state[Object::XIND]));
 }
 
 inline void Object::set_collision(Collidable * collider)

@@ -1,26 +1,26 @@
-# Detect the operating system 
-# for now we will only worry about OS X and Linux. 
+# Detect the operating system
+# for now we will only worry about OS X and Linux.
 UNAME_S = $(shell uname -s)
 
-CXXFLAGS = -std=c++11 -Wall -pedantic -pipe -g # Minimize what the user needs to install. 
+CXXFLAGS = -std=c++11 -Wall -pedantic -pipe -g # Minimize what the user needs to install.
 CXXLIBS = -pthread
 
 CXX = g++
 TST_CXX = g++
 ifeq ($(UNAME_S),Darwin)
-    CXX = g++-4.8 
+    CXX = g++-4.8
     TST_CXX = g++
-    GGT_FLAGS = -I ~/.aos/include/
+    GLM_FLAGS = -I $(shell brew --prefix glm)/include # glm is header-only; installed via `brew install glm`
     BOOST_INCLUDE = -I /usr/local/include/
-    BOOST_LIB = -L /usr/local/lib/ -lboost_unit_test_framework-mt 
+    BOOST_LIB = -L /usr/local/lib/ -lboost_unit_test_framework-mt
     GLUT_LIB = -Wl,-framework,GLUT
 endif
 ifeq ($(UNAME_S),Linux)
-    CXX = g++-4.8
-    TST_CXX = g++-4.8
+    CXX = g++
+    TST_CXX = g++
     CXXFLAGS := $(CXXFLAGS) -Wl,--no-as-needed #:= prevents recursive expansion
     GL_FLAGS = -lGL -lGLU
-    GGT_FLAGS = -I /usr/local/include/
+    GLM_FLAGS = # glm is header-only; `dnf install glm-devel` puts headers on the default include path
     BOOST_INCLUDE = -L/usr/include/boost
     BOOST_LIB = -L /usr/lib/x86_64-linux-gnu/ -lboost_unit_test_framework
     GLUT_LIB = -lglut
@@ -30,7 +30,7 @@ SDL_CFLAGS = $(shell pkg-config --cflags sdl3)
 #SDL_LDFLAGS = $(shell pkg-config --libs sdl3)
 SDL_SLIBS = $(shell pkg-config --libs sdl3)
 
-ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GGT_FLAGS) $(BOOST_LIBS) $(GLUT_LIB) 
+ALL_FLAGS = $(CXXFLAGS) $(CXXLIBS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(SDL_SLIBS) $(GL_FLAGS) $(GLM_FLAGS) $(BOOST_LIBS) $(GLUT_LIB)
 
 TST_FLAGS := -I src $(ALL_FLAGS) $(BOOST_INCLUDE) $(BOOST_LIB)
 
@@ -57,22 +57,22 @@ $(info $(TBIN))
 #$(info $(BIN))
 #$(info $(CXXFLAGS))
 
-# target: link the objects. 
+# target: link the objects.
 #	prerequisite: make sure that the objects are compiled first.
 #	prerequisite: check for any $(BIN) prerequisites.
 build: $(OBJS) $(MBJS) $(BIN)
 	$(CXX) -o $(BIN) $(MBJS) $(OBJS) $(ALL_FLAGS)
 
 cppcheck:
-	cppcheck --quiet --enable=all --inconclusive --std=c++11 * 2> cppcheck.txt
+	cppcheck --quiet --enable=all --inconclusive --std=c++23 * 2> cppcheck.txt
 
 # Builds and then runs the game.
 run: build
 	clear
-	./$(BIN)	
+	./$(BIN)
 
-# target: do work for creating the binary file. 
-#	prerequisite: Make sure that there is a bin directory. 
+# target: do work for creating the binary file.
+#	prerequisite: Make sure that there is a bin directory.
 $(BIN):	$(BIN_DIR)
 
 # target: If a dependency asks for files in the OBJ_DIR that have teh .o extension then
@@ -83,29 +83,29 @@ $(BIN):	$(BIN_DIR)
 $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.cpp $(OBJ_DIR)
 	$(CXX) -o $@ -c $< $(ALL_FLAGS)
 
-# target: Make make an executables directory if necessary. 
-$(BIN_DIR): 
+# target: Make make an executables directory if necessary.
+$(BIN_DIR):
 	mkdir -p ./$(BIN_DIR)
 
-# target: Make an object directory if necessary. 
+# target: Make an object directory if necessary.
 $(OBJ_DIR):
 	mkdir -p ./$(OBJ_DIR)
 
-# Build all of the test executables. 
+# Build all of the test executables.
 test: $(TBINS)
 
 run_tests:
 	sh $(TST_DIR)/run_tests.sh $(TBINS)
 
-# target: create each test binary. 	
+# target: create each test binary.
 $(TST_DIR)/%.test: $(TST_DIR)/%.o $(OBJS)
 	$(CXX) -o $@ $< $(OBJS) $(TST_FLAGS)
 
-$(TST_DIR)/%.o: $(TST_DIR)/%.cpp $(TST_DIR) 
+$(TST_DIR)/%.o: $(TST_DIR)/%.cpp $(TST_DIR)
 	$(CXX) -o $@ -c $< $(TST_FLAGS)
 
 clean_tests:
-	rm -f $(TST_DIR)/*.o 
+	rm -f $(TST_DIR)/*.o
 	rm -f $(TST_DIR)/*.test
 
 print:
@@ -128,4 +128,4 @@ doxygen:
 #	$(CXX) $@ -c $<
 
 #$(OBJ)%.o: %.c %h
-#	$(CXX) -c $< 
+#	$(CXX) -c $<

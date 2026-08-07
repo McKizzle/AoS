@@ -1,6 +1,6 @@
 #include <vector>
 #include <cmath>
-#include <gmtl/VecOps.h>
+#include <glm/glm.hpp>
 
 #ifndef QUADTREENODE_HPP
 #define QUADTREENODE_HPP

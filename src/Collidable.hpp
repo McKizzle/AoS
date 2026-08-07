@@ -1,6 +1,6 @@
 #include <vector>
 #include <cmath>
-#include <gmtl/VecOps.h>
+#include <glm/glm.hpp>
 
 #ifndef COLLIDABLE_HPP
 #define COLLIDABLE_HPP
@@ -19,8 +19,8 @@ namespace aos
             virtual void set_collision(Collidable * collider) = 0;
 
             /// Returns the verticies that belong to an object. 
-            virtual void get_vertices( std::vector< gmtl::Vec2d > & verts ) = 0;
-            virtual void get_center_coords( gmtl::Vec2d & cords ) = 0;
+            virtual void get_vertices( std::vector< glm::dvec2 > & verts ) = 0;
+            virtual void get_center_coords( glm::dvec2 & cords ) = 0;
             
             /// Gets the bounding radius of the Object. 
             virtual double get_bounding_radius() = 0;
@@ -45,8 +45,8 @@ namespace aos
             /// 
             /// \returns true / false if inside / ouside.
             static bool point_in_triangle(
-                gmtl::Vec2d P, gmtl::Vec2d A, 
-                gmtl::Vec2d B, gmtl::Vec2d C,
+                glm::dvec2 P, glm::dvec2 A,
+                glm::dvec2 B, glm::dvec2 C,
                 double &u, double &v
                 );
 
@@ -58,7 +58,7 @@ namespace aos
             ///
             /// \returns true or false for hit or miss
             static bool point_in_circle(
-                gmtl::Vec2d P, gmtl::Vec2d C, double radius);
+                glm::dvec2 P, glm::dvec2 C, double radius);
 
 
             /// Checks for the collision of a circle and circle. 
@@ -70,7 +70,7 @@ namespace aos
             ///
             /// \returns true or false for hit or miss
             static bool circle_in_circle(
-                gmtl::Vec2d C1, gmtl::Vec2d C2, double r1, double r2);
+                glm::dvec2 C1, glm::dvec2 C2, double r1, double r2);
 
     };
 }

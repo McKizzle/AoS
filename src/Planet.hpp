@@ -1,6 +1,5 @@
-#include <gmtl/gmtl.h>
-#include <gmtl/VecOps.h>
-#include <gmtl/MatrixOps.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #ifndef PLANET_HPP
 #define PLANET_HPP

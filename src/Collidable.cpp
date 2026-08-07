@@ -6,21 +6,21 @@ namespace aos
 {
 
 bool Collidable::point_in_triangle(
-        gmtl::Vec2d P, gmtl::Vec2d A, 
-        gmtl::Vec2d B, gmtl::Vec2d C,
+        glm::dvec2 P, glm::dvec2 A,
+        glm::dvec2 B, glm::dvec2 C,
         double &u, double &v
     )
 {
-    using namespace gmtl;
-    Vec2d w_2 = P - A;
-    Vec2d w_0 = B - A;
-    Vec2d w_1 = C - A;
- 
-    double w_00 = gmtl::dot(w_0, w_0);
-    double w_01 = gmtl::dot(w_0, w_1);
-    double w_11 = gmtl::dot(w_1, w_1);
-    double w_20 = gmtl::dot(w_2, w_0);
-    double w_21 = gmtl::dot(w_2, w_1);
+    using namespace glm;
+    dvec2 w_2 = P - A;
+    dvec2 w_0 = B - A;
+    dvec2 w_1 = C - A;
+
+    double w_00 = glm::dot(w_0, w_0);
+    double w_01 = glm::dot(w_0, w_1);
+    double w_11 = glm::dot(w_1, w_1);
+    double w_20 = glm::dot(w_2, w_0);
+    double w_21 = glm::dot(w_2, w_1);
 
     double denom = (w_00 * w_11 - w_01 * w_01);
     u = ((w_11 * w_20) - (w_01 * w_21)) / denom;
@@ -37,10 +37,10 @@ bool Collidable::point_in_triangle(
 
 /// Checks for the collision of a point and a circle. 
 bool Collidable::point_in_circle(
-    gmtl::Vec2d P, gmtl::Vec2d C, double radius
+    glm::dvec2 P, glm::dvec2 C, double radius
     )
 {
-    gmtl::Vec2d dx = P - C;
+    glm::dvec2 dx = P - C;
 
     double distance = std::sqrt(dx[0] * dx[0] + dx[1] * dx[1]);
 
@@ -49,10 +49,10 @@ bool Collidable::point_in_circle(
 
 /// Checks for a collision between two circles
 bool Collidable::circle_in_circle(
-    gmtl::Vec2d C1, gmtl::Vec2d C2, double r1, double r2
+    glm::dvec2 C1, glm::dvec2 C2, double r1, double r2
     )
-{  
-    gmtl::Vec2d dx = C1 - C2;
+{
+    glm::dvec2 dx = C1 - C2;
     double distance = std::sqrt(dx[0] * dx[0] + dx[1] * dx[1]);
     return (distance > (r1 + r2)) ? false : true;
 }
